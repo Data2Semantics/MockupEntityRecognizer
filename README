@@ -1,0 +1,4 @@
+Initial attempt, not doing anything yet. Just place holders for possible packages
+Libraries used
+	- Stanford NLP library http://nlp.stanford.edu/software/CRF-NER.html
+	- PDF Box library http://pdfbox.apache.org/

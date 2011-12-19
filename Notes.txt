@@ -1,0 +1,109 @@
+---------------------------------------- 
+Notes on existing AIDA-Learning Component
+----------------------------------------
+ 
+- NERCrf based on ABNER (recognizing BIOCREATIVE), 
+- NERRecognizer based on Lingpipe (recognizing BIOCREATIVE, GENOMIC, NEWS) and 
+- LearningModel based on Weka requires user annotated document.
+- Tagging using library from Weka
+	
+---------------------
+	Libraries
+---------------------
+
+Lingpipe seems to be the nicest library out there, especially documentation wise:
+- http://alias-i.com/lingpipe/web/download.html
+- There are already training model BIOCREATIVE, GENOMIC, NEWS trained model available.
+- If we are using this, the problem is that all data being processed should be available.
+  Yet, using this might be the next best thing if we don't want manual annotation.
+  Maybe we can use this one at least for prototyping, and then replace with non commercial ones later?
+
+
+Stanford Library, seems to be actively being developed, they still have recent releases.
+- It is also publicly available in Maven repo, 
+- Not commercial, in the long run would be better than Lingpipe
+- Documentation on how to train model is unfortunately scarce.
+
+GATE ? Seems to be too heavy to be included.
+
+AIDA used to be working with WEKA, for learning new model. 
+- If we are going to teach them new models, then we need to have a training set.
+- How do we get this?
+
+ABNER seems not longe actively being developed.
+
+PDFBox seems to be a nice library for manipulating PDFs:
+- http://pdfbox.apache.org/
+- We can manipulate existing PDFs, annotate and provide links to external documents (LinkedLifeData ?)
+- Support highlighting, annotating, adding comments to PDFs
+- Cookbook: http://pdfbox.apache.org/userguide/cookbook.html
+  
+
+
+-------------------------------------------------------------------
+Roughly this batch processing is what I understand I attempt to do:
+-------------------------------------------------------------------
+
+- <ProcessPDF>
+    - Input :
+        - PDF files, VOCABULARY
+    - Processing :
+        - <Extract> PDF into CORPUS
+        - <Recognize> TERMS within the CORPUS as a known CONCEPTS from certain VOCABULARY
+        - <Annotate> TERMS within PDF using CONCEPT associated with LLDLink from LLDLinkMap
+    - Output :
+        - AnnotatedPDF
+
+- <PreprocessVocabulary>
+	- Input : 
+		- VOCABULARY
+	- Process : 
+		- repeatedly perform <LookupLLDLink> for each CONCEPT within VOCABULARY
+	- Output : 
+		- LLDLinkMap <CONCEPTS, LLDLink>
+
+- <LookupLLDLink>
+	- Input : 
+		- CONCEPTS
+	- Process : 
+		- Probably some SPARQLing required, or just plain HTTP post/search.
+	- Output : 
+		- LLDLink
+		
+- <Recognize> things from a text :
+    - Input : 
+        - CORPUS, CONCEPT
+    - Processing:
+        - Use <STANFORD NER>
+    - Output:
+        - TERMs recognized within CORPUS and the CONCEPT to which they belong.
+        
+- <Find> related linkedLifeData
+    - Input : 
+        - CONCEPTS
+    - Output :
+        - Linked Life Data Link a.k.a LLDLink location of the CONCEPT
+
+- <Extract> PDF into CORPUS
+    - Input :
+        - PDF
+    - Processing
+        - Use <PDFBOX>
+    - Output :
+        - CORPUS
+
+	
+		
+		
+Data Dictionary
+
+	- CORPUS : 
+		- text extracted from the PDF files where we will try to annotate.
+		- this is what will be feed into the NER.			
+		
+	- VOCABULARY:
+		- Collections of hierarchical CONCEPTS taken from one of source ONTOLOGY, 
+		  such as DRUGBANK, DISEASOME, SYMPTOMS.
+		- We are limiting the vocabularies only from those available in LLD.
+	
+  

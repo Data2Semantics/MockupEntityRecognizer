@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>d2s-phiels-usecase</groupId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>D2S Annotation</name>
+	<description>Experimental annotation module which will attempts to annotate guidelines and publications, related to certain severe adverse effects.
+
+We will attempt to do entity recognition for Drugs, Diseases and Symptomps. 
+Will be using library from Standford NLP.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox-lucene</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+	</dependencies>
+
+	<artifactId>D2SAnnotate</artifactId>
+</project>
