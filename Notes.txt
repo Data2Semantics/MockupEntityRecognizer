@@ -50,9 +50,12 @@ Roughly this batch processing is what I understand I attempt to do:
     - Processing :
         - <Extract> PDF into CORPUS
         - <Recognize> TERMS within the CORPUS as a known CONCEPTS from certain VOCABULARY
-        - <Annotate> TERMS within PDF using CONCEPT associated with LLDLink from LLDLinkMap
+        - <AnnotatePDF> TERMS within PDF using CONCEPT associated with LLDLink from LLDLinkMap
+        - <GenerateAnnotatedOntology> 
+        
     - Output :
         - AnnotatedPDF
+        - AnnotatedOntology
 
 - <PreprocessVocabulary>
 	- Input : 

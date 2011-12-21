@@ -28,14 +28,14 @@ public class NERTest {
 				.getClassifierNoExceptions(serializedClassifier);
 
 		String fileContents = extractor.getText(fileTest);
+		System.out.println(fileContents);
 		
 		List<List<CoreLabel>> out = classifier.classify(fileContents);
 		for (List<CoreLabel> sentence : out) {
 			for (CoreLabel word : sentence) {
-				System.out.print(word.word() + '/'
-						+ word.get(AnswerAnnotation.class) + ' ');
+				//System.out.print(word.word() + '/'+ word.get(AnswerAnnotation.class) + ' ');
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		
 		// Not really a test, move along, nothing here.

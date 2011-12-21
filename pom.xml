@@ -25,6 +25,16 @@ Will be using library from Standford NLP.</description>
 			<artifactId>pdfbox-lucene</artifactId>
 			<version>1.6.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openrdf</groupId>
+			<artifactId>openrdf-util</artifactId>
+			<version>1.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf</groupId>
+			<artifactId>openrdf-model</artifactId>
+			<version>1.2.7</version>
+		</dependency>
 	</dependencies>
 
 	<artifactId>D2SAnnotate</artifactId>
