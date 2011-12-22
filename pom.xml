@@ -35,6 +35,16 @@ Will be using library from Standford NLP.</description>
 			<artifactId>openrdf-model</artifactId>
 			<version>1.2.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>3.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
 	</dependencies>
 
 	<artifactId>D2SAnnotate</artifactId>
