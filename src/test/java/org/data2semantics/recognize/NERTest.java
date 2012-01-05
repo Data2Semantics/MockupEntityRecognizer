@@ -10,7 +10,8 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
-import org.data2semantics.util.PDFExtractor;
+import org.data2semantics.indexer.D2S_PDFHandler;
+import org.junit.Test;
 
 public class NERTest {
 	/**
@@ -18,24 +19,25 @@ public class NERTest {
 	 * @param args
 	 * @throws IOException
 	 */
+	@Test
 	public void testFromNERSampleDemo() throws IOException {
 
 		String serializedClassifier = "src\\main\\resources\\all.3class.distsim.crf.ser.gz";
 		File  fileTest				= new File("src\\test\\resources\\neutropenia.pdf");
-		PDFExtractor extractor = new PDFExtractor();
+		D2S_PDFHandler extractor = new D2S_PDFHandler(fileTest);
 		
 		AbstractSequenceClassifier classifier = CRFClassifier
 				.getClassifierNoExceptions(serializedClassifier);
 
-		String fileContents = extractor.getText(fileTest);
-		System.out.println(fileContents);
+		String fileContents = extractor.getStrippedTextContent();
+		//System.out.println(fileContents);
 		
 		List<List<CoreLabel>> out = classifier.classify(fileContents);
 		for (List<CoreLabel> sentence : out) {
 			for (CoreLabel word : sentence) {
-				//System.out.print(word.word() + '/'+ word.get(AnswerAnnotation.class) + ' ');
+				System.out.print(word.word() + '/'+ word.get(AnswerAnnotation.class) + ' ');
 			}
-			//System.out.println();
+			System.out.println();
 		}
 		
 		// Not really a test, move along, nothing here.
