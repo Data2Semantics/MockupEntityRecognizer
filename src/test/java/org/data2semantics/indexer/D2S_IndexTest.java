@@ -16,7 +16,7 @@ import org.junit.Test;
  * @author wibisono
  *
  */
-public class D2SIndexTest {
+public class D2S_IndexTest {
 
 	static final String PUB_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Publications";
 	static final String GUIDE_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Guidelines";
