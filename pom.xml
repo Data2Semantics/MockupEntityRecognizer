@@ -8,7 +8,12 @@
 
 We will attempt to do entity recognition for Drugs, Diseases and Symptomps. 
 Will be using library from Standford NLP.</description>
-
+	<repositories>
+		<repository>
+			<id>Berkeley for OWLAPI</id>
+			<url>http://code.berkeleybop.org/maven/repository</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
@@ -44,6 +49,11 @@ Will be using library from Standford NLP.</description>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
+		</dependency>
+		<dependency>
+		  	<groupId>owlapi</groupId>
+		  	<artifactId>owlapi</artifactId>
+  			<version>3.2.4</version>
 		</dependency>
 	</dependencies>
 

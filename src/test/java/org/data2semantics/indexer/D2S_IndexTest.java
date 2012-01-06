@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.pdfbox.examples.util.PrintTextLocations;
 import org.junit.Test;
 
 /**
@@ -48,13 +49,17 @@ public class D2S_IndexTest {
 		D2S_Indexer testIndexes = new D2S_Indexer();
 		testIndexes.startAddingFiles();
 		
+		
 		for(File currentPDF : pubFiles){
-			if(currentPDF.getName().endsWith(".pdf"))
+			if(currentPDF.getName().endsWith(".pdf")){
 				testIndexes.addPDFDocument(currentPDF);
+			}
 		}
 		testIndexes.stopAddingFiles();
 
-		Document [] hits = testIndexes.simpleStringSearch("neutropenia", "contents");
+		Document [] hits = testIndexes.simpleStringSearch("neutropenic fever", "contents");
+
+		
 		assert(hits != null);
 		for(Document doc : hits){
 			List<Fieldable> fields = doc.getFields();

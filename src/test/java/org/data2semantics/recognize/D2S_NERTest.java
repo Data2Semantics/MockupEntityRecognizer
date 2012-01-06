@@ -22,7 +22,7 @@ public class D2S_NERTest {
 	@Test
 	public void testFromNERSampleDemo() throws IOException {
 
-		String serializedClassifier = "src\\main\\resources\\all.3class.distsim.crf.ser.gz";
+		String serializedClassifier = "src\\main\\resources\\model\\all.3class.distsim.crf.ser.gz";
 		File  fileTest				= new File("src\\test\\resources\\neutropenia.pdf");
 		D2S_PDFHandler extractor = new D2S_PDFHandler(fileTest);
 		

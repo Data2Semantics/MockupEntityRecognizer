@@ -10,7 +10,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
- * Handling PDF, getting the contents
+ * Handling PDF, getting the contents using text stripper.
  * 
  * @author wibisono
  * 

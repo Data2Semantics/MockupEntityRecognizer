@@ -27,6 +27,7 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
 import org.apache.pdfbox.pdmodel.interactive.action.type.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLine;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationSquareCircle;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationText;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
@@ -161,7 +162,7 @@ public class D2S_Annotation {
 			annotations.add(txtLink);
 
 			// Now draw a few more annotations
-
+			
 			PDAnnotationSquareCircle aCircle = new PDAnnotationSquareCircle(
 					PDAnnotationSquareCircle.SUB_TYPE_CIRCLE);
 			aCircle.setContents("Circle Annotation");
