@@ -8,7 +8,45 @@ import java.util.List;
  *
  */
 public class D2S_Concept {
-		String uriString;
+		String stringID;
 		String mainTerm;
 		List<String> synonyms;
+	
+		/**
+		 * @return the stringID
+		 */
+		public String getStringID() {
+			return stringID;
+		}
+		/**
+		 * @param stringID the stringID to set
+		 */
+		public void setStringID(String stringID) {
+			this.stringID = stringID;
+		}
+		/**
+		 * @return the mainTerm
+		 */
+		public String getMainTerm() {
+			return mainTerm;
+		}
+		/**
+		 * @param mainTerm the mainTerm to set
+		 */
+		public void setMainTerm(String mainTerm) {
+			this.mainTerm = mainTerm;
+		}
+		/**
+		 * @return the synonyms
+		 */
+		public List<String> getSynonyms() {
+			return synonyms;
+		}
+		/**
+		 * @param synonyms the synonyms to set
+		 */
+		public void setSynonyms(List<String> synonyms) {
+			this.synonyms = synonyms;
+		}
+		
 }
