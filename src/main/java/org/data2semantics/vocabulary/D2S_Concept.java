@@ -1,6 +1,7 @@
 package org.data2semantics.vocabulary;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * The concept which has an URI
@@ -49,4 +50,20 @@ public class D2S_Concept {
 			this.synonyms = synonyms;
 		}
 		
+		public void addSynonym(String newSynonym) {
+			if(synonyms==null){
+				synonyms = new Vector<String>();
+			}
+			synonyms.add(newSynonym);
+		}
+		@Override
+		public String toString(){
+			String result = "";
+			result += mainTerm +"("+stringID+ ")\n";
+			if(synonyms != null)
+				for(String syn : synonyms){
+					result += "   a.k.a "+syn+"\n";
+				}
+			return result;
+		}
 }

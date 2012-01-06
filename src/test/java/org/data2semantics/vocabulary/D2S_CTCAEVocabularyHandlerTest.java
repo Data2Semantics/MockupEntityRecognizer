@@ -19,7 +19,8 @@ public class D2S_CTCAEVocabularyHandlerTest {
 		D2S_CTCAEVocabularyHandler myHandler = new D2S_CTCAEVocabularyHandler();
 		List<D2S_Concept> availableConcepts = myHandler.getAvailableConcepts();
 		for(D2S_Concept concept : availableConcepts){
-			System.out.println("Check "+concept.getStringID());
+			System.out.println(concept);
+			
 		}
 	}
 
