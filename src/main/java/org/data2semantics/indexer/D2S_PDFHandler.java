@@ -10,7 +10,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
- * Handling PDF, getting the contents using text stripper.
+ * This is the class responsible for handling PDF.
+ * It uses PDFBox to get content of PDF, as a text.
+ * 
+ * The PDFTextStripper is used to obtain this information.
  * 
  * @author wibisono
  * 
