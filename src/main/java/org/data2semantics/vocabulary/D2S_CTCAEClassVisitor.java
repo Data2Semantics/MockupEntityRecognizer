@@ -1,14 +1,11 @@
 package org.data2semantics.vocabulary;
 
-import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +15,6 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.util.OWLOntologyWalker;
 import org.semanticweb.owlapi.util.OWLOntologyWalkerVisitor;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 
 public class D2S_CTCAEClassVisitor extends OWLOntologyWalkerVisitor<Object> {
@@ -80,45 +76,12 @@ public class D2S_CTCAEClassVisitor extends OWLOntologyWalkerVisitor<Object> {
 		return extractToken(xmlLiteral, "<ncicp:term-name>", "</ncicp:term-name>");
 	}
 	
-	
-	
 	private String extractToken(String stringToSearch, String startToken, String endToken) {
 		int startIndex = stringToSearch.indexOf(startToken);
 		int stopIndex = stringToSearch.indexOf(endToken);
 		return stringToSearch.substring(startIndex+startToken.length(), stopIndex);
 	}
 
-	/**
-	 * Maybe later I'll switch to this implementation of parsing, now we'll temporary use regex
-	 * @param xmlLiteral
-	 * @return
-	 */
-	private String extractTermNameProperly(String xmlLiteral){
-		String result = "";
-		try {
-			xmlDoc = builder.parse(new StringBufferInputStream(xmlLiteral) );
-		} catch (Exception e) {
-			log.error("Failed to parse XMLLiteral");
-		} 
-		
-		return result;
-	}
-	
-	private void initializeXMLDocumentBuilder(){
-		
-		try {
-			factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
-			builder = factory.newDocumentBuilder();
-			
-			
-		} catch (Exception e) {
-			log.error("Failed to initialize XML document Builder");
-		} 
-		
-		
-	}
-	
 	public List<D2S_Concept> getAvailableConcepts(){
 		return availableConcepts;
 	}
