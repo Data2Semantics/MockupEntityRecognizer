@@ -49,6 +49,11 @@ public class D2S_PDFHandler {
 			StringWriter target = new StringWriter();
 			source.writeText(pdDocument, target);
 			textContent = target.toString();
+			
+			// Probably this should be done by analyser
+			textContent = textContent.replaceAll("\n"," ");
+			textContent = textContent.replaceAll("\t"," ");
+			
 			target.close();
 			pdDocument.close();
 		} catch (IOException ex) {

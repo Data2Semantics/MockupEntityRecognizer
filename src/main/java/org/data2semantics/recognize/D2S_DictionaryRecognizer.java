@@ -61,18 +61,18 @@ public class D2S_DictionaryRecognizer {
 		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
 				List<String> synonyms = currentConcept.getSynonyms();
 				String mainTerm = currentConcept.getMainTerm();
-				Document[] found = currentIndex.simpleStringSearch("\""+mainTerm+"\"", "contents");
+				Document[] found = currentIndex.simpleStringSearch(mainTerm, "contents");
 				if(found != null && found.length != 0) {
-					System.out.println("Found " + found.length + "  results for "+mainTerm);
+					//System.out.println("Found " + found.length + "  results for "+mainTerm);
+					sanityCheck(found, mainTerm);
 					count ++;
+
 				}
 				for(String term : synonyms){
-					found = currentIndex.simpleStringSearch("\""+term+"\"", "contents");
+					found = currentIndex.simpleStringSearch(term, "contents");
 					if(found == null || found.length == 0) continue;
-					System.out.println("Found " + found.length + "  results for "+term);
-//					for(Document d : found){
-//						System.out.println("   "+d.getField("Title")+d.getField("contents"));
-//					}
+					//System.out.println("Found " + found.length + "  results for "+term);
+					sanityCheck(found, term);
 					count ++;
 				}
 					
@@ -85,6 +85,27 @@ public class D2S_DictionaryRecognizer {
 		
 	}
 	
+	private void sanityCheck(Document[] found, String mainTerm){
+		for (Document d : found) {
+			
+			String[] tokens = mainTerm.split(" ");
+			String content = d.get("contents").toLowerCase();
+			int checkIndex =content.indexOf(mainTerm.toLowerCase());
+			
+			if (checkIndex  >= 0) {
+				System.out.println("=================================================");
+				System.out.println("Found : "	+ mainTerm);
+				System.out.println("     >>   CONTEXT:");
+				String context =content.substring(Math.max(0,
+								checkIndex - 50), Math.min(
+								checkIndex + 50,
+								content.length()));
+				System.out.println(context.substring(0,Math.min(context.length(), 150)));
+				System.out.println("=================================================");
+				
+			} 
+		}
+	}
 	public int getNumberOfFiles(){
 		return currentIndex.getNumberOfFiles();
 	}

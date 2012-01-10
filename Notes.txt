@@ -110,3 +110,20 @@ Data Dictionary
 		- We are limiting the vocabularies only from those available in LLD.
 	
   
+-->"<ncicp:ComplexTerm>
+			<ncicp:term-name>CD4 positive lymphocyte depletion</ncicp:term-name>
+			<ncicp:term-group>LLT</ncicp:term-group>
+			<ncicp:term-source>MedDRA</ncicp:term-source>
+			<ncicp:source-code>10007841</ncicp:source-code>
+	</ncicp:ComplexTerm>"^^rdf:XMLLiteral  
+	
+-->"<ncicp:ComplexTerm>
+			<ncicp:term-name>Absolute CD4 lymphocytes decreased</ncicp:term-name>
+			<ncicp:term-group>LLT</ncicp:term-group>
+			<ncicp:term-source>MedDRA</ncicp:term-source><ncicp:source-code>10065399</ncicp:source-code></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+-->"<ncicp:ComplexTerm><ncicp:term-name>T-helper cells decreased</ncicp:term-name><ncicp:term-group>LLT</ncicp:term-group><ncicp:term-source>MedDRA</ncicp:term-source><ncicp:source-code>10042992</ncicp:source-code></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+-->"<ncicp:ComplexTerm><ncicp:term-name>CD4 lymphocytes decreased</ncicp:term-name><ncicp:term-group>PT</ncicp:term-group><ncicp:term-source>CTCAE</ncicp:term-source></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+-->"<ncicp:ComplexTerm><ncicp:term-name>CD4 lymphocytes low</ncicp:term-name><ncicp:term-group>LLT</ncicp:term-group><ncicp:term-source>MedDRA</ncicp:term-source><ncicp:source-code>10007840</ncicp:source-code></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+-->"<ncicp:ComplexTerm><ncicp:term-name>T-helper cells low</ncicp:term-name><ncicp:term-group>LLT</ncicp:term-group><ncicp:term-source>MedDRA</ncicp:term-source><ncicp:source-code>10048981</ncicp:source-code></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+-->"<ncicp:ComplexTerm><ncicp:term-name>CD4 lymphocytes decreased</ncicp:term-name><ncicp:term-group>LLT</ncicp:term-group><ncicp:term-source>MedDRA</ncicp:term-source><ncicp:source-code>10007839</ncicp:source-code></ncicp:ComplexTerm>"^^rdf:XMLLiteral  :  http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#FULL_SYN
+Annotation for <http://ncicb.nci.nih.gov/xml/owl/EVS/ctcae.owl#Grade_4_Treatment_related_secondary_malignancy>

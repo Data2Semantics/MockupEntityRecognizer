@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -26,8 +25,6 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.apache.pdfbox.lucene.LucenePDFDocument;
-import org.apache.pdfbox.util.PDFHighlighter;
-import org.data2semantics.recognize.D2S_DictionaryRecognizer;
 
 /**
  * First attempt to have a lucene index of existing pdf guidelines. Currently
@@ -138,9 +135,12 @@ public class D2S_Indexer {
 		IndexSearcher searcher = null;
 		Query simpleQuery = null;
 		QueryParser p;
-
+		
+		// This is needed for multiple word query Am I allowed to do this? What is the proper form of query?
+		query = "\"" + query + "\"";
 		simpleQuery = new QueryParser(Version.LUCENE_35, field, analyzer).parse(query);
 
+		//We have much fewer documents, this should not matter.
 		int hitsPerPage = 50;
 		indexReader = IndexReader.open(theIndex);
 
@@ -162,7 +162,10 @@ public class D2S_Indexer {
 			}
 		}
 		
-		return results.toArray(new Document[results.size()]);
+		Document ret[] = new Document[results.size()];
+		for(int i=0;i<results.size();i++)
+			ret[i] = results.get(i);
+		return ret;
 	}
 	public static String bestTerm;
 	public static ScoreDoc bestDoc;

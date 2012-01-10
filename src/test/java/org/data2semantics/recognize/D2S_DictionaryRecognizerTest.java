@@ -15,7 +15,7 @@ public class D2S_DictionaryRecognizerTest {
 //	}
 	
 	@Test
-	public void dummySearch() throws CorruptIndexException, IOException, ParseException{
+	public void searchTerm() throws CorruptIndexException, IOException, ParseException{
 		D2S_DictionaryRecognizer recognizer = new D2S_DictionaryRecognizer();
 		recognizer.doIt();
 	}
