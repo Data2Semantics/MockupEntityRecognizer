@@ -77,6 +77,7 @@ public class D2S_Indexer {
 			luceneDocument = LucenePDFDocument.getDocument(pdfFile);
 			String textContent = new D2S_PDFHandler(pdfFile).getStrippedTextContent();
 			luceneDocument.add(new Field("contents", textContent, Field.Store.YES, Field.Index.ANALYZED));
+			luceneDocument.add(new Field("filename", pdfFile.getName(), Field.Store.YES, Field.Index.ANALYZED));
 			
 		
 			indexWriter.addDocument(luceneDocument);
@@ -91,7 +92,6 @@ public class D2S_Indexer {
 		File publicationDir = new File(directory);
 		
 		File[] pubFiles  = publicationDir.listFiles();
-		System.out.println(pubFiles.length);
 		assert(pubFiles != null);
 		
 		try {

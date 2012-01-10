@@ -38,13 +38,18 @@ public class D2S_DictionaryRecognizer {
 	D2S_Indexer currentIndex=null;
 	
 	public D2S_DictionaryRecognizer() {
+		System.out.println("Preparing vocabulary");
+		
 		vocabularyHandler = new D2S_CTCAEVocabularyHandler();
-	
+		System.out.println("Done preparing vocabulary");
+		
 		try {
+			System.out.println("Preparing indexes");
 			currentIndex = new D2S_Indexer();
 			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
 			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);
-		
+			System.out.println("Done preparing indexes");
+			
 		} catch (IOException e) {
 			log.error("Failed to add files to index");
 		}
@@ -90,11 +95,13 @@ public class D2S_DictionaryRecognizer {
 			
 			String[] tokens = mainTerm.split(" ");
 			String content = d.get("contents").toLowerCase();
+			String fileName = d.get("filename");
+			
 			int checkIndex =content.indexOf(mainTerm.toLowerCase());
 			
 			if (checkIndex  >= 0) {
 				System.out.println("=================================================");
-				System.out.println("Found : "	+ mainTerm);
+				System.out.println("Found : "	+ mainTerm + " \nFile : " +fileName);
 				System.out.println("     >>   CONTEXT:");
 				String context =content.substring(Math.max(0,
 								checkIndex - 50), Math.min(
