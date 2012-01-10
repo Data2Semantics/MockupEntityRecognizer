@@ -72,5 +72,15 @@ public class D2S_IndexTest {
 			}
 		}
 	}
+	
+	@Test
+	public void checkNumberOfFiles() throws IOException{
+		D2S_Indexer testIndexes = new D2S_Indexer();
+		testIndexes.addPDFDirectoryToIndex(PUB_DIR);
+		testIndexes.addPDFDirectoryToIndex(GUIDE_DIR);
+		
+		assert(testIndexes.getNumberOfFiles() != 0);
+		System.out.println("Number of files" + testIndexes.getNumberOfFiles());
+	}
 
 }

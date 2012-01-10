@@ -15,6 +15,9 @@ import org.apache.pdfbox.util.PDFTextStripper;
  * 
  * The PDFTextStripper is used to obtain this information.
  * 
+ * We might want to extend and modify behaviour of this PDFText stripper or write our own.
+ * Since text position is no longer available in this one.
+ * 
  * @author wibisono
  * 
  */

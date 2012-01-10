@@ -53,6 +53,11 @@ public class D2S_CTCAEClassVisitor extends OWLOntologyWalkerVisitor<Object> {
 			}
 			if(isCTCAEPreferredName(annProperty)){
 				String mainTerm =ann.getValue().toString();
+				
+				//A hack, I don't know how to better handle these yet
+				if(mainTerm.toLowerCase().endsWith("^^xsd:string"))
+						mainTerm = mainTerm.substring(0,mainTerm.length()-12);
+				
 				currentConcept.setMainTerm(mainTerm);
 			}
 		}

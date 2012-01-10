@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -24,6 +26,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.apache.pdfbox.lucene.LucenePDFDocument;
 import org.apache.pdfbox.util.PDFHighlighter;
+import org.data2semantics.recognize.D2S_DictionaryRecognizer;
 
 /**
  * First attempt to have a lucene index of existing pdf guidelines. Currently
@@ -34,10 +37,12 @@ import org.apache.pdfbox.util.PDFHighlighter;
  */
 public class D2S_Indexer {
 
+	private Log log = LogFactory.getLog(D2S_Indexer.class);
+
 	Directory theIndex ;
 
-	IndexWriter indexWriter;
-	IndexReader indexReader;
+	IndexWriter indexWriter=null;
+	IndexReader indexReader=null;
 	
 	
 	StandardAnalyzer analyzer;
@@ -48,11 +53,11 @@ public class D2S_Indexer {
 	
 	}
 	
+	IndexWriterConfig writerConfig = null;
 	
-	public void startAddingFiles() throws IOException{
-		
-		IndexWriterConfig writerConfig = new IndexWriterConfig(
-				Version.LUCENE_35, analyzer);
+	public void startAddingFiles() throws IOException {
+
+		writerConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
 
 		try {
 			indexWriter = new IndexWriter(theIndex, writerConfig);
@@ -61,11 +66,13 @@ public class D2S_Indexer {
 		} catch (LockObtainFailedException e) {
 			throw new IOException("No lock obtained, failed to open");
 		}
+
 	}
 	
 	public void stopAddingFiles() throws CorruptIndexException, IOException{
 		indexWriter.close();
 	}
+	
 	public void addPDFDocument(File pdfFile) throws IOException {
 		Document luceneDocument = null;
 		try {
@@ -82,7 +89,37 @@ public class D2S_Indexer {
 			throw new IOException("Failed to add lucene Document to Index");
 		}
 	}
+	public void addPDFDirectoryToIndex(String directory) {
+		File publicationDir = new File(directory);
+		
+		File[] pubFiles  = publicationDir.listFiles();
+		System.out.println(pubFiles.length);
+		assert(pubFiles != null);
+		
+		try {
+
+			startAddingFiles();
+			
+			for(File currentPDF : pubFiles){
+				if(currentPDF.getName().endsWith(".pdf")){
+					addPDFDocument(currentPDF);
+				}
+			}
+			stopAddingFiles();
+		} catch(Exception e){
+			log.error("Failed to add pdf files to indexes");
+		}
+	}
+	public int getNumberOfFiles(){
+		try {
+			String[] docs =theIndex.listAll();
+			return docs.length;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
 	
+
 /**
  * 
  * Simple search of string within some field in the current index.
