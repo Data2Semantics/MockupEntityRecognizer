@@ -57,25 +57,31 @@ public class D2S_DictionaryRecognizer {
 	public void doIt() throws CorruptIndexException, IOException, ParseException{
 		
 		results = new Vector<D2S_Annotation>();
+		int count =0;
 		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
 				List<String> synonyms = currentConcept.getSynonyms();
 				String mainTerm = currentConcept.getMainTerm();
-				Document[] found = currentIndex.simpleStringSearch(mainTerm, "contents");
-				if(found != null){
-					if(found.length >0)
+				Document[] found = currentIndex.simpleStringSearch("\""+mainTerm+"\"", "contents");
+				if(found != null && found.length != 0) {
 					System.out.println("Found " + found.length + "  results for "+mainTerm);
+					count ++;
 				}
-//				for(String term : synonyms){
-//					found = currentIndex.simpleStringSearch(term, "contents");
-//					if(found != null){
-//						System.out.println("Found " + found.length + "  results for "+term);
-//						for(Document d : found){
-//							System.out.println("   "+d.getField("Title")+d.getField("contents"));
-//						}
+				for(String term : synonyms){
+					found = currentIndex.simpleStringSearch("\""+term+"\"", "contents");
+					if(found == null || found.length == 0) continue;
+					System.out.println("Found " + found.length + "  results for "+term);
+//					for(Document d : found){
+//						System.out.println("   "+d.getField("Title")+d.getField("contents"));
 //					}
-//				}
+					count ++;
+				}
 					
 		}
+		log.info("Check count : "+count);
+		log.info("Best score : "+currentIndex.bestScore);
+
+		log.info("Best term : "+currentIndex.bestTerm);
+		log.info("Best doc: "+currentIndex.bestDoc);
 		
 	}
 	

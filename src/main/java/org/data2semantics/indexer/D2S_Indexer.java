@@ -3,6 +3,7 @@ package org.data2semantics.indexer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -140,7 +141,7 @@ public class D2S_Indexer {
 
 		simpleQuery = new QueryParser(Version.LUCENE_35, field, analyzer).parse(query);
 
-		int hitsPerPage = 10;
+		int hitsPerPage = 50;
 		indexReader = IndexReader.open(theIndex);
 
 		searcher = new IndexSearcher(indexReader);
@@ -149,15 +150,23 @@ public class D2S_Indexer {
 		searcher.search(simpleQuery, collector);
 		
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-		Document[] results = new Document[hits.length];
+		List<Document> results = new Vector<Document>();
 		
 		for(int i=0;i<hits.length;i++){
-			results[i] = searcher.doc(hits[i].doc);
+			if(hits[i].score > 0.1)
+				results.add(searcher.doc(hits[i].doc));
+			if(bestScore < hits[i].score){
+				bestScore = hits[i].score;
+				bestDoc = hits[i];
+				bestTerm = query;
+			}
 		}
 		
-		return results;
+		return results.toArray(new Document[results.size()]);
 	}
-
+	public static String bestTerm;
+	public static ScoreDoc bestDoc;
+	public static float bestScore=0;
 	// TODO, test to handle multiple PDF's, perform some searching.
 	// Think about how to store the result found when searching indexes.
 }
