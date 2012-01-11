@@ -82,7 +82,7 @@ public class D2S_DictionaryRecognizer {
 				}
 					
 		}
-		log.info("Check count : "+count);
+		log.info("Check count number of hits: "+count);
 		log.info("Best score : "+currentIndex.bestScore);
 
 		log.info("Best term : "+currentIndex.bestTerm);
