@@ -42,4 +42,102 @@ public class D2S_DocChunk {
 		result += "\nPos     : "+top + ","+left+" - "+bottom+","+right;
 		return result;
 	}
+
+	/**
+	 * @return the pageNumber
+	 */
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+	/**
+	 * @param pageNumber the pageNumber to set
+	 */
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+	/**
+	 * @return the chunkNumber
+	 */
+	public int getChunkNumber() {
+		return chunkNumber;
+	}
+
+	/**
+	 * @param chunkNumber the chunkNumber to set
+	 */
+	public void setChunkNumber(int chunkNumber) {
+		this.chunkNumber = chunkNumber;
+	}
+
+	/**
+	 * @return the textChunk
+	 */
+	public String getTextChunk() {
+		return textChunk;
+	}
+
+	/**
+	 * @param textChunk the textChunk to set
+	 */
+	public void setTextChunk(String textChunk) {
+		this.textChunk = textChunk;
+	}
+
+	/**
+	 * @return the top
+	 */
+	public float getTop() {
+		return top;
+	}
+
+	/**
+	 * @param top the top to set
+	 */
+	public void setTop(float top) {
+		this.top = top;
+	}
+
+	/**
+	 * @return the left
+	 */
+	public float getLeft() {
+		return left;
+	}
+
+	/**
+	 * @param left the left to set
+	 */
+	public void setLeft(float left) {
+		this.left = left;
+	}
+
+	/**
+	 * @return the bottom
+	 */
+	public float getBottom() {
+		return bottom;
+	}
+
+	/**
+	 * @param bottom the bottom to set
+	 */
+	public void setBottom(float bottom) {
+		this.bottom = bottom;
+	}
+
+	/**
+	 * @return the right
+	 */
+	public float getRight() {
+		return right;
+	}
+
+	/**
+	 * @param right the right to set
+	 */
+	public void setRight(float right) {
+		this.right = right;
+	}
 }

@@ -6,7 +6,20 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.pdfbox.examples.pdmodel.Annotation;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
+import org.apache.pdfbox.pdmodel.interactive.action.type.PDActionURI;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLine;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationSquareCircle;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
 
@@ -36,6 +49,7 @@ public class D2S_ModifiedPDFStripper extends PDFTextStripper {
 			initializeChunk();
 		}
 	}
+	Annotation a;
 	
 	private void updateChunkBoundingBox(TextPosition text) {
 		if(left > text.getX()) {
@@ -43,10 +57,10 @@ public class D2S_ModifiedPDFStripper extends PDFTextStripper {
 		}
 		
 		if(top > text.getY()) {
-			top = text.getY();
+			top = text.getY()-text.getHeight();
 		}
 		
-		if(bottom < text.getY()+text.getHeight()) {
+		if(bottom < text.getY()) {
 			bottom = text.getY()+text.getHeight();
 		}
 		
@@ -80,4 +94,6 @@ public class D2S_ModifiedPDFStripper extends PDFTextStripper {
 	public Vector<D2S_DocChunk> getDocumentChunks(){
 		return documentChunks;
 	}
+	
+
 }
