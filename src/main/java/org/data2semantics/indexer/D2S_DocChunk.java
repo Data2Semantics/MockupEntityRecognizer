@@ -34,6 +34,10 @@ public class D2S_DocChunk {
 
 	}
 	
+	public String getPosition(){
+		return "["+left+","+top+"]-["+bottom+","+right+"]";
+	}
+	
 	@Override
 	public String toString() {
 		String result = "";

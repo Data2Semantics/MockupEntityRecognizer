@@ -29,7 +29,7 @@ public class D2S_ChunkedPDFStripperTest {
 		doc = PDDocument.load(fileTest);
 		mStripper.writeText(doc,writer);
 		
-		Vector<D2S_DocChunk> chunks = mStripper.getDocumentChunks();
+		List<D2S_DocChunk> chunks = mStripper.getDocumentChunks();
 		PDGamma yellow = new PDGamma();
 		yellow.setR(1);
 		yellow.setG(1);

@@ -1,6 +1,7 @@
 package org.data2semantics.indexer;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Vector;
 
@@ -40,6 +41,20 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 		
 	}
 	
+	/**
+	 * Just convinient wrapper to process document, without writing since we are more interested on chunked result.
+	 * @param doc
+	 */
+	public void processPDDocument(PDDocument doc){
+		StringWriter dummyWriter = new StringWriter();
+		try {
+			countPage=0;countChunk=0; 
+			beginNewChunk();
+			writeText(doc, dummyWriter);
+		} catch (IOException e) {
+			log.error("Failed to process PDDocument");
+		}
+	}
 	
 	float top, left, bottom, right;
 	int countPage=0, countChunk = 0;
@@ -123,7 +138,7 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	 * @return
 	 */
 	
-	public Vector<D2S_DocChunk> getDocumentChunks(){
+	public List<D2S_DocChunk> getDocumentChunks(){
 		return documentChunks;
 	}
 	

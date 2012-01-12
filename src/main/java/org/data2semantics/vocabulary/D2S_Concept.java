@@ -1,6 +1,8 @@
 package org.data2semantics.vocabulary;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -11,7 +13,9 @@ import java.util.Vector;
 public class D2S_Concept {
 		String stringID;
 		String mainTerm;
-		List<String> synonyms;
+		
+		//Removing duplicates
+		Set<String> synonyms;
 	
 		/**
 		 * @return the stringID
@@ -40,19 +44,19 @@ public class D2S_Concept {
 		/**
 		 * @return the synonyms
 		 */
-		public List<String> getSynonyms() {
+		public Set<String> getSynonyms() {
 			return synonyms;
 		}
 		/**
 		 * @param synonyms the synonyms to set
 		 */
-		public void setSynonyms(List<String> synonyms) {
+		public void setSynonyms(Set<String> synonyms) {
 			this.synonyms = synonyms;
 		}
 		
 		public void addSynonym(String newSynonym) {
 			if(synonyms==null){
-				synonyms = new Vector<String>();
+				synonyms = new HashSet<String>();
 			}
 			synonyms.add(newSynonym);
 		}

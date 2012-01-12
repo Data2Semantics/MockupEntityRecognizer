@@ -25,6 +25,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.apache.pdfbox.lucene.LucenePDFDocument;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * First attempt to have a lucene index of existing pdf guidelines. Currently
@@ -39,9 +40,13 @@ public class D2S_Indexer {
 
 	Directory theIndex ;
 
-	IndexWriter indexWriter=null;
 	IndexReader indexReader=null;
+	IndexWriter indexWriter=null;
+	IndexWriterConfig writerConfig = null;
 	
+	// For chunk processing pdfs
+	D2S_ChunkedPDFStripper chunkedPDFStripper = new D2S_ChunkedPDFStripper();
+	PDDocument pdDocument;
 	
 	StandardAnalyzer analyzer;
 
@@ -51,8 +56,31 @@ public class D2S_Indexer {
 	
 	}
 	
-	IndexWriterConfig writerConfig = null;
 	
+	
+	
+	public void addPDFDirectoryToIndex(String directory) {
+		File publicationDir = new File(directory);
+		
+		File[] pubFiles  = publicationDir.listFiles();
+		assert(pubFiles != null);
+		
+		try {
+
+			startAddingFiles();
+			
+			for(File currentPDF : pubFiles){
+				if(currentPDF.getName().endsWith(".pdf")){
+					addPDFDocument(currentPDF);
+				}
+			}
+			
+			stopAddingFiles();
+		} catch(Exception e){
+			log.error("Failed to add pdf files to indexes");
+		}
+	}
+
 	public void startAddingFiles() throws IOException {
 
 		writerConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
@@ -70,44 +98,46 @@ public class D2S_Indexer {
 	public void stopAddingFiles() throws CorruptIndexException, IOException{
 		indexWriter.close();
 	}
-	
+
+	/**
+	 * Adding pdf file, but then these files will further be divided into Chunks.
+	 * @param pdfFile
+	 * @throws IOException
+	 */
 	public void addPDFDocument(File pdfFile) throws IOException {
-		Document luceneDocument = null;
-		try {
-			luceneDocument = LucenePDFDocument.getDocument(pdfFile);
-			String textContent = new D2S_PDFHandler(pdfFile).getStrippedTextContent();
-			luceneDocument.add(new Field("contents", textContent, Field.Store.YES, Field.Index.ANALYZED));
-			luceneDocument.add(new Field("filename", pdfFile.getName(), Field.Store.YES, Field.Index.ANALYZED));
-			
 		
-			indexWriter.addDocument(luceneDocument);
+		try {
+			pdDocument = PDDocument.load(pdfFile);
+			chunkedPDFStripper.processPDDocument(pdDocument);
+			addDocumentChunks(chunkedPDFStripper.getDocumentChunks(), pdfFile);
 		} catch (IOException e) {
-			if (luceneDocument == null)
+			if (pdDocument == null)
 				throw new IOException(
-						"Failed to create Lucene Document from pdf file");
+						"Failed to create PDFBox Document from pdf file");
 			throw new IOException("Failed to add lucene Document to Index");
 		}
 	}
-	public void addPDFDirectoryToIndex(String directory) {
-		File publicationDir = new File(directory);
-		
-		File[] pubFiles  = publicationDir.listFiles();
-		assert(pubFiles != null);
-		
-		try {
+	
 
-			startAddingFiles();
+	
+	private void addDocumentChunks(List<D2S_DocChunk> chunks, File pdfFile) throws IOException {
+		
+		for(D2S_DocChunk currrentChunk : chunks){
+			Document luceneDocument = new Document();
+			luceneDocument.add(new Field("contents", currrentChunk.getTextChunk(), Field.Store.YES, Field.Index.ANALYZED));
 			
-			for(File currentPDF : pubFiles){
-				if(currentPDF.getName().endsWith(".pdf")){
-					addPDFDocument(currentPDF);
-				}
-			}
-			stopAddingFiles();
-		} catch(Exception e){
-			log.error("Failed to add pdf files to indexes");
+			luceneDocument.add(new Field("filename", pdfFile.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+			luceneDocument.add(new Field("page_nr", currrentChunk.getPageNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+			luceneDocument.add(new Field("chunk_nr", currrentChunk.getChunkNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+			luceneDocument.add(new Field("position", currrentChunk.getPosition()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+			
+			
+			indexWriter.addDocument(luceneDocument);
 		}
+	
+		
 	}
+
 	public int getNumberOfFiles(){
 		try {
 			String[] docs =theIndex.listAll();

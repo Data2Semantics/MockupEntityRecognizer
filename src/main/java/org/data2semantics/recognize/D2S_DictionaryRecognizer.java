@@ -3,6 +3,7 @@ package org.data2semantics.recognize;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.commons.logging.Log;
@@ -64,7 +65,7 @@ public class D2S_DictionaryRecognizer {
 		results = new Vector<D2S_Annotation>();
 		int count =0;
 		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
-				List<String> synonyms = currentConcept.getSynonyms();
+				Set<String> synonyms = currentConcept.getSynonyms();
 				String mainTerm = currentConcept.getMainTerm();
 				Document[] found = currentIndex.simpleStringSearch(mainTerm, "contents");
 				if(found != null && found.length != 0) {
@@ -93,15 +94,22 @@ public class D2S_DictionaryRecognizer {
 	private void sanityCheck(Document[] found, String mainTerm){
 		for (Document d : found) {
 			
-			String[] tokens = mainTerm.split(" ");
-			String content = d.get("contents").toLowerCase();
+			String content 	= d.get("contents").toLowerCase();
 			String fileName = d.get("filename");
+			String page_nr 	= d.get("page_nr");
+			String chunk_nr = d.get("chunk_nr");
+			String position = d.get("position");
 			
 			int checkIndex =content.indexOf(mainTerm.toLowerCase());
 			
 			if (checkIndex  >= 0) {
 				System.out.println("=================================================");
-				System.out.println("Found : "	+ mainTerm + " \nFile : " +fileName);
+				System.out.println("Found : "	+ mainTerm
+									+ "\nFile    : " + fileName 
+									+ "\nPage nr : " + page_nr
+									+ "\nChunk nr: " + chunk_nr
+									+ "\nPosition: " + position
+									);
 				System.out.println("     >>   CONTEXT:");
 				String context =content.substring(Math.max(0,
 								checkIndex - 50), Math.min(
