@@ -23,12 +23,12 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
 
-public class D2S_ModifiedPDFStripper extends PDFTextStripper {
+public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	
-	private Log log = LogFactory.getLog(D2S_ModifiedPDFStripper.class);
+	private Log log = LogFactory.getLog(D2S_ChunkedPDFStripper.class);
 	Vector<D2S_DocChunk> documentChunks = new Vector<D2S_DocChunk>();
 	
-	public D2S_ModifiedPDFStripper() throws IOException {
+	public D2S_ChunkedPDFStripper() throws IOException {
 		super();
 		
 	}

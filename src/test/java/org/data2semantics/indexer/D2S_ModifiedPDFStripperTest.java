@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.pdfbox.examples.pdmodel.Annotation;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -22,7 +23,7 @@ public class D2S_ModifiedPDFStripperTest {
 	
 	@Test
 	public void testCharactersByArticle() throws IOException, COSVisitorException{
-		D2S_ModifiedPDFStripper mStripper = new D2S_ModifiedPDFStripper();
+		D2S_ChunkedPDFStripper mStripper = new D2S_ChunkedPDFStripper();
 		StringWriter writer = new StringWriter();
 		doc = PDDocument.load(fileTest);
 		mStripper.writeText(doc,writer);
@@ -32,7 +33,7 @@ public class D2S_ModifiedPDFStripperTest {
 		yellow.setR(1);
 		yellow.setG(1);
 		
-
+		Annotation a;
         PDPageNode rootPage = doc.getDocumentCatalog().getPages();
         List<PDPage> pages = new ArrayList<PDPage>();
         rootPage.getAllKids(pages);
