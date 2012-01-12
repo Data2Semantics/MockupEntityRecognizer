@@ -55,7 +55,6 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 			log.error("Failed to process PDDocument");
 		}
 	}
-	
 	float top, left, bottom, right;
 	int countPage=0, countChunk = 0;
 
@@ -72,7 +71,8 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 		currentChunk.append(text.getCharacter());
 		if(text.getCharacter().equals(".")){
 			++countChunk;
-			documentChunks.add(new D2S_DocChunk(countPage, countChunk, currentChunk.toString(), top, left, bottom, right));
+			D2S_DocChunk newChunk = new D2S_DocChunk(countPage, countChunk, currentChunk.toString(), top, left, bottom, right); 
+			documentChunks.add(newChunk);
 			beginNewChunk();
 		}
 	}

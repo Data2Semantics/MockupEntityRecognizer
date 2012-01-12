@@ -49,6 +49,9 @@ public class D2S_Indexer {
 	PDDocument pdDocument;
 	
 	StandardAnalyzer analyzer;
+	
+	// Since we are working with chunks, I need to keep the real names of documents here.
+	List<File> indexedFiles = new Vector<File>();
 
 	public D2S_Indexer() throws IOException {
 		theIndex = new RAMDirectory();
@@ -57,7 +60,9 @@ public class D2S_Indexer {
 	}
 	
 	
-	
+	public List<File> getIndexedFiles(){
+		return indexedFiles;
+	}
 	
 	public void addPDFDirectoryToIndex(String directory) {
 		File publicationDir = new File(directory);
@@ -72,6 +77,7 @@ public class D2S_Indexer {
 			for(File currentPDF : pubFiles){
 				if(currentPDF.getName().endsWith(".pdf")){
 					addPDFDocument(currentPDF);
+					indexedFiles.add(currentPDF);
 				}
 			}
 			

@@ -13,6 +13,7 @@ public class D2S_DocChunk {
 	int chunkNumber;
 	
 	String textChunk;
+	String prefix, suffix;
 	
 	float top;
 	float left;
@@ -34,8 +35,40 @@ public class D2S_DocChunk {
 
 	}
 	
+	/**
+	 * @return the prefix
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * @param prefix the prefix to set
+	 */
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	/**
+	 * @return the suffix
+	 */
+	public String getSuffix() {
+		return suffix;
+	}
+
+	/**
+	 * @param suffix the suffix to set
+	 */
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
+
+	private int toInt(float f){
+			return new Float(Math.round(f)).intValue();
+	}
 	public String getPosition(){
-		return "["+left+","+top+"]-["+bottom+","+right+"]";
+		
+		return "("+toInt(left)+","+toInt(top)+")-("+toInt(bottom)+","+toInt(right)+")";
 	}
 	
 	@Override
