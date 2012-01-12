@@ -115,6 +115,9 @@ public class D2S_Indexer {
 				throw new IOException(
 						"Failed to create PDFBox Document from pdf file");
 			throw new IOException("Failed to add lucene Document to Index");
+		} 
+		finally{
+			pdDocument.close();
 		}
 	}
 	
