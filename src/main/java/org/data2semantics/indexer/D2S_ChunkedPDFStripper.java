@@ -23,6 +23,13 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
 
+/**
+ * Chunked PDF stripper extending PDFTextStripper overwriting processTextPosition.
+ * The resulting chunks of texts keeps position information so that it can be used later on for visualization.
+ * 
+ * @author wibisono
+ *
+ */
 public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	
 	private Log log = LogFactory.getLog(D2S_ChunkedPDFStripper.class);
@@ -39,6 +46,11 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 
 	StringBuffer currentChunk;
 	
+	/**
+	 * This method is provided by PDFText stripper to be overwritten, 
+	 * It is called whenever original PDFText stripper process a character with position.
+	 * Now this processing is done while chunking the text, which ended with . (Assuming it will be a sentence).
+	 */
 	@Override
 	protected void processTextPosition(TextPosition text) {
 		updateChunkBoundingBox(text);
@@ -46,21 +58,46 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 		if(text.getCharacter().equals(".")){
 			++countChunk;
 			documentChunks.add(new D2S_DocChunk(countPage, countChunk, currentChunk.toString(), top, left, bottom, right));
-			initializeChunk();
+			beginNewChunk();
 		}
 	}
-	Annotation a;
 	
+	
+	/**
+	 * Called by parent everytime we started a new page.
+	 */
+	@Override
+	protected void startPage(PDPage page) throws IOException {
+		// TODO Auto-generated method stub
+		super.startPage(page);
+		countPage ++;
+		beginNewChunk();
+	}
+
+	/**
+	 * Beginning of a new chunk, resetting boundingbox parameters and the currentChunk string buffer used to keep the 
+	 */
+	private void beginNewChunk() {
+		top = 10000; left = 10000; 
+		bottom = 0; right = 0;
+		currentChunk = new StringBuffer();		
+	}
+	
+	/**
+	 * Does what its methodname said, 
+	 * looking for the bounding box by checking each character/text position.
+	 * @param text
+	 */
 	private void updateChunkBoundingBox(TextPosition text) {
 		if(left > text.getX()) {
 			left = text.getX();
 		}
 		
-		if(top > text.getY()) {
+		if(top > text.getY()-text.getHeight()) {
 			top = text.getY()-text.getHeight();
 		}
 		
-		if(bottom < text.getY()) {
+		if(bottom < text.getY()+text.getHeight()) {
 			bottom = text.getY()+text.getHeight();
 		}
 		
@@ -70,26 +107,21 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 		
 	}
 
-	
+	/**
+	 * I don't remember why I am exposing these variables.
+	 * These list of characters are temporary storage for text being processed by PDFTextStripper.
+	 * @return
+	 */
 
 	Vector<List<TextPosition>> getCharacterByArticles(){
 		return charactersByArticle;
 	}
 	
 	
-	@Override
-	protected void startPage(PDPage page) throws IOException {
-		// TODO Auto-generated method stub
-		super.startPage(page);
-		countPage ++;
-		initializeChunk();
-	}
-
-	private void initializeChunk() {
-		top = 10000; left = 10000; 
-		bottom = 0; right = 0;
-		currentChunk = new StringBuffer();		
-	}
+	/**
+	 * Getters of the resulting document chunks.
+	 * @return
+	 */
 	
 	public Vector<D2S_DocChunk> getDocumentChunks(){
 		return documentChunks;

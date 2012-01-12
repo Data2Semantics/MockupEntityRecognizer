@@ -14,10 +14,11 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageNode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 import org.junit.Test;
 
-public class D2S_ModifiedPDFStripperTest {
+public class D2S_ChunkedPDFStripperTest {
 	File  fileTest				= new File("src\\test\\resources\\neutropenia.pdf");
 	PDDocument doc;
 	
@@ -33,8 +34,7 @@ public class D2S_ModifiedPDFStripperTest {
 		yellow.setR(1);
 		yellow.setG(1);
 		
-		Annotation a;
-        PDPageNode rootPage = doc.getDocumentCatalog().getPages();
+		PDPageNode rootPage = doc.getDocumentCatalog().getPages();
         List<PDPage> pages = new ArrayList<PDPage>();
         rootPage.getAllKids(pages);
    
@@ -42,7 +42,7 @@ public class D2S_ModifiedPDFStripperTest {
 			System.out.println(chunk);
 			
 			PDPage currentPage = pages.get(chunk.getPageNumber()-1);
-            List annotations = currentPage.getAnnotations();
+            List <PDAnnotation> annotations = currentPage.getAnnotations();
             PDRectangle mediaBox = currentPage.getMediaBox();
             System.out.println(" Width : "+mediaBox.getWidth());
             System.out.println(" Height : "+mediaBox.getHeight());
