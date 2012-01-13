@@ -173,7 +173,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		rdf:type aos:InitEndCornerSelector;"+
 				"\n 		aos:init "+ position.split("-")[0]+";"+
 				"\n 		aos:end "+ position.split("-")[1]+";"+
-				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">"+
+				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 
 				
