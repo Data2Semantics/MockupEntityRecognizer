@@ -54,7 +54,7 @@ public class D2S_DictionaryRecognizer {
 			currentIndex = new D2S_Indexer();
 			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
 			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);
-			log.info("Done preparing indexes");
+			//log.info("Done preparing indexes");
 			
 		} catch (IOException e) {
 			log.error("Failed to add files to index");
@@ -165,7 +165,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		aos:exact \""+MAIN_TERM+"\";"+
 				"\n 		aos:prefix \""+PREFIX+"\";"+
 				"\n 		aos:postfix \""+POSTFIX+"\";"+
-				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">"+
+				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 				
 				"\n<http://www.data2semantics.org/example/imageselector/"+selectorID +"/> rdf:type ao:Selector; "+
@@ -173,7 +173,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		rdf:type aos:InitEndCornerSelector;"+
 				"\n 		aos:init "+ position.split("-")[0]+";"+
 				"\n 		aos:end "+ position.split("-")[1]+";"+
-				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">"+
+				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 
 				
