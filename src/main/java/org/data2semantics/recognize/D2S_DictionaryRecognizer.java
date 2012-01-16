@@ -16,7 +16,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.pdfbox.examples.util.ExtractTextByArea;
-import org.apache.soap.encoding.soapenc.FPDeserUtil;
 import org.data2semantics.indexer.D2S_Indexer;
 import org.data2semantics.indexer.D2S_PDFHandler;
 import org.data2semantics.vocabulary.D2S_CTCAEVocabularyHandler;
@@ -54,7 +53,7 @@ public class D2S_DictionaryRecognizer {
 			currentIndex = new D2S_Indexer();
 			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
 			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);
-			log.info("Done preparing indexes");
+			//log.info("Done preparing indexes");
 			
 		} catch (IOException e) {
 			log.error("Failed to add files to index");
@@ -165,7 +164,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		aos:exact \""+MAIN_TERM+"\";"+
 				"\n 		aos:prefix \""+PREFIX+"\";"+
 				"\n 		aos:postfix \""+POSTFIX+"\";"+
-				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">"+
+				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 				
 				"\n<http://www.data2semantics.org/example/imageselector/"+selectorID +"/> rdf:type ao:Selector; "+
