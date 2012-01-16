@@ -18,7 +18,6 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.turtle.TurtleWriter;
-import org.openrdf.vocabulary.RDF;
 
 
 
@@ -64,7 +63,10 @@ public class D2S_AnnotationOntology {
 	public static final String D2S_EXAMPLE = "http://www.data2semantics.org/example/";
 
 	public static final String D2S_SOURCEDOC = D2S_EXAMPLE+"sourcedocs/";
-
+	
+	public static final String D2S_PREFIX_SELECTOR = D2S_EXAMPLE+"prefixpostfixtextselector/";
+	
+	
 	public static final String D2S_DOCS = D2S_EXAMPLE+"docs/";
 
 	
@@ -152,7 +154,7 @@ public class D2S_AnnotationOntology {
 				
 
 			} catch (IOException e) {
-				log.error("Failed to add document");
+				log.error("Failed to add document "+fileName);
 			}
 			
 		}
@@ -169,8 +171,38 @@ public class D2S_AnnotationOntology {
 	 * @param position
 	 */
 	public void addAnnotation(String mainTerm, String prefix, String postfix, String fileName, 
-			String annotation, String position){
+			String annotation, String position, String page_nr, String chunk_nr, String termLocation){
 			
+			String selectorID = fileName+"_"+page_nr+"_"+chunk_nr+"_"+termLocation;
+			try{
+				
+				// Ideally I think these two more general selector should be inferred, not explicitly stated here.
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), URIImpl.RDF_TYPE, 
+										 new URIImpl(AO_CORE,"Selector"));
+
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), URIImpl.RDF_TYPE, 
+						 new URIImpl(AO_SELECTOR+"TextSelector"));
+	
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), URIImpl.RDF_TYPE, 
+						 new URIImpl(AO_SELECTOR,"PrefixPostFixSelector"));
+				
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), 
+						new URIImpl(AO_SELECTOR,"exact"),
+						new LiteralImpl(mainTerm));
+				
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), 
+						new URIImpl(AO_SELECTOR,"prefix"),
+						new LiteralImpl(prefix));
+				
+				docWriter.writeStatement(new URIImpl(D2S_PREFIX_SELECTOR+selectorID), 
+						new URIImpl(AO_SELECTOR,"postfix"),
+						new LiteralImpl(postfix));
+				
+				
+	
+			}catch(IOException e){
+				log.error("Failed to add term "+mainTerm+ "  "+prefix + "  "+postfix + " "+fileName);
+			}
 	}
 	
 	public void addStatement(Resource subj, URI pred, Value obj ){
