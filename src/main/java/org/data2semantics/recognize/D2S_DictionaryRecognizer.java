@@ -183,7 +183,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		ao:hasTopic <"+ANNOTATION+">;"+
 				"\n 		pav:createdOn \""+CREATED_ON+"\";"+
 				"\n 		pav:createdBy <http://www.data2semantics.org/example/D2SAnnotator/>;"+
-				"\n 		annotation-core:context <http://www.data2semantics.org/example/prefixpostfixtextselector/"+selectorID+"/> .";
+				"\n 		ao:context <http://www.data2semantics.org/example/prefixpostfixtextselector/"+selectorID+"/> .";
 				return result;
 	}
 	
