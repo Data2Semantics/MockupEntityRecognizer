@@ -171,8 +171,8 @@ public class D2S_DictionaryRecognizer {
 				"\n<http://www.data2semantics.org/example/imageselector/"+selectorID +"/> rdf:type ao:Selector; "+
 				"\n 		rdf:type aos:ImageSelector;"+
 				"\n 		rdf:type aos:InitEndCornerSelector;"+
-				"\n 		aos:init "+ position.split("-")[0]+";"+
-				"\n 		aos:end "+ position.split("-")[1]+";"+
+				"\n 		aos:init \""+ position.split("-")[0]+"\";"+
+				"\n 		aos:end \""+ position.split("-")[1]+"\";"+
 				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 
