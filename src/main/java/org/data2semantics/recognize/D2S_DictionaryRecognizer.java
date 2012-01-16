@@ -108,7 +108,8 @@ public class D2S_DictionaryRecognizer {
 			"\n@prefix pav: <http://purl.org/pav#> ."+
 			"\n@prefix ann: <http://www.w3.org/2000/10/annotation-ns#> ."+
 			"\n@prefix pro: <http://purl.obolibrary.org/obo#> ."+
-			"\n@prefix foaf: <http://xmlns.com/foaf/0.1#> .\n"
+			"\n@prefix foaf: <http://xmlns.com/foaf/0.1#> .\n" +
+			"\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 		);
 		
 		System.out.println(
