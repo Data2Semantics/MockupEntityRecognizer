@@ -16,7 +16,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.pdfbox.examples.util.ExtractTextByArea;
-import org.apache.soap.encoding.soapenc.FPDeserUtil;
 import org.data2semantics.indexer.D2S_Indexer;
 import org.data2semantics.indexer.D2S_PDFHandler;
 import org.data2semantics.vocabulary.D2S_CTCAEVocabularyHandler;
@@ -185,7 +184,7 @@ public class D2S_DictionaryRecognizer {
 				"\n 		ao:hasTopic <"+ANNOTATION+">;"+
 				"\n 		pav:createdOn \""+CREATED_ON+"\";"+
 				"\n 		pav:createdBy <http://www.data2semantics.org/example/D2SAnnotator/>;"+
-				"\n 		annotation-core:context <http://www.data2semantics.org/example/prefixpostfixtextselector/"+selectorID+"/> .";
+				"\n 		ao:context <http://www.data2semantics.org/example/prefixpostfixtextselector/"+selectorID+"/> .";
 				return result;
 	}
 	
