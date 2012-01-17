@@ -36,8 +36,8 @@ public class D2S_DictionaryRecognizer {
 	List<D2S_Annotation> results;
 
 	// Think of a better way to provide this directory as a configuration
-	static final String PUB_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Publications";
-	static final String GUIDE_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Guidelines";
+	static final String PUB_DIR="/home/lrd900/tmpDocs/literature";
+	static final String GUIDE_DIR="/home/lrd900/tmpDocs/guidelines";
 
 	// Coba bikin dari publication dulu
 	D2S_Indexer currentIndex=null;
@@ -99,7 +99,7 @@ public class D2S_DictionaryRecognizer {
 	
 	private void printAnnotatorHeader(){
 		System.out.println(
-			"\n@prefix ao: <http@prefix://purl.org/ao/core#> . "+
+			"\n@prefix ao: <http://purl.org/ao/core#> . "+
 			"\n@prefix aot: <http://purl.org/ao/types#> ."+
 			"\n@prefix aos: <http://purl.org/ao/selectors#> ."+
 			"\n@prefix aof: <http://purl.org/ao/foaf#> ."+
@@ -107,7 +107,8 @@ public class D2S_DictionaryRecognizer {
 			"\n@prefix pav: <http://purl.org/pav#> ."+
 			"\n@prefix ann: <http://www.w3.org/2000/10/annotation-ns#> ."+
 			"\n@prefix pro: <http://purl.obolibrary.org/obo#> ."+
-			"\n@prefix foaf: <http://xmlns.com/foaf/0.1#> .\n"
+			"\n@prefix foaf: <http://xmlns.com/foaf/0.1#> ." +
+			"\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 		);
 		
 		System.out.println(
@@ -170,8 +171,8 @@ public class D2S_DictionaryRecognizer {
 				"\n<http://www.data2semantics.org/example/imageselector/"+selectorID +"/> rdf:type ao:Selector; "+
 				"\n 		rdf:type aos:ImageSelector;"+
 				"\n 		rdf:type aos:InitEndCornerSelector;"+
-				"\n 		aos:init "+ position.split("-")[0]+";"+
-				"\n 		aos:end "+ position.split("-")[1]+";"+
+				"\n 		aos:init \""+ position.split("-")[0]+"\";"+
+				"\n 		aos:end \""+ position.split("-")[1]+"\";"+
 				"\n 		aof:onDocument <http://www.data2semantics.org/example/Docs/"+NAMEOFFILE+">;"+
 				"\n 		ao:onSourceDocument <http://www.data2semantics.org/example/sourceDocs/"+NAMEOFFILE+"> ."+
 
