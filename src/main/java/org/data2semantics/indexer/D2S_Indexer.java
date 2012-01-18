@@ -116,8 +116,14 @@ public class D2S_Indexer {
 
 		try {
 			pdDocument = PDDocument.load(pdfFile);
-			chunkedPDFStripper.processPDDocument(pdDocument);
-			addDocumentChunks(chunkedPDFStripper.getDocumentChunks(), pdfFile);
+			chunkedPDFStripper.processPDDocument(pdDocument, pdfFile);
+			
+			List<D2S_DocChunk> chunks = chunkedPDFStripper.getDocumentChunks();
+			
+			for(D2S_DocChunk currrentChunk : chunks){
+				indexWriter.addDocument(currrentChunk.getLuceneDocument());
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			if (pdDocument == null)
@@ -131,25 +137,6 @@ public class D2S_Indexer {
 		}
 	}
 	
-
-	
-	private void addDocumentChunks(List<D2S_DocChunk> chunks, File pdfFile) throws IOException {
-		
-		for(D2S_DocChunk currrentChunk : chunks){
-			Document luceneDocument = new Document();
-			luceneDocument.add(new Field("contents", currrentChunk.getTextChunk(), Field.Store.YES, Field.Index.ANALYZED));
-			
-			luceneDocument.add(new Field("filename", pdfFile.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("page_nr", currrentChunk.getPageNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("chunk_nr", currrentChunk.getChunkNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("position", currrentChunk.getPosition()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			
-			
-			indexWriter.addDocument(luceneDocument);
-		}
-	
-		
-	}
 
 	public int getNumberOfFiles(){
 		try {

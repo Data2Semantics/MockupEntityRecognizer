@@ -1,5 +1,10 @@
 package org.data2semantics.indexer;
 
+import java.io.File;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+
 /**
  * The idea is that this is a small chunk of text extracted from PDF which contains a whole sentece of text (delimited by .)
  * The base of extraction is using PDFTextStripper, by extending and using the processTextPosition streaming.
@@ -12,6 +17,7 @@ public class D2S_DocChunk {
 	int pageNumber;
 	int chunkNumber;
 	
+	String fileName;
 	String textChunk;
 	String prefix, suffix;
 	
@@ -22,9 +28,10 @@ public class D2S_DocChunk {
 	
 
 
-	public D2S_DocChunk(int pageNumber, int chunkNumber, String textChunk,
+	public D2S_DocChunk(String fileName, int pageNumber, int chunkNumber, String textChunk,
 			float top, float left, float bottom, float right) {
 		super();
+		this.fileName = fileName;
 		this.pageNumber = pageNumber;
 		this.chunkNumber = chunkNumber;
 		this.textChunk = textChunk;
@@ -35,6 +42,34 @@ public class D2S_DocChunk {
 
 	}
 	
+
+	public  Document getLuceneDocument() {
+		
+		Document luceneDocument = new Document();
+
+		luceneDocument.add(new Field("contents", getTextChunk(), Field.Store.YES, Field.Index.ANALYZED));
+		luceneDocument.add(new Field("filename", getFileName(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+		luceneDocument.add(new Field("page_nr", getPageNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+		luceneDocument.add(new Field("chunk_nr",getChunkNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+		luceneDocument.add(new Field("position",getPosition()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
+		
+		return luceneDocument;
+	}
+	
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+		return fileName;
+	}
+
+	/**
+	 * @param fileName the fileName to set
+	 */
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	/**
 	 * @return the prefix
 	 */

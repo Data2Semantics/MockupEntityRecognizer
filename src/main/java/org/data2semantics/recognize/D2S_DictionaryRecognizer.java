@@ -238,7 +238,7 @@ public class D2S_DictionaryRecognizer {
 		
 		//Add annotations
 		
-	
+		log.info("Start searching terms in document chunks ");
 		int count =0;
 		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
 				Set<String> synonyms = currentConcept.getSynonyms();
@@ -248,7 +248,6 @@ public class D2S_DictionaryRecognizer {
 					//System.out.println("Found " + found.length + "  results for "+mainTerm);
 					generateAnnotationOntology(foundDocuments, mainTerm, currentConcept, aoWriter);
 					count ++;
-
 				}
 				for(String term : synonyms){
 					foundDocuments = currentIndex.simpleStringSearch(term, "contents");
@@ -259,26 +258,30 @@ public class D2S_DictionaryRecognizer {
 				}
 					
 		}
-		
 		aoWriter.stopWriting();
+
+		log.info("Finish writing result");
 	}
 	
 	private void generateAnnotationOntology(Document[] found, String mainTerm, D2S_Concept currentConcept, D2S_AnnotationOntologyWriter aoWriter){
 		
 		for (Document d : found) {
-			String content = d.get("contents");
-			String lowerCaseContent 	= content.toLowerCase();
-			String NAMEOFFILE = d.get("filename").replaceAll(" ","_");
 			String page_nr 	= d.get("page_nr");
 			String chunk_nr = d.get("chunk_nr");
 			String position = d.get("position");
+			String content 	= d.get("contents");
+			
+			String fileName = d.get("filename").replaceAll(" ","_");
+			
+			String lowerCaseContent 	= content.toLowerCase();
+			
 			int termLocation =lowerCaseContent.indexOf(mainTerm.toLowerCase());
 			
 			if (termLocation  >= 0) {
 				String prefix = content.substring(0,termLocation);
 				String suffix = content.substring(termLocation+mainTerm.length()+1);
 				String uriID = currentConcept.getStringID();
-				aoWriter.addAnnotation(mainTerm, prefix, suffix, NAMEOFFILE, uriID, position, page_nr, chunk_nr, ""+termLocation);
+				aoWriter.addAnnotation(mainTerm, prefix, suffix, fileName, uriID, position, page_nr, chunk_nr, ""+termLocation);
 			} 
 		}
 	}
