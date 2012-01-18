@@ -23,10 +23,15 @@ public class D2S_Annotation {
 	//Text following term found
 	String suffix;
 	
+	//File originally where this term is found.
+	String fileName;
+	
 	// Page number in PDF
 	int page_number;
 	
 	// Location as returned by TextPosition from pdfbox
 	int x_offset, y_offset;
+	
+	
 	
 }

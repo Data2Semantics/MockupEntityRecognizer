@@ -1,12 +1,16 @@
 package org.data2semantics.recognize;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Properties;
+
+import java.net.URL;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,8 +52,8 @@ public class D2S_DictionaryRecognizer {
 		try {
 			log.info("Preparing indexes");
 			currentIndex = new D2S_Indexer();
-			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
-			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);
+			
+			addDirectoriesToBeIndexed();
 			//log.info("Done preparing indexes");
 			
 		} catch (IOException e) {
@@ -58,7 +62,36 @@ public class D2S_DictionaryRecognizer {
 		
 	}
 	
+	private void addDirectoriesToBeIndexed(){
+		Properties properties = new Properties();
+		
+		// Property file indicating which file to be indexed  in src/main/resources	
+		URL propertyURL = getClass().getClassLoader().getResource("indexed.dirs");
 
+		if(propertyURL == null){
+			// no property file, resort to some default PUB_DIR
+			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
+			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);	
+			return;
+		}
+
+		try {
+			File propFile = new File(propertyURL.getFile());
+			properties.load(new FileInputStream(propFile));
+			int count = new Integer(properties.getProperty("directories.count"));
+			
+			for(int i=1;i<=count;i++){
+				String currentDir = properties.getProperty("directory."+count);
+				log.info("Adding directory : " +currentDir);
+				currentIndex.addPDFDirectoryToIndex(currentDir);
+			}
+
+		}
+		catch(Exception e){
+			
+		}	
+		
+	}
 
 	//Let's just do it and see how far we go.
 	public void doIt() throws CorruptIndexException, IOException, ParseException{
@@ -68,8 +101,10 @@ public class D2S_DictionaryRecognizer {
 		results = new Vector<D2S_Annotation>();
 		int count =0;
 		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
+			
 				Set<String> synonyms = currentConcept.getSynonyms();
 				String mainTerm = currentConcept.getMainTerm();
+				log.info("Searching term "+mainTerm);
 				Document[] foundDocuments = currentIndex.simpleStringSearch(mainTerm, "contents");
 				if(foundDocuments != null && foundDocuments.length != 0) {
 					//System.out.println("Found " + found.length + "  results for "+mainTerm);
@@ -189,5 +224,63 @@ public class D2S_DictionaryRecognizer {
 		return currentIndex.getNumberOfFiles();
 	}
 	
+	public void doItWithRIO(String outputFile) throws CorruptIndexException, IOException, ParseException{
+
+		D2S_AnnotationOntologyWriter aoWriter  = new D2S_AnnotationOntologyWriter(outputFile);
+		
+		aoWriter.startWriting();
+		aoWriter.addFiles(currentIndex.getIndexedFiles());
+		
+		results = new Vector<D2S_Annotation>();
+		
+		//Add annotations
+		
+		log.info("Start searching terms in document chunks ");
+		int count =0;
+		for(D2S_Concept currentConcept : vocabularyHandler.getAvailableConcepts()){
+				Set<String> synonyms = currentConcept.getSynonyms();
+				String mainTerm = currentConcept.getMainTerm();
+				Document[] foundDocuments = currentIndex.simpleStringSearch(mainTerm, "contents");
+				if(foundDocuments != null && foundDocuments.length != 0) {
+					//System.out.println("Found " + found.length + "  results for "+mainTerm);
+					generateAnnotationOntology(foundDocuments, mainTerm, currentConcept, aoWriter);
+					count ++;
+				}
+				for(String term : synonyms){
+					foundDocuments = currentIndex.simpleStringSearch(term, "contents");
+					if(foundDocuments == null || foundDocuments.length == 0) continue;
+					//System.out.println("Found " + found.length + "  results for "+term);
+					generateAnnotationOntology(foundDocuments, term, currentConcept, aoWriter);
+					count ++;
+				}
+					
+		}
+		aoWriter.stopWriting();
+
+		log.info("Finish writing result");
+	}
+	
+	private void generateAnnotationOntology(Document[] found, String mainTerm, D2S_Concept currentConcept, D2S_AnnotationOntologyWriter aoWriter){
+		
+		for (Document d : found) {
+			String page_nr 	= d.get("page_nr");
+			String chunk_nr = d.get("chunk_nr");
+			String position = d.get("position");
+			String content 	= d.get("contents");
+			
+			String fileName = d.get("filename").replaceAll(" ","_");
+			
+			String lowerCaseContent 	= content.toLowerCase();
+			
+			int termLocation =lowerCaseContent.indexOf(mainTerm.toLowerCase());
+			
+			if (termLocation  >= 0) {
+				String prefix = content.substring(0,termLocation);
+				String suffix = content.substring(termLocation+mainTerm.length()+1);
+				String uriID = currentConcept.getStringID();
+				aoWriter.addAnnotation(mainTerm, prefix, suffix, fileName, uriID, position, page_nr, chunk_nr, ""+termLocation);
+			} 
+		}
+	}
 	
 }

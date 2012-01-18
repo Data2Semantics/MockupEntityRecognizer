@@ -55,6 +55,11 @@ Will be using library from Standford NLP.</description>
 		  	<artifactId>owlapi</artifactId>
   			<version>3.2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openrdf</groupId>
+			<artifactId>rio</artifactId>
+			<version>1.0.10</version>
+		</dependency>
 	</dependencies>
 
 	<artifactId>D2SAnnotate</artifactId>

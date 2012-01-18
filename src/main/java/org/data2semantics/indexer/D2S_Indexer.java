@@ -66,7 +66,6 @@ public class D2S_Indexer {
 	
 	public void addPDFDirectoryToIndex(String directory) {
 		File publicationDir = new File(directory);
-		
 		File[] pubFiles  = publicationDir.listFiles();
 		assert(pubFiles != null);
 		
@@ -78,11 +77,13 @@ public class D2S_Indexer {
 				if(currentPDF.getName().endsWith(".pdf")){
 					addPDFDocument(currentPDF);
 					indexedFiles.add(currentPDF);
+					log.info("   Added pdf "+currentPDF);
 				}
 			}
 			
 			stopAddingFiles();
 		} catch(Exception e){
+			e.printStackTrace();
 			log.error("Failed to add pdf files to indexes");
 		}
 	}
@@ -112,40 +113,30 @@ public class D2S_Indexer {
 	 */
 	public void addPDFDocument(File pdfFile) throws IOException {
 		
+
 		try {
 			pdDocument = PDDocument.load(pdfFile);
-			chunkedPDFStripper.processPDDocument(pdDocument);
-			addDocumentChunks(chunkedPDFStripper.getDocumentChunks(), pdfFile);
+			chunkedPDFStripper.processPDDocument(pdDocument, pdfFile);
+			
+			List<D2S_DocChunk> chunks = chunkedPDFStripper.getDocumentChunks();
+			
+			for(D2S_DocChunk currrentChunk : chunks){
+				indexWriter.addDocument(currrentChunk.getLuceneDocument());
+			}
+			
 		} catch (IOException e) {
+			e.printStackTrace();
 			if (pdDocument == null)
 				throw new IOException(
 						"Failed to create PDFBox Document from pdf file");
 			throw new IOException("Failed to add lucene Document to Index");
 		} 
 		finally{
-			pdDocument.close();
+			if(pdDocument != null)
+				pdDocument.close();
 		}
 	}
 	
-
-	
-	private void addDocumentChunks(List<D2S_DocChunk> chunks, File pdfFile) throws IOException {
-		
-		for(D2S_DocChunk currrentChunk : chunks){
-			Document luceneDocument = new Document();
-			luceneDocument.add(new Field("contents", currrentChunk.getTextChunk(), Field.Store.YES, Field.Index.ANALYZED));
-			
-			luceneDocument.add(new Field("filename", pdfFile.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("page_nr", currrentChunk.getPageNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("chunk_nr", currrentChunk.getChunkNumber()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			luceneDocument.add(new Field("position", currrentChunk.getPosition()+"", Field.Store.YES, Field.Index.NOT_ANALYZED));
-			
-			
-			indexWriter.addDocument(luceneDocument);
-		}
-	
-		
-	}
 
 	public int getNumberOfFiles(){
 		try {
@@ -206,8 +197,11 @@ public class D2S_Indexer {
 			ret[i] = results.get(i);
 		return ret;
 	}
+	
 	public static String bestTerm;
+	
 	public static ScoreDoc bestDoc;
+	
 	public static float bestScore=0;
 	// TODO, test to handle multiple PDF's, perform some searching.
 	// Think about how to store the result found when searching indexes.

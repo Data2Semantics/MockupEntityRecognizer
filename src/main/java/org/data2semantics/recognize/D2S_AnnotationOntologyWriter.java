@@ -31,10 +31,10 @@ import org.openrdf.rio.turtle.TurtleWriter;
  *
 
  */
-public class D2S_AnnotationOntology {
+public class D2S_AnnotationOntologyWriter {
 	
 	
-	private Log log = LogFactory.getLog(D2S_AnnotationOntology.class);
+	private Log log = LogFactory.getLog(D2S_AnnotationOntologyWriter.class);
 
 	
 	//Namespaces
@@ -115,15 +115,15 @@ public class D2S_AnnotationOntology {
 	private void setupNameSpace() {
 		
 		try {
-			docWriter.setNamespace("ao",   D2S_AnnotationOntology.AO_CORE);
-			docWriter.setNamespace("aof",  D2S_AnnotationOntology.AO_FOAF);
-			docWriter.setNamespace("aot",  D2S_AnnotationOntology.AO_TYPE);
-			docWriter.setNamespace("aos",  D2S_AnnotationOntology.AO_SELECTOR);
+			docWriter.setNamespace("ao",   D2S_AnnotationOntologyWriter.AO_CORE);
+			docWriter.setNamespace("aof",  D2S_AnnotationOntologyWriter.AO_FOAF);
+			docWriter.setNamespace("aot",  D2S_AnnotationOntologyWriter.AO_TYPE);
+			docWriter.setNamespace("aos",  D2S_AnnotationOntologyWriter.AO_SELECTOR);
 			
-			docWriter.setNamespace("pav",  D2S_AnnotationOntology.PAV);
-			docWriter.setNamespace("ann",  D2S_AnnotationOntology.ANNOTEA);
-			docWriter.setNamespace("pro",  D2S_AnnotationOntology.OBO);
-			docWriter.setNamespace("foaf", D2S_AnnotationOntology.FOAF);
+			docWriter.setNamespace("pav",  D2S_AnnotationOntologyWriter.PAV);
+			docWriter.setNamespace("ann",  D2S_AnnotationOntologyWriter.ANNOTEA);
+			docWriter.setNamespace("pro",  D2S_AnnotationOntologyWriter.OBO);
+			docWriter.setNamespace("foaf", D2S_AnnotationOntologyWriter.FOAF);
 			
 				
 		} catch (IOException e) {
@@ -134,7 +134,7 @@ public class D2S_AnnotationOntology {
 	TurtleWriter docWriter;
 	FileOutputStream outputStream = null;
 	
-	public D2S_AnnotationOntology(String outputFile) {
+	public D2S_AnnotationOntologyWriter(String outputFile) {
 		try {
 			outputStream = new FileOutputStream(new File(outputFile));
 		} catch (FileNotFoundException e) {

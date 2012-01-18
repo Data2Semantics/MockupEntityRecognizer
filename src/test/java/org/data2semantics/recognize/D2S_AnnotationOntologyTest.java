@@ -11,7 +11,7 @@ public class D2S_AnnotationOntologyTest {
 		D2S_Indexer indexer = new D2S_Indexer();
 		indexer.addPDFDirectoryToIndex(PUB_DIR);
 		
-		D2S_AnnotationOntology ao  = new D2S_AnnotationOntology("result.rdf");
+		D2S_AnnotationOntologyWriter ao  = new D2S_AnnotationOntologyWriter("result.rdf");
 		ao.startWriting();
 		ao.addFiles(indexer.getIndexedFiles());
 		ao.addAnnotation("mainTerm", "prefix", "postfix", "fileName", "http://meddra.com", "position-position", 
