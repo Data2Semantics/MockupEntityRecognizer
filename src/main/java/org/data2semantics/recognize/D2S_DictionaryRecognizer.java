@@ -1,6 +1,7 @@
 package org.data2semantics.recognize;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Properties;
+
+import java.net.URL;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,8 +55,8 @@ public class D2S_DictionaryRecognizer {
 		try {
 			log.info("Preparing indexes");
 			currentIndex = new D2S_Indexer();
-			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
-			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);
+			
+			addDirectoriesToBeIndexed();
 			//log.info("Done preparing indexes");
 			
 		} catch (IOException e) {
@@ -61,7 +65,42 @@ public class D2S_DictionaryRecognizer {
 		
 	}
 	
+	private void addDirectoriesToBeIndexed(){
+		Properties properties = new Properties();
+		
+		// Property file indicating which file to be indexed  in src/main/resources	
+		URL propertyURL = getClass().getClassLoader().getResource("indexed.dirs");
 
+		if(propertyURL == null){
+			// no property file, resort to some default PUB_DIR
+			currentIndex.addPDFDirectoryToIndex(PUB_DIR);
+			currentIndex.addPDFDirectoryToIndex(GUIDE_DIR);	
+			return;
+		}
+
+		try {
+			File propFile = new File(propertyURL.getFile());
+			properties.load(new FileInputStream(propFile));
+			String directories = properties.getProperty("directories");
+			Vector<String> vdirs = new Vector<String>();
+
+			// multiple directory
+			if(directories.indexOf(",") >=0){
+				String [] dirs = directories.split(",");
+				for(String dir : dirs) vdirs.add(dir);
+			} else 
+				vdirs.add(directories);
+
+			for(String idxDir: vdirs){
+				currentIndex.addPDFDirectoryToIndex(idxDir);
+			}
+
+		}
+		catch(Exception e){
+			
+		}	
+		
+	}
 
 	//Let's just do it and see how far we go.
 	public void doIt() throws CorruptIndexException, IOException, ParseException{
