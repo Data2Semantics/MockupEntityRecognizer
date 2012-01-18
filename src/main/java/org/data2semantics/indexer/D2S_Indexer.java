@@ -66,7 +66,6 @@ public class D2S_Indexer {
 	
 	public void addPDFDirectoryToIndex(String directory) {
 		File publicationDir = new File(directory);
-		System.out.println(directory);
 		File[] pubFiles  = publicationDir.listFiles();
 		assert(pubFiles != null);
 		
@@ -78,6 +77,7 @@ public class D2S_Indexer {
 				if(currentPDF.getName().endsWith(".pdf")){
 					addPDFDocument(currentPDF);
 					indexedFiles.add(currentPDF);
+					log.info("   Added pdf "+currentPDF);
 				}
 			}
 			
@@ -113,7 +113,7 @@ public class D2S_Indexer {
 	 */
 	public void addPDFDocument(File pdfFile) throws IOException {
 		
-		System.out.println("Adding "+pdfFile.getAbsolutePath());
+
 		try {
 			pdDocument = PDDocument.load(pdfFile);
 			chunkedPDFStripper.processPDDocument(pdDocument);
