@@ -210,8 +210,11 @@ public class D2S_Indexer {
 			ret[i] = results.get(i);
 		return ret;
 	}
+	
 	public static String bestTerm;
+	
 	public static ScoreDoc bestDoc;
+	
 	public static float bestScore=0;
 	// TODO, test to handle multiple PDF's, perform some searching.
 	// Think about how to store the result found when searching indexes.

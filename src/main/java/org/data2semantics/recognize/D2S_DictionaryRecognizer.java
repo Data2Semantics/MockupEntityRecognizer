@@ -229,7 +229,7 @@ public class D2S_DictionaryRecognizer {
 	
 	public void doItWithRIO(String outputFile) throws CorruptIndexException, IOException, ParseException{
 
-		D2S_AnnotationOntology aoWriter  = new D2S_AnnotationOntology(outputFile);
+		D2S_AnnotationOntologyWriter aoWriter  = new D2S_AnnotationOntologyWriter(outputFile);
 		
 		aoWriter.startWriting();
 		aoWriter.addFiles(currentIndex.getIndexedFiles());
@@ -263,7 +263,7 @@ public class D2S_DictionaryRecognizer {
 		aoWriter.stopWriting();
 	}
 	
-	private void generateAnnotationOntology(Document[] found, String mainTerm, D2S_Concept currentConcept, D2S_AnnotationOntology aoWriter){
+	private void generateAnnotationOntology(Document[] found, String mainTerm, D2S_Concept currentConcept, D2S_AnnotationOntologyWriter aoWriter){
 		
 		for (Document d : found) {
 			String content = d.get("contents");
