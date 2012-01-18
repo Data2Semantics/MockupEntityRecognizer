@@ -66,7 +66,7 @@ public class D2S_Indexer {
 	
 	public void addPDFDirectoryToIndex(String directory) {
 		File publicationDir = new File(directory);
-		
+		System.out.println(directory);
 		File[] pubFiles  = publicationDir.listFiles();
 		assert(pubFiles != null);
 		
@@ -83,6 +83,7 @@ public class D2S_Indexer {
 			
 			stopAddingFiles();
 		} catch(Exception e){
+			e.printStackTrace();
 			log.error("Failed to add pdf files to indexes");
 		}
 	}
@@ -112,18 +113,21 @@ public class D2S_Indexer {
 	 */
 	public void addPDFDocument(File pdfFile) throws IOException {
 		
+		System.out.println("Adding "+pdfFile.getAbsolutePath());
 		try {
 			pdDocument = PDDocument.load(pdfFile);
 			chunkedPDFStripper.processPDDocument(pdDocument);
 			addDocumentChunks(chunkedPDFStripper.getDocumentChunks(), pdfFile);
 		} catch (IOException e) {
+			e.printStackTrace();
 			if (pdDocument == null)
 				throw new IOException(
 						"Failed to create PDFBox Document from pdf file");
 			throw new IOException("Failed to add lucene Document to Index");
 		} 
 		finally{
-			pdDocument.close();
+			if(pdDocument != null)
+				pdDocument.close();
 		}
 	}
 	

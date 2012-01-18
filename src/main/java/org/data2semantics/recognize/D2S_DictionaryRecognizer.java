@@ -81,18 +81,11 @@ public class D2S_DictionaryRecognizer {
 		try {
 			File propFile = new File(propertyURL.getFile());
 			properties.load(new FileInputStream(propFile));
-			String directories = properties.getProperty("directories");
-			Vector<String> vdirs = new Vector<String>();
-
-			// multiple directory
-			if(directories.indexOf(",") >=0){
-				String [] dirs = directories.split(",");
-				for(String dir : dirs) vdirs.add(dir);
-			} else 
-				vdirs.add(directories);
-
-			for(String idxDir: vdirs){
-				currentIndex.addPDFDirectoryToIndex(idxDir);
+			int count = new Integer(properties.getProperty("directories.count"));
+			
+			for(int i=1;i<=count;i++){
+				String currentDir = properties.getProperty("directory."+count);
+				currentIndex.addPDFDirectoryToIndex(currentDir);
 			}
 
 		}
