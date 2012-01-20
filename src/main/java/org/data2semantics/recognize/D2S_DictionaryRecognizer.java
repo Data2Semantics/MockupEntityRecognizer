@@ -3,9 +3,7 @@ package org.data2semantics.recognize;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.pdfbox.examples.util.ExtractTextByArea;
 import org.data2semantics.indexer.D2S_Indexer;
 import org.data2semantics.indexer.D2S_PDFHandler;
 import org.data2semantics.vocabulary.D2S_CTCAEVocabularyHandler;
@@ -138,7 +135,7 @@ public class D2S_DictionaryRecognizer {
 			"\n@prefix aot: <http://purl.org/ao/types#> ."+
 			"\n@prefix aos: <http://purl.org/ao/selectors#> ."+
 			"\n@prefix aof: <http://purl.org/ao/foaf#> ."+
-			"\n@prefix aof: <http://purl.org/ao/annotea#> ."+
+			"\n@prefix aoa: <http://purl.org/ao/annotea#> ."+
 			"\n@prefix pav: <http://purl.org/pav#> ."+
 			"\n@prefix ann: <http://www.w3.org/2000/10/annotation-ns#> ."+
 			"\n@prefix pro: <http://purl.obolibrary.org/obo#> ."+
