@@ -51,6 +51,7 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	public void processPDDocument(PDDocument doc, File pdfFile){
 
 		StringWriter dummyWriter = new StringWriter();
+		documentChunks.clear();
 		originalFile = pdfFile;
 		try {
 			countPage=0;countChunk=0; 
