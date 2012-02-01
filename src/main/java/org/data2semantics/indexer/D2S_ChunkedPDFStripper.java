@@ -73,8 +73,11 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	 */
 	@Override
 	protected void processTextPosition(TextPosition text) {
+		if(originalFile == null) return;
+		
 		updateChunkBoundingBox(text);
 		currentChunk.append(text.getCharacter());
+		
 		if(text.getCharacter().equals(".")){
 			++countChunk;
 			D2S_DocChunk newChunk = new D2S_DocChunk( originalFile.getName(),
@@ -107,7 +110,7 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	}
 	
 	/**
-	 * Does what its methodname said, 
+	 * Does what its method name said, 
 	 * looking for the bounding box by checking each character/text position.
 	 * @param text
 	 */

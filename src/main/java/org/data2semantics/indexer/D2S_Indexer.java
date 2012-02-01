@@ -116,6 +116,7 @@ public class D2S_Indexer {
 
 		try {
 			pdDocument = PDDocument.load(pdfFile);
+			chunkedPDFStripper = new D2S_ChunkedPDFStripper();
 			chunkedPDFStripper.processPDDocument(pdDocument, pdfFile);
 			
 			List<D2S_DocChunk> chunks = chunkedPDFStripper.getDocumentChunks();
