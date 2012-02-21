@@ -241,6 +241,8 @@ public class D2S_AnnotationOntologyWriter {
 		
 		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_PREFIX_SELECTOR, selectorID));
 		
+		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_IMAGE_SELECTOR, selectorID));
+		
 	}
 
 	private void writeImageSelector(String fileName, String position,
