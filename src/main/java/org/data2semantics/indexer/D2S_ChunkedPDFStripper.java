@@ -54,8 +54,10 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 		documentChunks.clear();
 		originalFile = pdfFile;
 		try {
-			countPage=0;countChunk=0; 
+			countPage=0;
+			countChunk=0; 
 			beginNewChunk();
+			System.out.println("Start writing ");
 			writeText(doc, dummyWriter);
 		} catch (IOException e) {
 			log.error("Failed to process PDDocument");
@@ -74,7 +76,6 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	@Override
 	protected void processTextPosition(TextPosition text) {
 		if(originalFile == null) return;
-		
 		updateChunkBoundingBox(text);
 		currentChunk.append(text.getCharacter());
 		
@@ -95,6 +96,7 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	@Override
 	protected void startPage(PDPage page) throws IOException {
 		// TODO Auto-generated method stub
+		System.out.println("-> Start page");
 		super.startPage(page);
 		countPage ++;
 		beginNewChunk();
@@ -106,7 +108,9 @@ public class D2S_ChunkedPDFStripper extends PDFTextStripper {
 	private void beginNewChunk() {
 		top = 10000; left = 10000; 
 		bottom = 0; right = 0;
-		currentChunk = new StringBuffer();		
+		currentChunk = new StringBuffer();
+		System.out.println("-------> Begin new chunk");
+		
 	}
 	
 	/**

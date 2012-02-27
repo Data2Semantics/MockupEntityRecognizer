@@ -19,15 +19,17 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 import org.junit.Test;
 
 public class D2S_ChunkedPDFStripperTest {
-	File  fileTest				= new File("src\\test\\resources\\neutropenia.pdf");
+	File fileTest				= new File("src\\test\\resources\\neutropenia.pdf");
+	File fileBJC				= new File("src\\test\\resources\\BJC_nature_2011_bjc2011304a.pdf");
 	PDDocument doc;
 	
 	@Test
-	public void testCharactersByArticle() throws IOException, COSVisitorException{
+	public void testChunkingArticles() throws IOException, COSVisitorException{
 		D2S_ChunkedPDFStripper mStripper = new D2S_ChunkedPDFStripper();
 		StringWriter writer = new StringWriter();
-		doc = PDDocument.load(fileTest);
-		mStripper.writeText(doc,writer);
+		doc = PDDocument.load(fileBJC);
+		mStripper.processPDDocument(doc, fileBJC);
+		//mStripper.writeText(doc,writer);
 		
 		List<D2S_DocChunk> chunks = mStripper.getDocumentChunks();
 		PDGamma yellow = new PDGamma();
@@ -37,8 +39,10 @@ public class D2S_ChunkedPDFStripperTest {
 		PDPageNode rootPage = doc.getDocumentCatalog().getPages();
         List<PDPage> pages = new ArrayList<PDPage>();
         rootPage.getAllKids(pages);
-   
+        System.out.println("Confused, where am I ?" + chunks.size());
+        
 		for(D2S_DocChunk chunk : chunks){
+			
 			System.out.println(chunk);
 			
 			PDPage currentPage = pages.get(chunk.getPageNumber()-1);
