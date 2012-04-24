@@ -207,7 +207,7 @@ public class D2S_AnnotationOntologyWriter {
 	 * @param annotation
 	 * @param position
 	 */
-	public void addAnnotation(String mainTerm, String prefix, String postfix,
+	public void addPDFAnnotation(String mainTerm, String prefix, String postfix,
 			String fileName, String annotation, String position,
 			String page_nr, String chunk_nr, String termLocation) {
 

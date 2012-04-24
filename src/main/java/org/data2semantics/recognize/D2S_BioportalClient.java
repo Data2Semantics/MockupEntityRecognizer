@@ -1,6 +1,12 @@
 package org.data2semantics.recognize;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -36,14 +42,21 @@ public class D2S_BioportalClient {
 		
 	}
 
-	public String annotateText(String text) {
+	/**
+	 * 
+	 * This is where you annotate a text and get the result. 
+	 * @param text
+	 * @param format : can be 'xml', text or 'tabDelimited'
+	 * @return
+	 */
+	
+	public String annotateText(String text, String format) {
 
 		method.addParameter("textToAnnotate",text);
 		
-		method.addParameter("format", "text"); // Options are 'text', 'xml',
+		method.addParameter("format", format); // Options are 'text', 'xml',
 												// 'tabDelimited'
 		
-		// My API key, use carefully not too much test yet.
 		StringBuffer result = new StringBuffer();
 
 		try {
@@ -51,9 +64,16 @@ public class D2S_BioportalClient {
 			int statusCode = client.executeMethod(method);
 
 			if (statusCode != -1) {
-				String contents = method.getResponseBodyAsString();
+				InputStream contentStream = method.getResponseBodyAsStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(contentStream));
+				String line = reader.readLine();
+				while(line != null){
+					result.append(line);
+					line = reader.readLine();
+				}
+				
 				method.releaseConnection();
-				result.append(contents + "\n");
+				
 			}
 
 		} catch (Exception e) {
