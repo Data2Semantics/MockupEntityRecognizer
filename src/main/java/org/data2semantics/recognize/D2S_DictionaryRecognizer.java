@@ -278,7 +278,7 @@ public class D2S_DictionaryRecognizer {
 				String prefix = content.substring(0,termLocation);
 				String suffix = content.substring(termLocation+mainTerm.length()+1);
 				String uriID = currentConcept.getStringID();
-				aoWriter.addAnnotation(mainTerm, prefix, suffix, fileName, uriID, position, page_nr, chunk_nr, ""+termLocation);
+				aoWriter.addPDFAnnotation(mainTerm, prefix, suffix, fileName, uriID, position, page_nr, chunk_nr, ""+termLocation);
 			} 
 		}
 	}
