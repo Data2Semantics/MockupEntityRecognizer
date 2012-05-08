@@ -73,20 +73,29 @@ public class D2S_BioPortalClientTest {
 			Thread.sleep(20000);
 		}
 	}
+	
 	@Test
+	/**
+	 * Get the files from sample dir, send it to Bioportal for annotation.
+	 * Store the result in processed directory.
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws InterruptedException
+	 */
 	public void parseXMLUsingDOMTest() throws SAXException, IOException, ParserConfigurationException, InterruptedException{
 		File sampleDir = new File(getClass().getClassLoader()
 				.getResource(SAMPLE_DIR).getFile());
 		
 		File[] xmlFiles = sampleDir.listFiles();
 		
-		int counter = 0;
-		D2S_BioportalClient client = new D2S_BioportalClient();
 		
 		for (File currentXMLFile : xmlFiles) {
+			// There are script and other non xml files in sample dir, ignore them
 			if(!currentXMLFile.getPath().endsWith("xml")) continue;
-			counter ++;
-			String outputFilePath = processedDir.getPath()+"\\output-"+counter+".xml";
+			
+			// Append output- to the content file name
+			String outputFilePath = processedDir.getPath()+"\\output-"+currentXMLFile.getName();
 			
 			// IF this file already created, move on.
 			if(new File(outputFilePath).exists()) continue;
@@ -102,6 +111,7 @@ public class D2S_BioPortalClientTest {
 		
 			FileWriter writer = new FileWriter(outputFilePath);
 			System.out.println("Annotating \n" + textContent);
+			D2S_BioportalClient client = new D2S_BioportalClient();
 			String annotationResult = client.annotateText(textContent,"xml");
 			writer.write(annotationResult);
 			writer.close();
