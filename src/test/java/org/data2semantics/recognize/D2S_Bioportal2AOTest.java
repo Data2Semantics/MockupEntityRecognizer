@@ -2,6 +2,7 @@ package org.data2semantics.recognize;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -35,17 +36,22 @@ public class D2S_Bioportal2AOTest {
 	
 	@Test
 	public void generateAOFromProcessedBioPortal() throws SAXException, IOException, ParserConfigurationException{
-		File [] bpresults = processedDir.listFiles();
+		FilenameFilter xmlFileFilter = new FilenameFilter() {
+			
+			public boolean accept(File arg0, String name) {
+				return name.endsWith("xml") && name.startsWith("output-");
+			}
+		};
+		
+		File [] bpresults = processedDir.listFiles(xmlFileFilter);
+		
 		D2S_AnnotationOntologyWriter aoWriter = new D2S_AnnotationOntologyWriter("output.rdf");
 		aoWriter.startWriting();
 		aoWriter.addFiles(Arrays.asList(bpresults));
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		
 		for(File currentResultFile : bpresults){
-			// Skipping non xml files.
-			if(!currentResultFile.getName().endsWith("xml")) continue;
-			if(!currentResultFile.getName().startsWith("output-")) continue;
-			
+	
 			SAXParser parser = saxParserFactory.newSAXParser();
 			Reader reader = new InputStreamReader(new FileInputStream(currentResultFile),"UTF-8");
 			InputSource is = new InputSource(reader);
@@ -53,7 +59,8 @@ public class D2S_Bioportal2AOTest {
 			System.out.println(currentResultFile.getName());
 			D2S_BioPortalAnnotationHandler myHandler = new D2S_BioPortalAnnotationHandler(currentResultFile.getName());
 			parser.parse(is, myHandler);
-			List<D2S_Annotation> testAnn= myHandler.getAnnotations();
+			List<D2S_Annotation> testAnn = myHandler.getAnnotations();
+			if(testAnn.size() >0)
 			System.out.println(testAnn.get(0));
 			
 		}
@@ -61,5 +68,5 @@ public class D2S_Bioportal2AOTest {
 		aoWriter.stopWriting();
 	
 	}
-	
+
 }

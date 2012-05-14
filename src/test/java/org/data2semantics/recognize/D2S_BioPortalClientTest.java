@@ -104,6 +104,7 @@ public class D2S_BioPortalClientTest {
 			DocumentBuilder builder = builderFactory.newDocumentBuilder();
 			Document doc = builder.parse(currentXMLFile);
 			
+			// We are annotating only the body part
 			NodeList list = doc.getElementsByTagName("body");
 			Element el = (Element)list.item(0);
 			String textContent = el.getTextContent();
