@@ -39,7 +39,7 @@ public class D2S_Bioportal2AOTest {
 		FilenameFilter xmlFileFilter = new FilenameFilter() {
 			
 			public boolean accept(File arg0, String name) {
-				return name.endsWith("xml") && name.startsWith("output-");
+				return name.endsWith("xml") && name.startsWith("output-content1.xml");
 			}
 		};
 		
@@ -50,18 +50,26 @@ public class D2S_Bioportal2AOTest {
 		aoWriter.addFiles(Arrays.asList(bpresults));
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		
+		
+		D2S_BioPortalAnnotationHandler bioPortalAnnotationSAXHandler;
+		SAXParser parser ;
+		Reader reader ;
+		InputSource is; 
+		List<D2S_Annotation> currentAnnotations;
+		
 		for(File currentResultFile : bpresults){
 	
-			SAXParser parser = saxParserFactory.newSAXParser();
-			Reader reader = new InputStreamReader(new FileInputStream(currentResultFile),"UTF-8");
-			InputSource is = new InputSource(reader);
+			parser = saxParserFactory.newSAXParser();
+			reader = new InputStreamReader(new FileInputStream(currentResultFile),"UTF-8");
+			is = new InputSource(reader);
 			is.setEncoding("UTF-8");
-			System.out.println(currentResultFile.getName());
-			D2S_BioPortalAnnotationHandler myHandler = new D2S_BioPortalAnnotationHandler(currentResultFile.getName());
-			parser.parse(is, myHandler);
-			List<D2S_Annotation> testAnn = myHandler.getAnnotations();
-			if(testAnn.size() >0)
-			System.out.println(testAnn.get(0));
+			
+			bioPortalAnnotationSAXHandler = new D2S_BioPortalAnnotationHandler(currentResultFile.getName());
+			parser.parse(is, bioPortalAnnotationSAXHandler);
+			
+			currentAnnotations = bioPortalAnnotationSAXHandler.getAnnotations();
+			for(D2S_Annotation currentAnnotation : currentAnnotations)
+				aoWriter.addAnnotation(currentAnnotation);
 			
 		}
 		

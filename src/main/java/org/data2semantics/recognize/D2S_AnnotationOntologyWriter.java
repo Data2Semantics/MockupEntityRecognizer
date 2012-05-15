@@ -205,7 +205,7 @@ public class D2S_AnnotationOntologyWriter {
 	 * @param postfix
 	 * @param fileName
 	 * @param annotation
-	 * @param position
+	 * @param position (image coordinates/positions)
 	 */
 	public void addPDFAnnotation(String mainTerm, String prefix, String postfix,
 			String fileName, String annotation, String position,
@@ -245,6 +245,49 @@ public class D2S_AnnotationOntologyWriter {
 		
 	}
 
+	/**
+	 * XML document, we don't have page number.
+	 * @param curAnnotation
+	 */
+	public void addAnnotation(D2S_Annotation curAnnotation){
+		String mainTerm="", prefix="", postfix="", fileName="", annotation="", position="", page_nr="", chunk_nr="", termLocation="";   
+		mainTerm = curAnnotation.getPreferredName();
+		prefix = curAnnotation.getPrefix();
+		postfix = curAnnotation.getSuffix();
+		fileName = curAnnotation.getFileName();
+		annotation = curAnnotation.getTermFound();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		 
+		String CREATED_ON = sdf.format(new Date());
+		
+		String selectorID = fileName + "_" + curAnnotation.getFrom() + "_"+curAnnotation.getTo();
+
+		writePrefixPostfixTextSelector(mainTerm, prefix, postfix, fileName,
+				selectorID);
+
+		URIImpl qualifier = new URIImpl(D2S_QUALIFIER, selectorID);
+		
+		addTriple(qualifier, URIImpl.RDF_TYPE, AOT_QUALIFIER);
+		
+		addTriple(qualifier, URIImpl.RDF_TYPE, AO_ANNOTATION);
+		
+		addTriple(qualifier, URIImpl.RDF_TYPE, ANN_ANNOTATION);
+		
+		addTriple(qualifier, AOF_ANNOTATES_DOCUMENT, new URIImpl(D2S_DOCS, fileName));
+		
+		addTriple(qualifier, AO_HASTOPIC, new URIImpl(annotation));
+		
+		addTriple(qualifier, PAV_CREATEDON, new LiteralImpl(CREATED_ON));
+		
+		addTriple(qualifier, PAV_CREATEDBY, new URIImpl(D2S_ANNOTATOR));
+		
+		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_PREFIX_SELECTOR, selectorID));
+		
+		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_IMAGE_SELECTOR, selectorID));
+		
+	}
+	
 	private void writeImageSelector(String fileName, String position,
 			String selectorID) {
 		URIImpl imageSelector = new URIImpl(D2S_IMAGE_SELECTOR, selectorID);
@@ -268,6 +311,14 @@ public class D2S_AnnotationOntologyWriter {
 				D2S_SOURCEDOC, fileName));
 	}
 
+	/**
+	 * Write necessary triples for prefix postfix selectors.
+	 * @param mainTerm
+	 * @param prefix
+	 * @param postfix
+	 * @param fileName
+	 * @param selectorID
+	 */
 	private void writePrefixPostfixTextSelector(String mainTerm, String prefix,
 			String postfix, String fileName, String selectorID)
 			{

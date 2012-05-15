@@ -25,6 +25,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 	String textToAnnotate = "";
 	String fullID = "";
 	String preferredName;
+	
 	int from, to;
 
 	boolean inTerm = false;
@@ -56,9 +57,11 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 		if (qName.equalsIgnoreCase("AnnotationBean")) {
 			currentAnnotation.setTermFound(fullID);
 			currentAnnotation.setPreferredName(preferredName);
-			currentAnnotation.setPrefix(getPrefix(from,to));
-			currentAnnotation.setSuffix(getSuffix(from,to));
+			currentAnnotation.setPrefix(getCurrentPrefix(from,to));
+			currentAnnotation.setSuffix(getCurrentSuffix(from,to));
 			currentAnnotation.setFileName(fileName);
+			currentAnnotation.setFrom(from);
+			currentAnnotation.setTo(to);
 			annotations.add(currentAnnotation);
 			currentAnnotation = null;
 		}
@@ -68,12 +71,14 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 		curQname ="";
 	}
 
-	private String getSuffix(int from2, int to2) {
-		return "Suffix "+from2+" "+to2;
+	// Getting 200 characters after the term, or the end of the text to Annotate
+	private String getCurrentSuffix(int from2, int to2) {
+		return textToAnnotate.substring(to2, Math.min(textToAnnotate.length(), to2+200));
 	}
-
-	private String getPrefix(int from2, int to2) {
-		return "Prefix "+from2+" "+to2;
+	
+	// Getting 200 characters before the term
+	private String getCurrentPrefix(int from2, int to2) {
+		return textToAnnotate.substring(Math.max(0,from2-200),from2-1);
 	}
 
 	public void characters(char[] ch, int start, int length)

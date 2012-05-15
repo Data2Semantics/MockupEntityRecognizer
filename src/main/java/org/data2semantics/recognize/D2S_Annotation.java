@@ -34,6 +34,9 @@ public class D2S_Annotation {
 	// Location as returned by TextPosition from pdfbox
 	int x_offset, y_offset;
 
+	// Index location, from to for text from bioportal
+	int from, to;
+	
 	@Override
 	public String toString() {
 		return "Term: " + termFound + "\nPreferredName: " + preferredName
@@ -154,4 +157,17 @@ public class D2S_Annotation {
 		this.y_offset = y_offset;
 	}
 
+	public void setFrom(int from) {
+		this.from = from;
+	}
+	public void setTo(int to) {
+		this.to = to;
+	}
+
+	public int getTo() {
+		return to;
+	}
+	public int getFrom(){
+		return from;
+	}
 }
