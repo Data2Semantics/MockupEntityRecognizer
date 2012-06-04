@@ -3,8 +3,11 @@ package org.data2semantics.recognize;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.Scanner;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -58,7 +61,7 @@ public class D2S_BioportalClient {
 												// 'tabDelimited'
 		
 		StringBuffer result = new StringBuffer();
-
+		
 		try {
 
 			int statusCode = client.executeMethod(method);
@@ -80,6 +83,40 @@ public class D2S_BioportalClient {
 			e.printStackTrace();
 		}
 		return result.toString();
+	}
+	
+	public void annotateToFile(String text, String format, File outputFile){
+		method.addParameter("textToAnnotate",text);
+		
+		method.addParameter("format", format); // Options are 'text', 'xml',
+												// 'tabDelimited'
+		
+		try {
+
+			int statusCode = client.executeMethod(method);
+			OutputStream outputStream =null;
+			InputStream contentStream =null;
+			
+			if (statusCode != -1) {
+				contentStream = method.getResponseBodyAsStream();
+				outputStream = new FileOutputStream(outputFile);
+				
+				int len;
+				byte buf[] = new byte[1024];
+				while((len=contentStream.read(buf))>0){
+					outputStream.write(buf,0,len);
+				}
+				
+			}
+			
+			method.releaseConnection();
+			
+			outputStream.close();
+			contentStream.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 
 }

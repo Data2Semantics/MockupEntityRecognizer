@@ -25,15 +25,18 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 	String textToAnnotate = "";
 	String fullID = "";
 	String preferredName;
+	String piiUnformatted="";
 	
 	int from, to;
 
 	boolean inTerm = false;
 
-	String fileName;
+	String originalSource;
+	String localFileName;
 	
-	public D2S_BioPortalAnnotationHandler(String fileName) {
-		this.fileName = fileName;
+	public D2S_BioPortalAnnotationHandler(String localFileName, String originalSource) {
+		this.originalSource = originalSource;
+		this.localFileName= localFileName ;
 	}
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
@@ -59,7 +62,8 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			currentAnnotation.setPreferredName(preferredName);
 			currentAnnotation.setPrefix(getCurrentPrefix(from,to));
 			currentAnnotation.setSuffix(getCurrentSuffix(from,to));
-			currentAnnotation.setFileName(fileName);
+			currentAnnotation.setOnDocument(originalSource);
+			currentAnnotation.setSourceDocument(localFileName);
 			currentAnnotation.setFrom(from);
 			currentAnnotation.setTo(to);
 			annotations.add(currentAnnotation);
@@ -73,12 +77,14 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 
 	// Getting 200 characters after the term, or the end of the text to Annotate
 	private String getCurrentSuffix(int from2, int to2) {
+		if(from2 > textToAnnotate.length() ) return "";
 		return textToAnnotate.substring(to2, Math.min(textToAnnotate.length(), to2+200));
 	}
 	
 	// Getting 200 characters before the term
 	private String getCurrentPrefix(int from2, int to2) {
-		return textToAnnotate.substring(Math.max(0,from2-200),from2-1);
+		if(from2 > textToAnnotate.length()) return "";
+		return textToAnnotate.substring(Math.max(0,from2-200),Math.max(0, from2-1));
 	}
 
 	public void characters(char[] ch, int start, int length)
@@ -89,6 +95,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			return;
 		}
 
+		
 		if (currentAnnotation == null) {
 			return;
 		}
@@ -103,6 +110,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			return;
 		}
 
+		
 		if (inTerm) {
 			if (curQname.equalsIgnoreCase("fullId")) {
 				fullID += new String(ch, start, length);
