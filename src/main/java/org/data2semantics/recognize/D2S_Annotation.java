@@ -25,8 +25,11 @@ public class D2S_Annotation {
 	// Text following term found
 	String suffix;
 
-	// File originally where this term is found.
-	String fileName;
+	// Original location where this term is found.
+	String onDocument;
+	
+	// Local instance of file, where we did annotation
+	String sourceDocument;
 
 	// Page number in PDF
 	int page_number;
@@ -41,7 +44,7 @@ public class D2S_Annotation {
 	public String toString() {
 		return "Term: " + termFound + "\nPreferredName: " + preferredName
 				+ "\nPrefix: " + prefix + "\nSuffix: " + suffix
-				+ "\nFileName: " + fileName + "\nPage " + page_number
+				+ "\nFileName: " + onDocument + "\nPage " + page_number
 				+ "\nx,y " + x_offset + "," + y_offset + "\n";
 	}
 
@@ -104,15 +107,15 @@ public class D2S_Annotation {
 	/**
 	 * @return the fileName
 	 */
-	public String getFileName() {
-		return fileName;
+	public String getOnDocument() {
+		return onDocument;
 	}
 
 	/**
 	 * @param fileName the fileName to set
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setOnDocument(String fileName) {
+		this.onDocument = fileName;
 	}
 
 	/**
@@ -169,5 +172,19 @@ public class D2S_Annotation {
 	}
 	public int getFrom(){
 		return from;
+	}
+
+	/**
+	 * @return the sourceDocument
+	 */
+	public String getSourceDocument() {
+		return sourceDocument;
+	}
+
+	/**
+	 * @param sourceDocument the sourceDocument to set
+	 */
+	public void setSourceDocument(String sourceDocument) {
+		this.sourceDocument = sourceDocument;
 	}
 }

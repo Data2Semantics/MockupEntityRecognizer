@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -199,29 +200,53 @@ public class D2S_AnnotationOntologyWriter {
 	}
 	
 	/**
+	 * Add files and original URLS
+	 * @param files
+	 */
+	public void addFileAndURLs(List<File> files, HashMap<String, String> originalURL) {
+
+		for (File curFile : files) {
+			String fileName = curFile.getName().replaceAll(" ", "_");
+			URIImpl fileSourceDocURI = new URIImpl(D2S_SOURCEDOC + fileName);
+			
+			addTriple(fileSourceDocURI, URIImpl.RDF_TYPE, PAV_SRCDOC);
+
+			addTriple(fileSourceDocURI, PAV_RETRIEVED_FROM, 
+					new URIImpl(originalURL.get(curFile.getName())));
+
+			addTriple(fileSourceDocURI, PAV_SRCACCESSED_FROM, 
+					dateToLiteral(new Date()));
+			
+			addTriple(new URIImpl(D2S_DOCS, fileName), URIImpl.RDF_TYPE, FOAF_DOCUMENT);
+
+		}
+
+	}
+	/**
 	 * This function will add annotation ontology found in PDF.
 	 * @param mainTerm
 	 * @param prefix
 	 * @param postfix
-	 * @param fileName
+	 * @param onDocument
 	 * @param annotation
 	 * @param position (image coordinates/positions)
 	 */
 	public void addPDFAnnotation(String mainTerm, String prefix, String postfix,
-			String fileName, String annotation, String position,
+			String onDocument, String annotation, String position,
 			String page_nr, String chunk_nr, String termLocation) {
-
+		String sourceDocument = onDocument;
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		 
 		String CREATED_ON = sdf.format(new Date());
 		
-		String selectorID = fileName + "_" + page_nr + "_" + chunk_nr + "_"
+		String selectorID = onDocument + "_" + page_nr + "_" + chunk_nr + "_"
 				+ termLocation;
 
-		writePrefixPostfixTextSelector(mainTerm, prefix, postfix, fileName,
+		writePrefixPostfixTextSelector(mainTerm, prefix, postfix, D2S_DOCS+onDocument, sourceDocument,
 				selectorID);
 
-		writeImageSelector(fileName, position, selectorID);
+		writeImageSelector(onDocument, position, selectorID);
 
 		URIImpl qualifier = new URIImpl(D2S_QUALIFIER, selectorID);
 		
@@ -231,7 +256,7 @@ public class D2S_AnnotationOntologyWriter {
 		
 		addTriple(qualifier, URIImpl.RDF_TYPE, ANN_ANNOTATION);
 		
-		addTriple(qualifier, AOF_ANNOTATES_DOCUMENT, new URIImpl(D2S_DOCS, fileName));
+		addTriple(qualifier, AOF_ANNOTATES_DOCUMENT, new URIImpl(D2S_DOCS, onDocument));
 		
 		addTriple(qualifier, AO_HASTOPIC, new URIImpl(annotation));
 		
@@ -250,21 +275,22 @@ public class D2S_AnnotationOntologyWriter {
 	 * @param curAnnotation
 	 */
 	public void addAnnotation(D2S_Annotation curAnnotation){
-		String mainTerm="", prefix="", postfix="", fileName="", annotation="", position="", page_nr="", chunk_nr="", termLocation="";   
+		String mainTerm="", prefix="", postfix="", onDocument="", sourceDocument = "", annotation="";
 		mainTerm = curAnnotation.getPreferredName();
 		prefix = curAnnotation.getPrefix();
 		postfix = curAnnotation.getSuffix();
-		fileName = curAnnotation.getFileName();
+		onDocument = curAnnotation.getOnDocument();
+		sourceDocument = curAnnotation.getSourceDocument();
 		annotation = curAnnotation.getTermFound();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		 
 		String CREATED_ON = sdf.format(new Date());
 		
-		String selectorID = fileName + "_" + curAnnotation.getFrom() + "_"+curAnnotation.getTo();
+		
+		String selectorID = sourceDocument + "_" + curAnnotation.getFrom() + "_"+curAnnotation.getTo();
 
-		writePrefixPostfixTextSelector(mainTerm, prefix, postfix, fileName,
-				selectorID);
+		writePrefixPostfixTextSelector(mainTerm, prefix, postfix, onDocument, sourceDocument, selectorID);
 
 		URIImpl qualifier = new URIImpl(D2S_QUALIFIER, selectorID);
 		
@@ -274,7 +300,8 @@ public class D2S_AnnotationOntologyWriter {
 		
 		addTriple(qualifier, URIImpl.RDF_TYPE, ANN_ANNOTATION);
 		
-		addTriple(qualifier, AOF_ANNOTATES_DOCUMENT, new URIImpl(D2S_DOCS, fileName));
+
+		addTriple(qualifier, AOF_ANNOTATES_DOCUMENT, new URIImpl(onDocument));
 		
 		addTriple(qualifier, AO_HASTOPIC, new URIImpl(annotation));
 		
@@ -284,9 +311,9 @@ public class D2S_AnnotationOntologyWriter {
 		
 		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_PREFIX_SELECTOR, selectorID));
 		
-		addTriple(qualifier, AO_CONTEXT, new URIImpl(D2S_IMAGE_SELECTOR, selectorID));
-		
 	}
+
+
 	
 	private void writeImageSelector(String fileName, String position,
 			String selectorID) {
@@ -307,8 +334,7 @@ public class D2S_AnnotationOntologyWriter {
 		addTriple(imageSelector, AOF_ONDOCUMENT,
 				new URIImpl(D2S_DOCS, fileName));
 
-		addTriple(imageSelector, AO_ONSOURCEDOCUMENT, new URIImpl(
-				D2S_SOURCEDOC, fileName));
+		addTriple(imageSelector, AO_ONSOURCEDOCUMENT, new URIImpl(D2S_SOURCEDOC, fileName));
 	}
 
 	/**
@@ -316,11 +342,11 @@ public class D2S_AnnotationOntologyWriter {
 	 * @param mainTerm
 	 * @param prefix
 	 * @param postfix
-	 * @param fileName
+	 * @param onDocument
 	 * @param selectorID
 	 */
 	private void writePrefixPostfixTextSelector(String mainTerm, String prefix,
-			String postfix, String fileName, String selectorID)
+			String postfix, String onDocument, String sourceDocument, String selectorID)
 			{
 		
 		URIImpl prefixPostfixSelector = new URIImpl(D2S_PREFIX_SELECTOR+selectorID);
@@ -344,10 +370,10 @@ public class D2S_AnnotationOntologyWriter {
 		addTriple(prefixPostfixSelector, AOS_POSTFIX, new LiteralImpl(postfix));
 		
 		//aof:onDocument 
-		addTriple(prefixPostfixSelector, AOF_ONDOCUMENT, new URIImpl(D2S_DOCS,fileName));
+		addTriple(prefixPostfixSelector, AOF_ONDOCUMENT,  new URIImpl(onDocument));
 
 		//ao:onSourceDocument 
-		addTriple(prefixPostfixSelector, AO_ONSOURCEDOCUMENT, new URIImpl(D2S_SOURCEDOC,fileName));
+		addTriple(prefixPostfixSelector, AO_ONSOURCEDOCUMENT, new URIImpl(D2S_SOURCEDOC, sourceDocument));
 	}
 	
 	public void addTriple(Resource subj, URI pred, Value obj ){
