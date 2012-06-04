@@ -2,6 +2,11 @@ package org.data2semantics.util;
 
 import java.io.File;
 
+/**
+ * 
+ * @author wibisono
+ *
+ */
 public class D2S_CallBioportal {
 	public static void main(String[] args) {
 		if(args.length < 1){
@@ -14,6 +19,8 @@ public class D2S_CallBioportal {
 			System.out.println("Pleas run first mvn -P create-snapshot, since there is no snapshot to be processed");
 			return;
 		}
+		
+		//TODO: Move code from Bioportal client test to here
 		System.out.println("Here we will call bioportal");
 		System.out.println(new File(args[0]).exists());
 	}
