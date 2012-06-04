@@ -3,3 +3,18 @@ Libraries used
 	- PDF Box library http://pdfbox.apache.org/
 	- OWL API http://owlapi.sourceforge.net/
 	- Lucene indexer	 
+
+	
+#Maven profiles:
+
+	- mvn -P create-snapshot
+	  Maven profile to process sources.txt in the main maven directory containing local file, url to create local snapshot of a source html file.
+	  Results will be in directory results/snapshots
+	
+	- mvn -P call-bioportal
+	  Maven  profile to annotate snapshots created from previous profile, and call bioportal annotator
+	  Results will be in directory results/bioportal-annotation
+	  
+	- mvn -P create-annotation-ontology
+	  Maven profile to create annotation ontology from previous profile.
+	  Results will be in directory results/annotation-ontology
