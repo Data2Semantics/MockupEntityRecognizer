@@ -8,13 +8,13 @@ import org.junit.Test;
 
 public class D2S_CTCAEVocabularyHandlerTest {
 
-	@Test
+	//@Test
 	public void constructionTest() {
 		D2S_CTCAEVocabularyHandler myHandler = new D2S_CTCAEVocabularyHandler();
 		assert(myHandler!=null);
 	}
 	
-	@Test
+	//@Test
 	public void listConceptsTest(){
 		D2S_CTCAEVocabularyHandler myHandler = new D2S_CTCAEVocabularyHandler();
 		List<D2S_Concept> availableConcepts = myHandler.getAvailableConcepts();

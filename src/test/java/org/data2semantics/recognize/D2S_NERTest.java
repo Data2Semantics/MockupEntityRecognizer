@@ -19,7 +19,7 @@ public class D2S_NERTest {
 	 * @param args
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void testFromNERSampleDemo() throws IOException {
 
 		String serializedClassifier = "src\\main\\resources\\model\\all.3class.distsim.crf.ser.gz";

@@ -23,7 +23,7 @@ public class D2S_ChunkedPDFStripperTest {
 	File fileBJC				= new File("src\\test\\resources\\BJC_nature_2011_bjc2011304a.pdf");
 	PDDocument doc;
 	
-	@Test
+	//@Test
 	public void testChunkingArticles() throws IOException, COSVisitorException{
 		D2S_ChunkedPDFStripper mStripper = new D2S_ChunkedPDFStripper();
 		StringWriter writer = new StringWriter();

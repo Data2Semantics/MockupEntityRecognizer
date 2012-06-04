@@ -6,7 +6,7 @@ import org.junit.Test;
 public class D2S_AnnotationOntologyTest {
 	static final String PUB_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Publications";
 	
-	@Test
+	//@Test
 	public void testAnnotationOntology() throws Exception{
 		D2S_Indexer indexer = new D2S_Indexer();
 		indexer.addPDFDirectoryToIndex(PUB_DIR);

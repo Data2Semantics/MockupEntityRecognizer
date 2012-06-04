@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -11,6 +12,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,11 +23,16 @@ import org.xml.sax.SAXException;
 public class D2S_BioPortalClientTest {
 
 	// This file in src/test/resources
+	public static final String GUIDELINE_DIR = "guideline-html";
+
 	public static final String SAMPLE_DIR = "sample-xml";
 
 	// This thing should not be empty, amazingly.
 	public static final String PROCESSED_DIR = "processed-xml";
 	
+	
+	File guidelineDir = new File(getClass().getClassLoader()
+			.getResource(GUIDELINE_DIR).getFile());
 	
 	File sampleDir = new File(getClass().getClassLoader()
 			.getResource(SAMPLE_DIR).getFile());
@@ -32,49 +40,56 @@ public class D2S_BioPortalClientTest {
 	
 	File processedDir = new File(getClass().getClassLoader()
 			.getResource(PROCESSED_DIR).getFile());
+	
 	//@Test
-	public void testElsevierXMLText() throws IOException, InterruptedException {
+	public void processGuidelinesHTML() throws IOException, InterruptedException {
 
 
+		FilenameFilter fileFilter = new FilenameFilter() {
+			
+			public boolean accept(File arg0, String name) {
+				return name.endsWith("html") && name.startsWith("Q00");
+			}
+		};
 		
-		File[] xmlFiles = sampleDir.listFiles();
+		File[] xmlFiles = guidelineDir.listFiles(fileFilter);
 
 		int counter = 0;
-		D2S_BioportalClient client = new D2S_BioportalClient();
 		
-		for (File currentXMLFile : xmlFiles) {
-			if(!currentXMLFile.getPath().endsWith("xml")) continue;
-			
+		for (File currentHTMLFile : xmlFiles) {
+			String outputName = currentHTMLFile.getName();
+			outputName=outputName.replaceAll("html","xml");
+			outputName="output-"+outputName;
 			counter ++;
-			String outputFilePath = processedDir.getPath()+"\\output"+counter+".xml";
+			String outputFilePath = processedDir.getPath()+"\\"+outputName;
 			
 			// IF this file already created, move on.
 			if(new File(outputFilePath).exists()) continue;
 			
-			Scanner fileScanner = new Scanner(new FileInputStream(currentXMLFile));
+			Scanner fileScanner = new Scanner(new FileInputStream(currentHTMLFile));
 			
-			FileWriter writer = new FileWriter(outputFilePath);
 			StringBuilder stringBuilder = new StringBuilder();
+			D2S_BioportalClient client = new D2S_BioportalClient();
 			
 			try {
-				// Refactor only to pick the body of the xml, but for now,
-				// everything is passed  just to see.
+				System.out.println("Start writing"+outputFilePath);
 				while (fileScanner.hasNextLine()) {
 					stringBuilder.append(fileScanner.nextLine() + "\n");
 				}
-				String textToAnnotate = stringBuilder.toString();
-				String annotationResult = client.annotateText(textToAnnotate,"xml");
-				writer.write(annotationResult);
-				System.out.println("Done writing output no "+counter);
+				String textToAnnotate = Jsoup.clean(stringBuilder.toString(), Whitelist.none());
+				int quarter = textToAnnotate.length()/4;
+				for(int i=0;i<4;i++){
+					client.annotateToFile(textToAnnotate.substring(i*quarter, (i+1)*quarter),"xml",new File(outputFilePath.replace(".xml","."+i+".xml")));
+				}
+				System.out.println("Done writing"+outputFilePath);
 			} finally {
 				fileScanner.close();
-				writer.close();
 			}
-			Thread.sleep(20000);
+			//Thread.sleep(20000);
 		}
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Get the files from sample dir, send it to Bioportal for annotation.
 	 * Store the result in processed directory.
@@ -87,12 +102,17 @@ public class D2S_BioPortalClientTest {
 		File sampleDir = new File(getClass().getClassLoader()
 				.getResource(SAMPLE_DIR).getFile());
 		
-		File[] xmlFiles = sampleDir.listFiles();
+		FilenameFilter xmlFileFilter = new FilenameFilter() {
+			
+			public boolean accept(File arg0, String name) {
+				return name.endsWith("xml") ;
+			}
+		};
+		
+		File[] xmlFiles = sampleDir.listFiles(xmlFileFilter);
 		
 		
 		for (File currentXMLFile : xmlFiles) {
-			// There are script and other non xml files in sample dir, ignore them
-			if(!currentXMLFile.getPath().endsWith("xml")) continue;
 			
 			// Append output- to the content file name
 			String outputFilePath = processedDir.getPath()+"\\output-"+currentXMLFile.getName();

@@ -22,7 +22,7 @@ public class D2S_IndexTest {
 	static final String PUB_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Publications";
 	static final String GUIDE_DIR="E:\\Projects\\COMMIT\\Philips-Elsevier-Usecase\\NERExperiment\\data\\Guidelines";
 	
-	@Test
+	//@Test
 	public void testSinglePDF() throws IOException, ParseException {
 		D2S_Indexer testIndexes = new D2S_Indexer();
 	
@@ -39,7 +39,7 @@ public class D2S_IndexTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testMultiplePDF() throws IOException, ParseException{
 		File publicationDir = new File(PUB_DIR);
 		
@@ -73,7 +73,7 @@ public class D2S_IndexTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void checkNumberOfFiles() throws IOException{
 		D2S_Indexer testIndexes = new D2S_Indexer();
 		testIndexes.addPDFDirectoryToIndex(PUB_DIR);

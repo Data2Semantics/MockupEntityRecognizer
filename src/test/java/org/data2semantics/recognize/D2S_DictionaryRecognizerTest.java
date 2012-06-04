@@ -20,7 +20,7 @@ public class D2S_DictionaryRecognizerTest {
 //		recognizer.doIt();
 //	}
 	
-	@Test
+	//@Test
 	public void searchTermWithRIO() throws CorruptIndexException, IOException, ParseException{
 		D2S_DictionaryRecognizer recognizer = new D2S_DictionaryRecognizer();
 		recognizer.doItWithRIO("output.rdf");
