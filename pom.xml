@@ -164,7 +164,8 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_CallBioportal
 						</mainClass>
 						<arguments>
-						     <argument>results</argument>
+						     <argument>results/snapshots</argument>
+						     <argument>results/bioportal</argument>
 						</arguments>													     
 					 </configuration>
 				     </execution>
