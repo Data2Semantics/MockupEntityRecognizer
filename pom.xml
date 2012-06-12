@@ -132,7 +132,7 @@ Will be using library from Standford NLP.</description>
 					 </goals>
 					 <configuration>
 						<mainClass> 
-							org.data2semantics.util.D2S_CreateSnapshot
+							org.data2semantics.modules.D2S_CreateSnapshot
 						</mainClass>
 						<arguments>
 						     <argument>sources.txt</argument>
@@ -161,7 +161,7 @@ Will be using library from Standford NLP.</description>
 					 </goals>
 					 <configuration>
 						<mainClass> 
-							org.data2semantics.util.D2S_CallBioportal
+							org.data2semantics.modules.D2S_CallBioportal
 						</mainClass>
 						<arguments>
 						     <argument>results</argument>
@@ -190,7 +190,7 @@ Will be using library from Standford NLP.</description>
 					 </goals>
 					 <configuration>
 						<mainClass> 
-							org.data2semantics.util.D2S_CreateAnnotationOntology
+							org.data2semantics.modules.D2S_CreateAnnotationOntology
 						</mainClass>
 						<arguments>
 						     <argument>resources/sources.txt</argument>
