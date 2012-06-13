@@ -96,6 +96,12 @@ Will be using library from Standford NLP.</description>
 			<artifactId>commons-io</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jyaml</groupId>
+			<artifactId>jyaml</artifactId>
+			<version>1.3</version>
+		</dependency>
+            
 	</dependencies>
 
 	<artifactId>D2SAnnotate</artifactId>
@@ -164,6 +170,7 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_CallBioportal
 						</mainClass>
 						<arguments>
+							 <argument>sources.txt</argument>
 						     <argument>results/snapshots</argument>
 						     <argument>results/bioportal</argument>
 						</arguments>													     
@@ -194,7 +201,8 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_CreateAnnotationOntology
 						</mainClass>
 						<arguments>
-						     <argument>resources/sources.txt</argument>
+						     <argument>results/bioportal</argument>
+						     <argument>results/annotation-ontology.rdf</argument>
 						</arguments>													     
 					 </configuration>
 				     </execution>

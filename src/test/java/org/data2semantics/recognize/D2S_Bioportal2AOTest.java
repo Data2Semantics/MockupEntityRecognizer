@@ -47,13 +47,13 @@ public class D2S_Bioportal2AOTest {
 		FilenameFilter xmlFileFilter = new FilenameFilter() {
 			
 			public boolean accept(File arg0, String name) {
-				return name.endsWith("xml") && name.startsWith("output-Q00");
+				return name.endsWith("xml");
 			}
 		};
 		
 		File [] bpresults = processedDir.listFiles(xmlFileFilter);
 		
-		D2S_AnnotationOntologyWriter aoWriter = new D2S_AnnotationOntologyWriter("output-q00.rdf");
+		D2S_AnnotationOntologyWriter aoWriter = new D2S_AnnotationOntologyWriter("output.rdf");
 		aoWriter.startWriting();
 		aoWriter.addFileAndURLs(Arrays.asList(bpresults),originalFileSources);
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();

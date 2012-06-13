@@ -99,11 +99,11 @@ public class D2S_BioPortalClientTest {
 	 * @throws InterruptedException
 	 */
 	public void parseXMLUsingDOMTest() throws SAXException, IOException, ParserConfigurationException, InterruptedException{
+		
 		File sampleDir = new File(getClass().getClassLoader()
 				.getResource(SAMPLE_DIR).getFile());
 		
-		FilenameFilter xmlFileFilter = new FilenameFilter() {
-			
+		FilenameFilter xmlFileFilter = new FilenameFilter() {			
 			public boolean accept(File arg0, String name) {
 				return name.endsWith("xml") ;
 			}
@@ -129,7 +129,6 @@ public class D2S_BioPortalClientTest {
 			Element el = (Element)list.item(0);
 			String textContent = el.getTextContent();
 			
-		
 			FileWriter writer = new FileWriter(outputFilePath);
 			System.out.println("Annotating \n" + textContent);
 			D2S_BioportalClient client = new D2S_BioportalClient();
