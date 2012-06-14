@@ -37,7 +37,7 @@ import org.openrdf.rio.turtle.TurtleWriter;
  *
 
  */
-public class D2S_AnnotationOntologyWriter {
+public class D2S_AnnotationOntologyWriter implements D2S_AnnotationWriter {
 	
 	
 	private Log log = LogFactory.getLog(D2S_AnnotationOntologyWriter.class);
