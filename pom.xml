@@ -141,7 +141,7 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_CreateSnapshot
 						</mainClass>
 						<arguments>
-						     <argument>sources.yaml</argument>
+						     <argument>short-list.yaml</argument>
 						     <argument>results/snapshots</argument>
 						</arguments>													     
 					 </configuration>
@@ -201,10 +201,9 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_CreateAnnotationOntology
 						</mainClass>
 						<arguments>
-						
-							 <argument>sources.yaml</argument>
 						     <argument>results/bioportal</argument>
-						     <argument>results/annotation-ontology.rdf</argument>
+							 <argument>short-list.yaml</argument>
+							 <argument>results/annotation-ontology.rdf</argument>
 						</arguments>													     
 					 </configuration>
 				     </execution>
