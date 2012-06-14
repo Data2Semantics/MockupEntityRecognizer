@@ -207,12 +207,13 @@ Will be using library from Standford NLP.</description>
 					 </goals>
 					 <configuration>
 						<mainClass> 
-							org.data2semantics.modules.D2S_CreateAnnotationOntology
+							org.data2semantics.modules.D2S_AnnotationRenderer
 						</mainClass>
 						<arguments>
 						     <argument>results/bioportal</argument>
 							 <argument>short-list.yaml</argument>
 							 <argument>results/annotation-ontology.rdf</argument>
+							 <argument>AO</argument>
 						</arguments>													     
 					 </configuration>
 				     </execution>
@@ -221,5 +222,37 @@ Will be using library from Standford NLP.</description>
 			 </plugins>
 		     </build>
 		</profile>		
+		<profile>
+		     <id>create-open-annotation-model</id>
+		     <build>
+			 <defaultGoal>package</defaultGoal>
+
+			 <plugins>
+			     <plugin>
+				 <groupId>org.codehaus.mojo</groupId>
+				 <artifactId>exec-maven-plugin</artifactId>
+				 <executions>
+				     <execution>
+					 <phase>package</phase>
+					 <goals>
+					     <goal>java</goal>
+					 </goals>
+					 <configuration>
+						<mainClass> 
+							org.data2semantics.modules.D2S_AnnotationRenderer
+						</mainClass>
+						<arguments>
+						     <argument>results/bioportal</argument>
+							 <argument>short-list.yaml</argument>
+							 <argument>results/annotations.rdf</argument>
+							 <argument>OA</argument>
+						</arguments>													     
+					 </configuration>
+				     </execution>
+				 </executions>
+			     </plugin>
+			 </plugins>
+		     </build>
+		</profile>
 	</profiles>
 </project>
