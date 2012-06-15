@@ -1,39 +1,47 @@
 package org.data2semantics.recognize;
 
-import org.openrdf.model.impl.URIImpl;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.model.URI;
 
 public class Vocab {
 
+	
+	private ValueFactory vf;
+	
+	public Vocab(ValueFactory f){
+		this.vf = f;
+	}
+	
 	
 	/*
 	 * The Annotation Ontology namespaces
 	 */
 	
-	public static final String AO = "http://purl.org/ao/";
+	public final String AO = "http://purl.org/ao/";
 	
-	public static final String AO_CORE = AO + "core#";
+	public final String AO_CORE = AO + "core#";
 
-	public static final String AO_FOAF = AO + "foaf#";
+	public final String AO_FOAF = AO + "foaf#";
 
-	public static final String AO_TYPE = AO + "types#";
+	public final String AO_TYPE = AO + "types#";
 	
-	public static final String AO_SELECTOR = AO + "selectors#";
+	public final String AO_SELECTOR = AO + "selectors#";
 	
 	
-	public static URIImpl ao(String suffix) {
-		return new URIImpl(AO_CORE + suffix);
+	public URI ao(String suffix) {
+		return vf.createURI(AO_CORE + suffix);
 	}
 	
-	public static URIImpl aof(String suffix) {
-		return new URIImpl(AO_FOAF + suffix);
+	public URI aof(String suffix) {
+		return vf.createURI(AO_FOAF + suffix);
 	}
 	
-	public static URIImpl aot(String suffix) {
-		return new URIImpl(AO_TYPE + suffix);
+	public URI aot(String suffix) {
+		return vf.createURI(AO_TYPE + suffix);
 	}
 	
-	public static URIImpl aos(String suffix) {
-		return new URIImpl(AO_SELECTOR + suffix);
+	public URI aos(String suffix) {
+		return vf.createURI(AO_SELECTOR + suffix);
 	}
 	
 	
@@ -41,17 +49,17 @@ public class Vocab {
 	 * The Open Annotation namespaces
 	 */
 	
-	public static final String OA = "http://www.w3.org/ns/openannotation/core/";
+	public final String OA = "http://www.w3.org/ns/openannotation/core/";
 	
-	public static final String OAX = "http://www.w3.org/ns/openannotation/extension/";
+	public final String OAX = "http://www.w3.org/ns/openannotation/extension/";
 	
 	
-	public static URIImpl oa(String suffix) {
-		return new URIImpl(OA + suffix);
+	public URI oa(String suffix) {
+		return vf.createURI(OA + suffix);
 	}
 	
-	public static URIImpl oax(String suffix) {
-		return new URIImpl(OAX + suffix);
+	public URI oax(String suffix) {
+		return vf.createURI(OAX + suffix);
 	}	
 	
 
@@ -60,65 +68,77 @@ public class Vocab {
 	 * Various namespaces
 	 */
 	
-	public static final String ANNOTEA = "http://www.w3.org/2000/10/annotation-ns#";
+	public final String ANNOTEA = "http://www.w3.org/2000/10/annotation-ns#";
 	
-	public static final String FOAF = "http://xmlns.com/foaf/0.1#";
+	public final String FOAF = "http://xmlns.com/foaf/0.1#";
 
-	public static final String PAV = "http://purl.org/pav/";
+	public final String PAV = "http://purl.org/pav/";
 
-	public static final String OBO = "http://purl.obolibrary.org/obo#";
+	public final String OBO = "http://purl.obolibrary.org/obo#";
 	
-	public static final String XSD = "http://www.w3.org/TR/xmlschema-2/#";
+	public final String XSD = "http://www.w3.org/TR/xmlschema-2/#";
 	
-	public static URIImpl annotea(String suffix) {
-		return new URIImpl(ANNOTEA + suffix);
-	}
-	
-	public static URIImpl pav(String suffix) {
-		return new URIImpl(PAV + suffix);
-	}
-	public static URIImpl foaf(String suffix) {
-		return new URIImpl(FOAF + suffix);
-	}
-	public static URIImpl obo(String suffix) {
-		return new URIImpl(OBO + suffix);
-	}
-	public static URIImpl xsd(String suffix) {
-		return new URIImpl(XSD + suffix);
+	public URI annotea(String suffix) {
+		return vf.createURI(ANNOTEA + suffix);
 	}
 	
-	public static URIImpl d2s(String suffix){
-		return new URIImpl(D2S + suffix);
+	public URI pav(String suffix) {
+		return vf.createURI(PAV + suffix);
+	}
+	public URI foaf(String suffix) {
+		return vf.createURI(FOAF + suffix);
+	}
+	public URI obo(String suffix) {
+		return vf.createURI(OBO + suffix);
+	}
+	public URI xsd(String suffix) {
+		return vf.createURI(XSD + suffix);
+	}
+	
+	public URI d2s(String suffix){
+		return vf.createURI(D2S + suffix);
+	}
+	
+	/* 
+	 * The SKOS namespace
+	 */
+	
+	public final String SKOS = "http://www.w3.org/2004/02/skos/core#";
+	
+	public URI skos(String suffix) {
+		return vf.createURI(SKOS + suffix);
 	}
 	
 	/*
 	 * The D2S namespace
 	 */
 	
-	public static final String D2S = "http://annotations.data2semantics.org/resource/";
+	public final String D2S = "http://annotations.data2semantics.org/resource/";
 	
-	public static URIImpl doc(String suffix){
+	public URI doc(String suffix){
 		return d2s("doc/"+suffix);
 	}
 	
-	public static URIImpl selector(String suffix){
+	public URI selector(String suffix){
 		return d2s("selector/"+suffix);
 	}	
 	
-	public static URIImpl annotation(String suffix){
+	public URI annotation(String suffix){
 		return d2s("annotation/"+suffix);
 	}
 	
-	public static URIImpl state(String suffix){
+	public org.openrdf.model.URI state(String suffix){
 		return d2s("state/"+suffix);
 	}
 	
-	public static URIImpl target(String suffix){
+	public URI target(String suffix){
 		return d2s("target/"+suffix);
 	}
 	
-	public static URIImpl annotator(String suffix){
+	public URI annotator(String suffix){
 		return d2s("D2SAnnotator/"+suffix);
 	}
+
+
 	
 }
