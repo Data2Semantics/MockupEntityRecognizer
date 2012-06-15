@@ -17,6 +17,13 @@ Will be using library from Standford NLP.</description>
 			<url>http://repo.aduna-software.org/maven2/releases/</url>
 			<id>Aduna</id>
 		</repository>
+		<repository>
+		  <id>apache-repo-releases</id>
+		  <url>https://repository.apache.org/content/repositories/releases/</url>
+		  <releases>
+		   <enabled>true</enabled>
+		  </releases>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -70,21 +77,13 @@ Will be using library from Standford NLP.</description>
 			<artifactId>commons-codec</artifactId>
 			<version>20041127.091804</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging-api</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging-adapters</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-		</dependency>
+<dependency>
+  <groupId>commons-logging</groupId>
+  <artifactId>commons-logging</artifactId>
+  <version>1.1.1</version>
+  <scope>provided</scope>
+</dependency>
+
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -100,16 +99,20 @@ Will be using library from Standford NLP.</description>
 			<artifactId>snakeyaml</artifactId>
 			<version>1.10</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-model</artifactId>
+			<artifactId>sesame-runtime</artifactId>
 			<version>2.6.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-rio-turtle</artifactId>
-			<version>2.6.6</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.6.6</version>
 		</dependency>
 	</dependencies>
 
@@ -229,6 +232,7 @@ Will be using library from Standford NLP.</description>
 
 			 <plugins>
 			     <plugin>
+			     <version>1.2.1</version>
 				 <groupId>org.codehaus.mojo</groupId>
 				 <artifactId>exec-maven-plugin</artifactId>
 				 <executions>
@@ -242,7 +246,7 @@ Will be using library from Standford NLP.</description>
 							org.data2semantics.modules.D2S_AnnotationRenderer
 						</mainClass>
 						<arguments>
-						     <argument>results/bioportal</argument>
+						    <argument>results/bioportal</argument>
 							 <argument>short-list.yaml</argument>
 							 <argument>results/annotations.rdf</argument>
 							 <argument>OA</argument>
