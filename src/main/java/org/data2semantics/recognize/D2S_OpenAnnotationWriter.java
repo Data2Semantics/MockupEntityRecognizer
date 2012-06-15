@@ -7,36 +7,41 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
-import org.openrdf.model.BNode;
+
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.BNodeImpl;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
+import org.openrdf.model.ValueFactory;
 import org.openrdf.model.vocabulary.RDF;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.turtle.TurtleWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.data2semantics.recognize.Vocab;
 
 public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 
-	private Log log = LogFactory.getLog(D2S_OpenAnnotationWriter.class);
+	private Logger log = LoggerFactory.getLogger(D2S_OpenAnnotationWriter.class);
 	
 	private TurtleWriter docWriter;
 	private FileOutputStream outputStream = null;
+	private ValueFactory vf;
+	private Vocab vocab;
+	private String timestamp;
+	private Repository repo;
 	
-	public D2S_OpenAnnotationWriter(String outputFile) {
+	public D2S_OpenAnnotationWriter(String outputFile) throws RepositoryException {
 		try {
 			outputStream = new FileOutputStream(new File(outputFile));
 		} catch (FileNotFoundException e) {
@@ -44,30 +49,75 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		}
 		
 		docWriter = new TurtleWriter(outputStream);
+		
+		repo = new SailRepository(new MemoryStore());
+		repo.initialize();
+		
 
 		
-		handleNamespaces();
-	}
+		vf = repo.getValueFactory();
+		vocab = new Vocab(vf);
+		
+		// Make sure that we have a single timestamp for the entire run (since URIs are timestamp specific)
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		 
+		timestamp = sdf.format(new Date());
+	}  
 	
 	
 	private void handleNamespaces() {
 		try {
-			docWriter.handleNamespace("oa",   Vocab.OA);
-			docWriter.handleNamespace("oax",  Vocab.OAX);
+			docWriter.handleNamespace("oa",   vocab.OA);
+			docWriter.handleNamespace("oax",  vocab.OAX);
+			docWriter.handleNamespace("skos", vocab.SKOS);
 		} catch (RDFHandlerException e) {
 			log.error("Failed to handle namespaces for Open Annotation model");
 		}
 	}
 	
 	public void startWriting() {
+		// I won't actually start writing here: the graph is serialized once stopWriting is called.
+		
+//		try {
+//			docWriter.startRDF();
+//		} catch (RDFHandlerException e) {
+//			log.error("Failed to start writing document");
+//		}
+	}
+
+	public void stopWriting(){
 		try {
 			docWriter.startRDF();
 		} catch (RDFHandlerException e) {
 			log.error("Failed to start writing document");
-		}
-	}
+			return;
+		}		
+		
+		handleNamespaces();
 
-	public void stopWriting(){
+		try {
+			RepositoryConnection con = repo.getConnection();
+			try {
+				RepositoryResult<Statement> statementIterator = con.getStatements(null, null, null, true);
+				
+				while (statementIterator.hasNext()) {
+					Statement s = statementIterator.next();
+					try {
+						docWriter.handleStatement(s);
+					} catch (RDFHandlerException e) {
+						// TODO Auto-generated catch block
+						log.error("Unable to handle statement");
+						e.printStackTrace();
+					}
+				}
+			} finally {
+				con.close();
+			}
+		} catch (RepositoryException e) {
+			log.error("Could not iterate over all statements in repository");
+			e.printStackTrace();
+		}
+		
 		try {
 			docWriter.endRDF();
 			outputStream.close();
@@ -83,6 +133,8 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	public void addAnnotation(D2S_Annotation curAnnotation) {
 		String exact="", prefix="", suffix="", source="", cachedSource = "", topic="";
 		
+
+		
 		exact = curAnnotation.getPreferredName();
 		prefix = curAnnotation.getPrefix();
 		suffix = curAnnotation.getSuffix();
@@ -90,63 +142,114 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		 
-		String timestamp = sdf.format(new Date());
-		Literal timestampLiteral = new LiteralImpl(timestamp.toString(), Vocab.xsd("dateTime"));
+
+		Literal timestampLiteral = vf.createLiteral(timestamp.toString(), vocab.xsd("dateTime"));
 		
 		String cachedSourceID = timestamp + "/" + cachedSource;
 		String stateID = cachedSource + "/" + timestamp;
 		String fragmentID = cachedSource + "_" + curAnnotation.getFrom() + "_"+curAnnotation.getTo() + "/" + timestamp;
 		
-		URI annotationURI = Vocab.annotation(fragmentID);
-		URI selectorURI = Vocab.selector(fragmentID);
-		URI targetURI = Vocab.target(fragmentID);
-		URI stateURI = Vocab.state(stateID);
-		URI cachedSourceURI = Vocab.doc(cachedSourceID);
-		URI sourceURI = new URIImpl(source);
+		
+		URI annotationURI = vocab.annotation(fragmentID);
+
+		
+		try {
+			RepositoryConnection con = repo.getConnection();
+
+			try {
+				if(con.hasStatement(annotationURI, null, null, true)) {
+					// If we've already visited the annotation (the annotationURI contains the range of characters in the source file)
+					// we retrieve the previously added semantic tag, and create a skos:exactMatch relation between the tags.
+					
+					RepositoryResult<Statement> statements = con.getStatements(annotationURI, vocab.oax("hasSemanticTag"), null, true);
+					
+					while (statements.hasNext()) {
+						Statement s = statements.next();
+						URI concept = (URI) s.getObject();
+						
+						Statement exactMatch = vf.createStatement(concept, vocab.skos("exactMatch"), vf.createURI(topic));
+						
+						con.add(exactMatch);
+					}
+					
+					return;
+				}
+			} finally {
+				con.close();
+			}
+		} catch (RepositoryException e) {
+			log.error("Whoops, couldn't connect to repository");
+			e.printStackTrace();
+		}
+//		if (graph.contains(annotationURI)) {
+//			// If we've already visited the annotation (the annotationURI contains the range of characters in the source file)
+//			// we can simply add the semantic tag, and return.
+//			addTriple(annotationURI, vocab.oax("hasSemanticTag"), vf.createURI(topic));
+//			return;
+//		}
+		
+		URI selectorURI = vocab.selector(fragmentID);
+		URI targetURI = vocab.target(fragmentID);
+		URI stateURI = vocab.state(stateID);
+		URI cachedSourceURI = vocab.doc(cachedSourceID);
+		URI sourceURI = vf.createURI(source);
+		
+
 		
 		/* Write the Annotation / Tag */
 		
-		addTriple(annotationURI, RDF.TYPE, Vocab.oa("Annotation"));
-		addTriple(annotationURI, RDF.TYPE, Vocab.oax("Tag"));
-		addTriple(annotationURI, Vocab.oax("hasSemanticTag"), new URIImpl(topic));
-		addTriple(annotationURI, Vocab.oa("hasTarget"), targetURI);
+		addTriple(annotationURI, RDF.TYPE, vocab.oa("Annotation"));
+		addTriple(annotationURI, RDF.TYPE, vocab.oax("Tag"));
+		addTriple(annotationURI, vocab.oax("hasSemanticTag"), vf.createURI(topic));
+		addTriple(annotationURI, vocab.oa("hasTarget"), targetURI);
 		
 		// Some provenance stuff
-		addTriple(annotationURI, Vocab.oa("generator"), new URIImpl("http://github.com/Data2Semantics/MockupEntityRecognizer"));
-		addTriple(annotationURI, Vocab.oa("generated"), timestampLiteral);
-		addTriple(annotationURI, Vocab.oa("modelVersion"), new URIImpl("http://www.openannotation.org/spec/core/20120509.html"));
+		addTriple(annotationURI, vocab.oa("generator"), vf.createURI("http://github.com/Data2Semantics/MockupEntityRecognizer"));
+		addTriple(annotationURI, vocab.oa("generated"), timestampLiteral);
+		addTriple(annotationURI, vocab.oa("modelVersion"), vf.createURI("http://www.openannotation.org/spec/core/20120509.html"));
 		
 		/* Write the Target */
 		
-		addTriple(targetURI, RDF.TYPE, Vocab.oa("SpecificResource"));
-		addTriple(targetURI, Vocab.oa("hasState"), stateURI);
-		addTriple(targetURI, Vocab.oa("hasSelector"), selectorURI);
-		addTriple(targetURI, Vocab.oa("hasSource"), sourceURI);
+		addTriple(targetURI, RDF.TYPE, vocab.oa("SpecificResource"));
+		addTriple(targetURI, vocab.oa("hasState"), stateURI);
+		addTriple(targetURI, vocab.oa("hasSelector"), selectorURI);
+		addTriple(targetURI, vocab.oa("hasSource"), sourceURI);
 		
 		/* Write the State */
 		
-		addTriple(stateURI, RDF.TYPE, Vocab.oa("State"));
-		addTriple(stateURI, Vocab.oa("cachedSource"), cachedSourceURI);
-		addTriple(stateURI, Vocab.oa("when"), timestampLiteral);
+		addTriple(stateURI, RDF.TYPE, vocab.oa("State"));
+		addTriple(stateURI, vocab.oa("cachedSource"), cachedSourceURI);
+		addTriple(stateURI, vocab.oa("when"), timestampLiteral);
 		
 		/* Write the TextQuoteSelector */
 		
-		addTriple(selectorURI, RDF.TYPE, Vocab.oax("TextQuoteSelector"));
-		addTriple(selectorURI, Vocab.oax("prefix"), new LiteralImpl(prefix));
-		addTriple(selectorURI, Vocab.oax("exact"), new LiteralImpl(exact));
-		addTriple(selectorURI, Vocab.oax("suffix"), new LiteralImpl(suffix));
+		addTriple(selectorURI, RDF.TYPE, vocab.oax("TextQuoteSelector"));
+		addTriple(selectorURI, vocab.oax("prefix"), vf.createLiteral(prefix));
+		addTriple(selectorURI, vocab.oax("exact"), vf.createLiteral(exact));
+		addTriple(selectorURI, vocab.oax("suffix"), vf.createLiteral(suffix));
 
 	}
 	
 	private void addTriple(Resource subj, URI pred, Value obj ){
+		Statement s = vf.createStatement(subj, pred, obj);
+//		log.info(s);
+		
 		try {
-			Statement s = new StatementImpl(subj,pred,obj);
-			docWriter.handleStatement(s);
-		} catch (RDFHandlerException e) {
-			log.error("Failed to add statement: "+subj+" "+pred+" "+obj);
+			RepositoryConnection con = repo.getConnection();
+			try {
+				con.add(s);
+			}  finally {
+				con.close();
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			log.error("Unable not add statement to repository:\n "+s);
+			e.printStackTrace();
+		}  catch (NullPointerException e) {
+			log.error("Hmmm... nullpointer.");
+			e.printStackTrace();
 		}
+		
 	}
 
 	public OutputStream getOS() {
