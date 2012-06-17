@@ -1,4 +1,4 @@
-package org.data2semantics.recognize;
+package org.data2semantics.util;
 
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.URI;

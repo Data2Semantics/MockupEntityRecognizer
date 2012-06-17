@@ -28,7 +28,7 @@ import org.openrdf.rio.turtle.TurtleWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.data2semantics.recognize.Vocab;
+import org.data2semantics.util.Vocab;
 
 public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 
