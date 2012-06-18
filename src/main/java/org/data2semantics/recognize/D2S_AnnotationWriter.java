@@ -11,5 +11,5 @@ public interface D2S_AnnotationWriter {
 	public void startWriting();
 	public void stopWriting();
 	public void addAnnotation(D2S_Annotation curAnnotation);
-	public OutputStream getOS();
+
 }

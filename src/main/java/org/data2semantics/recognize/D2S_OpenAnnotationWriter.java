@@ -28,27 +28,22 @@ import org.openrdf.rio.turtle.TurtleWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.data2semantics.util.RepositoryWriter;
 import org.data2semantics.util.Vocab;
 
 public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 
 	private Logger log = LoggerFactory.getLogger(D2S_OpenAnnotationWriter.class);
 	
-	private TurtleWriter docWriter;
-	private FileOutputStream outputStream = null;
+
+	private String outputFile;
 	private ValueFactory vf;
 	private Vocab vocab;
 	private String timestamp;
 	private Repository repo;
 	
 	public D2S_OpenAnnotationWriter(String outputFile) throws RepositoryException {
-		try {
-			outputStream = new FileOutputStream(new File(outputFile));
-		} catch (FileNotFoundException e) {
-			log.error("Failed to create output file");
-		}
-		
-		docWriter = new TurtleWriter(outputStream);
+		this.outputFile = outputFile;
 		
 		repo = new SailRepository(new MemoryStore());
 		repo.initialize();
@@ -65,15 +60,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	}  
 	
 	
-	private void handleNamespaces() {
-		try {
-			docWriter.handleNamespace("oa",   vocab.OA);
-			docWriter.handleNamespace("oax",  vocab.OAX);
-			docWriter.handleNamespace("skos", vocab.SKOS);
-		} catch (RDFHandlerException e) {
-			log.error("Failed to handle namespaces for Open Annotation model");
-		}
-	}
+
 	
 	public void startWriting() {
 		// I won't actually start writing here: the graph is serialized once stopWriting is called.
@@ -86,47 +73,10 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	}
 
 	public void stopWriting(){
-		try {
-			docWriter.startRDF();
-		} catch (RDFHandlerException e) {
-			log.error("Failed to start writing document");
-			return;
-		}		
+		RepositoryWriter rw = new RepositoryWriter(repo, outputFile);
 		
-		handleNamespaces();
-
-		try {
-			RepositoryConnection con = repo.getConnection();
-			try {
-				RepositoryResult<Statement> statementIterator = con.getStatements(null, null, null, true);
-				
-				while (statementIterator.hasNext()) {
-					Statement s = statementIterator.next();
-					try {
-						docWriter.handleStatement(s);
-					} catch (RDFHandlerException e) {
-						// TODO Auto-generated catch block
-						log.error("Unable to handle statement");
-						e.printStackTrace();
-					}
-				}
-			} finally {
-				con.close();
-			}
-		} catch (RepositoryException e) {
-			log.error("Could not iterate over all statements in repository");
-			e.printStackTrace();
-		}
+		rw.write();
 		
-		try {
-			docWriter.endRDF();
-			outputStream.close();
-		} catch (IOException e) {
-
-			log.error("Failed to stop writing document");
-		} catch (RDFHandlerException e) {
-			log.error("Failed to write document");
-		}
 	}
 
 
@@ -252,9 +202,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		
 	}
 
-	public OutputStream getOS() {
-		return outputStream;
-	}
+
 
 
 
