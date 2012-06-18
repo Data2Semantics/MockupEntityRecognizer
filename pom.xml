@@ -220,7 +220,7 @@ Will be using library from Standford NLP.</description>
 						<arguments>
 						     <argument>results/bioportal</argument>
 							 <argument>short-list.ttl</argument>
-							 <argument>results/annotation-ontology.rdf</argument>
+							 <argument>results/annotation-ontology.n3</argument>
 							 <argument>AO</argument>
 						</arguments>													     
 					 </configuration>
@@ -253,7 +253,7 @@ Will be using library from Standford NLP.</description>
 						<arguments>
 						    <argument>results/bioportal</argument>
 							 <argument>short-list.ttl</argument>
-							 <argument>results/annotations.rdf</argument>
+							 <argument>results/annotations.n3</argument>
 							 <argument>OA</argument>
 						</arguments>													     
 					 </configuration>
