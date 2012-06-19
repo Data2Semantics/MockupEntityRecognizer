@@ -21,14 +21,12 @@ public class RepositoryWriter {
 
 	private Logger log = LoggerFactory.getLogger(D2S_OpenAnnotationWriter.class);
 	
-	private String outputFileName = "";
 	private OutputStream outputStream ;
 	private TurtleWriter docWriter;
 	private Vocab vocab;
 	private Repository repo;
 	
 	public RepositoryWriter(Repository repo, String outputFileName){
-		this.outputFileName = outputFileName;
 		this.vocab = new Vocab(repo.getValueFactory());
 		this.repo = repo;
 		
@@ -74,7 +72,7 @@ public class RepositoryWriter {
 						docWriter.handleStatement(s);
 					} catch (RDFHandlerException e) {
 						// TODO Auto-generated catch block
-						log.error("Unable to handle statement");
+						log.error("Unable to handle statement:\n" + s);
 						e.printStackTrace();
 					}
 				}
