@@ -1,5 +1,6 @@
 @prefix d2s: <http://annotations.data2semantics.org/resource/> .
 
+<http://cid.oxfordjournals.org/content/52/4/e56.full> d2s:cachedAs "Q00" .
 
 <http://www.annals.org/content/119/4/270.full> d2s:cachedAs "Q02.47" .
 

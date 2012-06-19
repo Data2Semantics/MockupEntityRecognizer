@@ -113,10 +113,10 @@ public class Vocab {
 	 * The D2S namespace
 	 */
 	
-	public final String D2S = "http://annotations.data2semantics.org/resource/";
+	public final String D2S = "http://aers.data2semantics.org/resource/";
 	
 	public URI doc(String suffix){
-		return d2s("doc/"+suffix);
+		return d2s("document/"+suffix);
 	}
 	
 	public URI selector(String suffix){

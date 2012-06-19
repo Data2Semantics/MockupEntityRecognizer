@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.codec.digest.DigestUtils;
 
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
@@ -92,12 +93,15 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 		
+		log.info("Source "+source);
 
+		String exactDigest = DigestUtils.md5Hex(exact);
+		
 		Literal timestampLiteral = vf.createLiteral(timestamp.toString(), vocab.xsd("dateTime"));
 		
 		String cachedSourceID = timestamp + "/" + cachedSource;
-		String stateID = cachedSource + "/" + timestamp;
-		String fragmentID = cachedSource + "_" + curAnnotation.getFrom() + "_"+curAnnotation.getTo() + "/" + timestamp;
+		String stateID = cachedSource + "/" + exactDigest;
+		String fragmentID = cachedSource + "/" + curAnnotation.getFrom() + "/"+curAnnotation.getTo() + "/" + exactDigest;
 		
 		
 		URI annotationURI = vocab.annotation(fragmentID);
