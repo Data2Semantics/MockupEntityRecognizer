@@ -40,25 +40,26 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	private String outputFile;
 	private ValueFactory vf;
 	private Vocab vocab;
-	private String timestamp;
 	private Repository repo;
+	private String annotationTimestamp, snapshotTimestamp;
 	
-	public D2S_OpenAnnotationWriter(String outputFile) throws RepositoryException {
+	public D2S_OpenAnnotationWriter(String outputFile, String annotationTimestamp, String snapshotTimestamp) throws RepositoryException {
 		this.outputFile = outputFile;
 		
 		repo = new SailRepository(new MemoryStore());
 		repo.initialize();
 		
+		this.annotationTimestamp = annotationTimestamp;
+		this.snapshotTimestamp = snapshotTimestamp;
 
 		
 		vf = repo.getValueFactory();
 		vocab = new Vocab(vf);
 		
-		// Make sure that we have a single timestamp for the entire run (since URIs are timestamp specific)
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		 
-		timestamp = sdf.format(new Date());
+
 	}  
+	
+	
 	
 	
 
@@ -93,18 +94,20 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 		
-		log.info("Source "+source);
+		
 
 		String exactDigest = DigestUtils.md5Hex(exact);
 		
-		Literal timestampLiteral = vf.createLiteral(timestamp.toString(), vocab.xsd("dateTime"));
-		
-		String cachedSourceID = timestamp + "/" + cachedSource;
-		String stateID = cachedSource + "/" + exactDigest;
-		String fragmentID = cachedSource + "/" + curAnnotation.getFrom() + "/"+curAnnotation.getTo() + "/" + exactDigest;
+		Literal annotationTimestampLiteral = vf.createLiteral(annotationTimestamp, vocab.xsd("dateTime"));
+		Literal snapshotTimestampLiteral = vf.createLiteral(snapshotTimestamp, vocab.xsd("dateTime"));
 		
 		
-		URI annotationURI = vocab.annotation(fragmentID);
+		String cachedSourceID = snapshotTimestamp + "/" + cachedSource;
+		String stateID = source.substring(7) + "/" + snapshotTimestamp;
+		String fragmentID = source.substring(7) + "/" + snapshotTimestamp + "/" + exactDigest + "/" + curAnnotation.getFrom() + "/"+curAnnotation.getTo() ;
+		String annotationID = source.substring(7) + "/" + annotationTimestamp + "/" + exactDigest;
+		
+		URI annotationURI = vocab.annotation(annotationID);
 
 		
 		try {
@@ -135,12 +138,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 			log.error("Whoops, couldn't connect to repository");
 			e.printStackTrace();
 		}
-//		if (graph.contains(annotationURI)) {
-//			// If we've already visited the annotation (the annotationURI contains the range of characters in the source file)
-//			// we can simply add the semantic tag, and return.
-//			addTriple(annotationURI, vocab.oax("hasSemanticTag"), vf.createURI(topic));
-//			return;
-//		}
+
 		
 		URI selectorURI = vocab.selector(fragmentID);
 		URI targetURI = vocab.target(fragmentID);
@@ -159,7 +157,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		
 		// Some provenance stuff
 		addTriple(annotationURI, vocab.oa("generator"), vf.createURI("http://github.com/Data2Semantics/MockupEntityRecognizer"));
-		addTriple(annotationURI, vocab.oa("generated"), timestampLiteral);
+		addTriple(annotationURI, vocab.oa("generated"), annotationTimestampLiteral);
 		addTriple(annotationURI, vocab.oa("modelVersion"), vf.createURI("http://www.openannotation.org/spec/core/20120509.html"));
 		
 		/* Write the Target */
@@ -173,7 +171,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		
 		addTriple(stateURI, RDF.TYPE, vocab.oa("State"));
 		addTriple(stateURI, vocab.oa("cachedSource"), cachedSourceURI);
-		addTriple(stateURI, vocab.oa("when"), timestampLiteral);
+		addTriple(stateURI, vocab.oa("when"), snapshotTimestampLiteral);
 		
 		/* Write the TextQuoteSelector */
 		
