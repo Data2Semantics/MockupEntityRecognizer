@@ -1,12 +1,6 @@
 package org.data2semantics.recognize;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -23,8 +17,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.turtle.TurtleWriter;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,8 +88,10 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		topic = curAnnotation.getTermFound();
 		
 		
-
-		String exactDigest = DigestUtils.md5Hex(exact);
+		// The target digest is unique for the target of every annotation (prefix, exact, suffix)
+		String targetDigest = DigestUtils.md5Hex(prefix + exact + suffix);
+		// Make sure that we have a digest for the annotation that encodes both the body (topic) and the target (prefix, exact, suffix) of the annotation
+		String annotationDigest = DigestUtils.md5Hex(topic + prefix + exact + suffix);
 		
 		Literal annotationTimestampLiteral = vf.createLiteral(annotationTimestamp, vocab.xsd("dateTime"));
 		Literal snapshotTimestampLiteral = vf.createLiteral(snapshotTimestamp, vocab.xsd("dateTime"));
@@ -104,8 +99,8 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		
 		String cachedSourceID = snapshotTimestamp + "/" + cachedSource;
 		String stateID = source.substring(7) + "/" + snapshotTimestamp;
-		String fragmentID = source.substring(7) + "/" + snapshotTimestamp + "/" + exactDigest + "/" + curAnnotation.getFrom() + "/"+curAnnotation.getTo() ;
-		String annotationID = source.substring(7) + "/" + annotationTimestamp + "/" + exactDigest;
+		String fragmentID = source.substring(7) + "/" + snapshotTimestamp + "/" + targetDigest ;
+		String annotationID = source.substring(7) + "/" + annotationTimestamp + "/" + annotationDigest;
 		
 		URI annotationURI = vocab.annotation(annotationID);
 
@@ -176,9 +171,14 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		/* Write the TextQuoteSelector */
 		
 		addTriple(selectorURI, RDF.TYPE, vocab.oax("TextQuoteSelector"));
-		addTriple(selectorURI, vocab.oax("prefix"), vf.createLiteral(prefix));
-		addTriple(selectorURI, vocab.oax("exact"), vf.createLiteral(exact));
-		addTriple(selectorURI, vocab.oax("suffix"), vf.createLiteral(suffix));
+		addTriple(selectorURI, vocab.oax("prefix"), vf.createLiteral(prefix, "en"));
+		addTriple(selectorURI, vocab.oax("exact"), vf.createLiteral(exact, "en"));
+		addTriple(selectorURI, vocab.oax("suffix"), vf.createLiteral(suffix, "en"));
+		
+		addTriple(selectorURI, RDF.TYPE, vocab.oax("TextOffsetSelector"));
+		addTriple(selectorURI, vocab.oax("offset"), vf.createLiteral(curAnnotation.getFrom()));
+		addTriple(selectorURI, vocab.oax("range"), vf.createLiteral(curAnnotation.getTo()-curAnnotation.getFrom()));
+
 
 	}
 	
