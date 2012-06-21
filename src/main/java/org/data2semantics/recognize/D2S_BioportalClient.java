@@ -110,6 +110,8 @@ public class D2S_BioportalClient {
 		try {
 
 			HttpResponse response = client.execute(method);
+			System.out.println(response.getStatusLine());
+			
 			OutputStream outputStream =null;
 			InputStream contentStream =null;
 			
