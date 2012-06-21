@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class RepositoryWriter {
 
-	private Logger log = LoggerFactory.getLogger(D2S_OpenAnnotationWriter.class);
+	private Logger log = LoggerFactory.getLogger(RepositoryWriter.class);
 	
 	private OutputStream outputStream ;
 	private TurtleWriter docWriter;
