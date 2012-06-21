@@ -1,4 +1,4 @@
-@prefix d2s: <http://annotations.data2semantics.org/resource/> .
+@prefix d2s: <http://aers.ata2semantics.org/resource/> .
 
 
 <http://cid.oxfordjournals.org/content/52/4/e56.full> d2s:cachedAs "Q00" .
