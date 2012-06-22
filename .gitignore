@@ -5,3 +5,5 @@ target
 bin/
 results/
 
+
+.DS_Store
