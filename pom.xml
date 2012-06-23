@@ -160,11 +160,13 @@ Will be using library from Standford NLP.</description>
 					 </goals>
 					 <configuration>
 						<mainClass> 
-							org.data2semantics.modules.D2S_CreateSnapshot
+							org.data2semantics.modules.ModuleWrapper
 						</mainClass>
 						<arguments>
+							<argument>org.data2semantics.modules.D2S_CreateSnapshot</argument>
 						     <argument>short-list.ttl</argument>
-						     <argument>results/snapshots</argument>
+						     <argument>http://example.com/</argument>
+						     <argument>http://aers.data2semantics.org/resource/shortList</argument>
 						</arguments>													     
 					 </configuration>
 				     </execution>

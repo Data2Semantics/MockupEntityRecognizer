@@ -1,10 +1,10 @@
 @prefix d2s: <http://aers.data2semantics.org/resource/> .
 
-<http://cid.oxfordjournals.org/content/52/4/e56.full> d2s:cachedAs "Q00" .
 
-<http://www.annals.org/content/119/4/270.full> d2s:cachedAs "Q02.47" .
-
-<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> d2s:cachedAs "Q10.292" .
-
-<http://www.sciencedirect.com/science/article/pii/S1386653210000156> d2s:cachedAs "content1" .
+d2s:shortList a d2s:ResourceList ;
+	d2s:cachePrefix	"results/snapshots";
+	d2s:resource 	<http://cid.oxfordjournals.org/content/52/4/e56.full>, 
+					<http://www.annals.org/content/119/4/270.full>, 
+					<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext>, 
+					<http://www.sciencedirect.com/science/article/pii/S1386653210000156> .
 

@@ -46,6 +46,7 @@ public class RepositoryWriter {
 			docWriter.handleNamespace("oa",   vocab.OA);
 			docWriter.handleNamespace("oax",  vocab.OAX);
 			docWriter.handleNamespace("skos", vocab.SKOS);
+			docWriter.handleNamespace("d2s", vocab.D2S);
 		} catch (RDFHandlerException e) {
 			log.error("Failed to handle namespaces for Open Annotation model");
 		}
