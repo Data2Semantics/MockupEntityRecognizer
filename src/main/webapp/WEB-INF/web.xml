@@ -5,7 +5,7 @@
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
    version="2.5">
   <servlet>
-    <servlet-name>Hello</servlet-name>
+    <servlet-name>RunModule</servlet-name>
     <servlet-class>org.data2semantics.server.ModuleServer</servlet-class>
   </servlet>
   <servlet-mapping>

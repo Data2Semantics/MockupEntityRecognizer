@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.data2semantics.modules.AbstractModule;
 import org.data2semantics.modules.ModuleWrapper;
 import org.data2semantics.util.RepositoryWriter;
@@ -62,7 +63,7 @@ public class ModuleServer extends HttpServlet {
 	        response.setContentType("text/html");
 	        response.setStatus(HttpServletResponse.SC_OK);
 	        response.getWriter().println("<pre>");
-	        response.getWriter().print(output);
+	        response.getWriter().print(StringEscapeUtils.escapeHtml(output));
 	        response.getWriter().println("</pre>");
 	        response.getWriter().println("session=" + request.getSession(true).getId());
 	        
@@ -99,10 +100,6 @@ public class ModuleServer extends HttpServlet {
 			e.printStackTrace();
 		}
     	
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println("<h1>Hello Servlet</h1>");
-        response.getWriter().println("session=" + request.getSession(true).getId());
     }
     
 }
