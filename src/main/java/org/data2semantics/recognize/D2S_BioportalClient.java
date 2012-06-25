@@ -22,12 +22,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.data2semantics.modules.D2S_CallBioportal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class D2S_BioportalClient {
 	public static final String annotatorUrl = "http://rest.bioontology.org/obs/annotator";
 	DefaultHttpClient client  = new DefaultHttpClient();
 	HttpPost method = new HttpPost(annotatorUrl);
 	List <NameValuePair> params = new ArrayList <NameValuePair>();
+	
+	private Logger log = LoggerFactory.getLogger(D2S_BioportalClient.class);
 
 	public D2S_BioportalClient() {
 
@@ -68,20 +73,20 @@ public class D2S_BioportalClient {
 		int tries = 0;
 		
 		do {
-			System.out.println("Contacting BioPortal..");
+			log.info("Contacting BioPortal..");
 			response = client.execute(method);
 			entity = response.getEntity();
 			status = response.getStatusLine();
-			System.out.println(status);
+			log.info(status.toString());
 			if (entity != null && status.getStatusCode() != 200) {
 				EntityUtils.consume(entity);
-				System.out.println("Retrying in 2 secs...");
+				log.info("Retrying in 2 secs...");
 				Thread.sleep(2000);
 			}
 			tries += 1;
-		} while (status.getStatusCode() != 200 && tries < 10 ); 
+		} while (status.getStatusCode() != 200 && tries < 5 ); 
 		
-		if (tries == 10) throw new Exception("Could not retrieve annotation from BioPortal Annotator");
+		if (tries == 10) throw new Exception("Could not retrieve annotation from BioPortal Annotator, even after 5 tries!");
 		
 		
 		return entity;
@@ -109,7 +114,7 @@ public class D2S_BioportalClient {
 		try {
 
 			HttpEntity entity = callBioportal();
-			System.out.println("Retrieving results from BioPortal Annotator");
+			log.info("Retrieving results from BioPortal Annotator");
 			
 			if (entity != null) {
 				InputStream contentStream = entity.getContent();
@@ -142,14 +147,14 @@ public class D2S_BioportalClient {
 		try {
 
 			HttpEntity entity = callBioportal();
-			System.out.println("Retrieving results from BioPortal Annotator");
+			log.info("Retrieving results from BioPortal Annotator");
 			
 			OutputStream outputStream =null;
 			InputStream contentStream =null;
 			
 			
 			
-			System.out.println("Retrieving "+ entity.getContentLength() + " bytes");
+			log.info("Retrieving "+ entity.getContentLength() + " bytes");
 			
 			if (entity != null) {
 				contentStream = entity.getContent();
