@@ -24,6 +24,7 @@ import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.data2semantics.util.D2S_Utils;
 import org.data2semantics.util.RepositoryWriter;
 import org.data2semantics.util.Vocab;
 
@@ -32,59 +33,106 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	private Logger log = LoggerFactory
 			.getLogger(D2S_OpenAnnotationWriter.class);
 
-	private String outputFileName;
 	private ValueFactory vf;
 	private Vocab vocab;
-	private Repository repo;
-	private String annotationTimestamp, snapshotTimestamp;
+	private RepositoryConnection con;
+	private String annotationTime, annotationSourceTime, annotationFileName, annotationSourceLocation;
+	private URI documentURI;
 
-	public D2S_OpenAnnotationWriter(String outputFileName,
-			String annotationTimestamp, String snapshotTimestamp)
-			throws RepositoryException {
-		this.outputFileName = outputFileName;
+	
+	public D2S_OpenAnnotationWriter(RepositoryConnection con, URI documentURI) throws RepositoryException {
+		this.con = con;		
+		this.vf = con.getValueFactory();
+		this.vocab = new Vocab(vf);
+		this.documentURI = documentURI;
 
-		repo = new SailRepository(new MemoryStore());
-		repo.initialize();
+		
+		RepositoryResult<Statement> annotationIterator = con
+				.getStatements(documentURI, vocab.d2s("hasAnnotation"),
+						null, true);
 
-		this.annotationTimestamp = annotationTimestamp;
-		this.snapshotTimestamp = snapshotTimestamp;
+		Resource latestAnnotationResource = D2S_Utils.getLatest(con,
+				annotationIterator, vocab.d2s("annotationTime"));
 
-		vf = repo.getValueFactory();
-		vocab = new Vocab(vf);
+		
+		RepositoryResult<Statement> annotationPropertiesIterator = con
+				.getStatements(latestAnnotationResource,
+						null, null, true);
 
-	}
+		String annotationFileName = "";
+		String annotationTime = "";
 
-	public void startWriting() {
-		// I won't actually start writing here: the graph is serialized once
-		// stopWriting is called.
+		while (annotationPropertiesIterator.hasNext()) {
+			Statement annotationPropertyStatement = annotationPropertiesIterator
+					.next();
 
-		// try {
-		// docWriter.startRDF();
-		// } catch (RDFHandlerException e) {
-		// log.error("Failed to start writing document");
-		// }
-	}
+			log.debug(annotationPropertyStatement.toString());
+			
+			if (annotationPropertyStatement.getPredicate() == vocab.d2s("annotationTime")) {
+				annotationTime = annotationPropertyStatement.getObject().stringValue();
+				continue;
+			}
+			if (annotationPropertyStatement.getPredicate() == vocab.d2s("annotationLocation")) {
+				annotationFileName = annotationPropertyStatement.getObject().stringValue();
+				continue;
+			}	
 
-	public void stopWriting() {
+			// We only need one cache file
+			break;
+		}
+		
+		log.info("Latest annotations found at " + annotationFileName + " created at " + annotationTime);
+		
+		String annotationSourceTime = "";
+		String annotationSourceLocation = "";
 
-		try {
-			log.info("Starting RepositoryWriter (writing to " + outputFileName
-					+ ")");
+		RepositoryResult<Statement> annotationSourceIterator = con
+				.getStatements(latestAnnotationResource,
+						vocab.d2s("annotationSource"), null, true);
+		
+		while (annotationSourceIterator.hasNext()) {
+			Statement annotationSourceStatement = annotationSourceIterator
+					.next();
 
-			FileOutputStream outputStream = new FileOutputStream(new File(
-					outputFileName));
-			OutputStreamWriter streamWriter = new OutputStreamWriter(
-					outputStream);
-			RepositoryWriter rw = new RepositoryWriter(repo, streamWriter);
-
-			rw.write();
-			log.info("Done");
-
-		} catch (FileNotFoundException e) {
-			log.error("Failed to create output file " + outputFileName);
+			log.debug(annotationSourceStatement.toString());
+			
+			Value annotationSource = annotationSourceStatement.getObject();
+			
+			try {
+				RepositoryResult<Statement> annotationSourcePropertiesIterator = con.getStatements((Resource) annotationSource, null, null, true);
+	
+				while (annotationSourcePropertiesIterator.hasNext()) {
+					Statement annotationSourcePropertyStatement = annotationSourcePropertiesIterator.next();
+	
+					log.debug(annotationSourcePropertyStatement.toString()); 
+					
+					if (annotationSourcePropertyStatement.getPredicate() == vocab.d2s("cacheTime")) {
+						annotationSourceTime = annotationSourcePropertyStatement.getObject().stringValue();
+						continue;
+					}
+					if (annotationSourcePropertyStatement.getPredicate() == vocab.d2s("cacheLocation")) {
+						annotationSourceLocation = annotationSourcePropertyStatement.getObject().stringValue();
+						continue;
+					}	
+				}
+			} catch (ClassCastException e) {
+				log.debug(annotationSource + " is not a Resource");
+			}
+			
+			// We need only one annotation source (there can be only one)
+			break;
 		}
 
+		log.info("Annotations were based on a cached copy " + annotationSourceLocation + " created at "+ annotationSourceTime);
+		
+		
+		this.annotationTime = annotationTime;
+		this.annotationFileName = annotationFileName;
+		this.annotationSourceTime = annotationSourceTime;
+		this.annotationSourceLocation = annotationSourceLocation;
+		
 	}
+
 
 	public void addAnnotation(D2S_Annotation curAnnotation) {
 		String exact = "", prefix = "", suffix = "", source = "", cachedSource = "", topic = "";
@@ -106,53 +154,48 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 				+ suffix);
 
 		Literal annotationTimestampLiteral = vf.createLiteral(
-				annotationTimestamp, vocab.xsd("dateTime"));
-		Literal snapshotTimestampLiteral = vf.createLiteral(snapshotTimestamp,
+				annotationTime, vocab.xsd("dateTime"));
+		Literal snapshotTimestampLiteral = vf.createLiteral(annotationSourceTime,
 				vocab.xsd("dateTime"));
 
-		String cachedSourceID = snapshotTimestamp + "/" + cachedSource;
-		String stateID = source.substring(7) + "/" + snapshotTimestamp;
-		String fragmentID = source.substring(7) + "/" + snapshotTimestamp + "/"
+		String cachedSourceID = cachedSource;
+		String stateID = source.substring(7) + "/" + annotationSourceTime;
+		String fragmentID = source.substring(7) + "/" + annotationSourceTime + "/"
 				+ targetDigest;
-		String annotationID = source.substring(7) + "/" + annotationTimestamp
+		String annotationID = source.substring(7) + "/" + annotationTime
 				+ "/" + annotationDigest;
 
 		URI annotationURI = vocab.annotation(annotationID);
 
 		try {
-			RepositoryConnection con = repo.getConnection();
+			if (con.hasStatement(annotationURI, null, null, true)) {
+				// If we've already visited the annotation (the
+				// annotationURI contains the range of characters in the
+				// source file)
+				// we retrieve the previously added semantic tag, and create
+				// a skos:exactMatch relation between the tags.
 
-			try {
-				if (con.hasStatement(annotationURI, null, null, true)) {
-					// If we've already visited the annotation (the
-					// annotationURI contains the range of characters in the
-					// source file)
-					// we retrieve the previously added semantic tag, and create
-					// a skos:exactMatch relation between the tags.
+				RepositoryResult<Statement> statements = con.getStatements(
+						annotationURI, vocab.oax("hasSemanticTag"), null,
+						true);
 
-					RepositoryResult<Statement> statements = con.getStatements(
-							annotationURI, vocab.oax("hasSemanticTag"), null,
-							true);
+				while (statements.hasNext()) {
+					Statement s = statements.next();
+					URI concept = (URI) s.getObject();
 
-					while (statements.hasNext()) {
-						Statement s = statements.next();
-						URI concept = (URI) s.getObject();
+					Statement exactMatch = vf.createStatement(concept,
+							vocab.skos("exactMatch"), vf.createURI(topic));
 
-						Statement exactMatch = vf.createStatement(concept,
-								vocab.skos("exactMatch"), vf.createURI(topic));
-
-						con.add(exactMatch);
-					}
-
-					return;
+					con.add(exactMatch);
 				}
-			} finally {
-				con.close();
+
+				return;
 			}
 		} catch (RepositoryException e) {
-			log.error("Whoops, couldn't connect to repository");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 
 		URI selectorURI = vocab.selector(fragmentID);
 		URI targetURI = vocab.target(fragmentID);
@@ -216,18 +259,11 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 
 	private void addTriple(Resource subj, URI pred, Value obj) {
 		Statement s = vf.createStatement(subj, pred, obj);
-		// log.info(s);
 
 		try {
-			RepositoryConnection con = repo.getConnection();
-			try {
-				con.add(s);
-			} finally {
-				con.close();
-			}
+			con.add(s);
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			log.error("Unable not add statement to repository:\n " + s);
+			log.error("Unable to add statement to repository:\n " + s);
 			e.printStackTrace();
 		} catch (NullPointerException e) {
 			log.error("Hmmm... nullpointer.");
@@ -235,5 +271,20 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		}
 
 	}
+
+
+	public String getAnnotationFileName() {
+		// TODO Auto-generated method stub
+		return this.annotationFileName;
+	}
+	
+	public String getAnnotationSourceLocation() {
+		return this.annotationSourceLocation;
+	}
+	
+	public URI getDocumentURI() {
+		return this.documentURI;
+	}
+	
 
 }
