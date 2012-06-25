@@ -395,6 +395,16 @@ public class D2S_AnnotationOntologyWriter implements D2S_AnnotationWriter {
 	public OutputStream getOS(){
 		return outputStream;
 	}
+
+	public String getAnnotationFileName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public URI getDocumentURI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }
