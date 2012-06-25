@@ -65,23 +65,22 @@ public class ModuleServer extends HttpServlet {
 				log.error("Failed to create output file " + outputFileName);
 			}
 			
+			// TODO: Fix the code below, as it runs out of memory...
 			
-			log.info("Starting RepositoryWriter (writing to string)");
-
-			StringWriter stringWriter = new StringWriter();
-			RepositoryWriter rw = new RepositoryWriter(outputRepository,
-					stringWriter);
-
-			rw.write();
-			log.info("Done");
-
-			String output = stringWriter.toString();
+//			log.info("Starting RepositoryWriter (writing to string)");
+//
+//			StringWriter stringWriter = new StringWriter();
+//			RepositoryWriter rw = new RepositoryWriter(outputRepository,
+//					stringWriter);
+//
+//			rw.write();
+//			log.info("Done");
+//
+//			String output = stringWriter.toString();
 
 			response.setContentType("text/html");
 			response.setStatus(HttpServletResponse.SC_OK);
-			response.getWriter().println("<pre>");
-			response.getWriter().print(StringEscapeUtils.escapeHtml(output));
-			response.getWriter().println("</pre>");
+			response.getWriter().println("All done!<br/>");
 			response.getWriter().println(
 					"session=" + request.getSession(true).getId());
 
