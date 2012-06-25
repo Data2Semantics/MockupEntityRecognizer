@@ -4,6 +4,7 @@
 d2s:shortList a d2s:ResourceList ;
 	d2s:cacheDirectory	"results/snapshots";
 	d2s:bioportalDirectory "results/bioportal";
+	d2s:annotationType	<http://www.w3.org/ns/openannotation/core/> ;
 	d2s:resource 	<http://cid.oxfordjournals.org/content/52/4/e56.full>, 
 					<http://www.annals.org/content/119/4/270.full>, 
 					<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext>, 
