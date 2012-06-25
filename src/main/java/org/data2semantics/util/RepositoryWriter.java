@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
-import org.data2semantics.recognize.D2S_OpenAnnotationWriter;
 import org.openrdf.model.Statement;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -20,53 +20,49 @@ import org.slf4j.LoggerFactory;
 public class RepositoryWriter {
 
 	private Logger log = LoggerFactory.getLogger(RepositoryWriter.class);
-	
-	private OutputStream outputStream ;
+
+	private Writer writer;
 	private TurtleWriter docWriter;
 	private Vocab vocab;
 	private Repository repo;
-	
-	public RepositoryWriter(Repository repo, String outputFileName){
+
+	public RepositoryWriter(Repository repo, Writer writer) {
 		this.vocab = new Vocab(repo.getValueFactory());
 		this.repo = repo;
+		this.writer = writer;
 		
-		try {
-			outputStream = new FileOutputStream(new File(outputFileName));
-		} catch (FileNotFoundException e) {
-			log.error("Failed to create output file "+outputFileName);
-		}
-		
-		docWriter = new TurtleWriter(outputStream);
-		
+
+		docWriter = new TurtleWriter(writer);
+
 	}
-	
-	
+
 	private void handleNamespaces() {
 		try {
-			docWriter.handleNamespace("oa",   vocab.OA);
-			docWriter.handleNamespace("oax",  vocab.OAX);
+			docWriter.handleNamespace("oa", vocab.OA);
+			docWriter.handleNamespace("oax", vocab.OAX);
 			docWriter.handleNamespace("skos", vocab.SKOS);
 			docWriter.handleNamespace("d2s", vocab.D2S);
 		} catch (RDFHandlerException e) {
 			log.error("Failed to handle namespaces for Open Annotation model");
 		}
 	}
-	
+
 	public void write() {
 		try {
 			docWriter.startRDF();
 		} catch (RDFHandlerException e) {
 			log.error("Failed to start writing document");
 			return;
-		}		
-		
+		}
+
 		handleNamespaces();
 
 		try {
 			RepositoryConnection con = repo.getConnection();
 			try {
-				RepositoryResult<Statement> statementIterator = con.getStatements(null, null, null, true);
-				
+				RepositoryResult<Statement> statementIterator = con
+						.getStatements(null, null, null, true);
+
 				while (statementIterator.hasNext()) {
 					Statement s = statementIterator.next();
 					try {
@@ -84,16 +80,15 @@ public class RepositoryWriter {
 			log.error("Could not iterate over all statements in repository");
 			e.printStackTrace();
 		}
-		
+
 		try {
 			docWriter.endRDF();
-			outputStream.close();
+			writer.close();
 		} catch (IOException e) {
 			log.error("Failed to stop writing document");
 		} catch (RDFHandlerException e) {
 			log.error("Failed to write document");
 		}
-		
-		
+
 	}
 }
