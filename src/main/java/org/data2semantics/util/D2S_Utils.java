@@ -1,11 +1,17 @@
 package org.data2semantics.util;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFFormat;
@@ -37,5 +43,55 @@ public class D2S_Utils {
 				e.printStackTrace();
 			}
 			return cacheNameToSourceMap;
+		}
+		
+		public static Resource getLatest(RepositoryConnection con, RepositoryResult<Statement> statementIterator, URI timeProperty) throws RepositoryException {
+			Resource latestResource = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			
+			while (statementIterator.hasNext()) {
+				Statement s = statementIterator.next();
+				Resource r = (Resource) s
+						.getObject();
+
+				RepositoryResult<Statement> timeIterator = con
+						.getStatements(r,
+								timeProperty, null, true);
+
+				Date latest = null;
+				while (timeIterator.hasNext()) {
+					Statement timeStatement = timeIterator
+							.next();
+
+					String cacheTime = timeStatement.getObject()
+							.stringValue();
+
+					Date time;
+
+					try {
+						time = sdf.parse(cacheTime);
+
+						if (latest == null) {
+							latest = time;
+							latestResource = r;
+
+						} else if (time.after(latest)) {
+							latest = time;
+							latestResource = r;
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}	
+				
+				
+			}
+			
+
+
+			
+			return latestResource ;
 		}
 }
