@@ -47,7 +47,7 @@ public class D2S_Utils {
 		
 		public static Resource getLatest(RepositoryConnection con, RepositoryResult<Statement> statementIterator, URI timeProperty) throws RepositoryException {
 			Resource latestResource = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			SimpleDateFormat sdf = D2S_Utils.getSimpleDateFormat();
 			
 			while (statementIterator.hasNext()) {
 				Statement s = statementIterator.next();
@@ -93,5 +93,13 @@ public class D2S_Utils {
 
 			
 			return latestResource ;
+		}
+		
+		public static SimpleDateFormat getSimpleDateFormat(){
+			SimpleDateFormat sdfForWindows =  new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
+			SimpleDateFormat sdfForUnixMac =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			if(System.getProperty("os.name").toLowerCase().contains("win"))
+				return sdfForWindows ;
+			return sdfForUnixMac;
 		}
 }
