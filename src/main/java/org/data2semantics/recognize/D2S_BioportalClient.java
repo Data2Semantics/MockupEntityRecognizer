@@ -40,8 +40,8 @@ public class D2S_BioportalClient {
 				"D2S Bioportal - Annotator - Client");
 
 		 
-
-
+		client.getParams().setParameter("http.socket.timeout", new Integer(20000));
+		method.getParams().setParameter("http.socket.timeout", new Integer(20000));
 		
 		// Configure the form parameters
 		params.add(new BasicNameValuePair("longestOnly", "false"));
