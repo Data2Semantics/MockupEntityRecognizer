@@ -1,14 +1,26 @@
 package org.data2semantics.recognize;
 
+import info.aduna.xml.XMLReaderFactory;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
+
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -22,26 +34,38 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
-import org.data2semantics.modules.D2S_CallBioportal;
+import org.data2semantics.util.D2S_Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
+
+import edu.stanford.nlp.io.StringOutputStream;
 
 public class D2S_BioportalClient {
 	public static final String annotatorUrl = "http://rest.bioontology.org/obs/annotator";
-	DefaultHttpClient client  = new DefaultHttpClient();
-	HttpPost method = new HttpPost(annotatorUrl);
-	List <NameValuePair> params = new ArrayList <NameValuePair>();
+	DefaultHttpClient client  = null;
+	HttpPost method = null;
+	List <NameValuePair> params = null;
 	
 	private Logger log = LoggerFactory.getLogger(D2S_BioportalClient.class);
 
 	public D2S_BioportalClient() {
-
+		initialize();
+	}
+	public void initialize(){
+		client = new DefaultHttpClient();
+		method = new HttpPost(annotatorUrl);
+		params = new ArrayList<NameValuePair>();
 		client.getParams().setParameter(CoreProtocolPNames.USER_AGENT,
 				"D2S Bioportal - Annotator - Client");
 
 		 
 		client.getParams().setParameter("http.socket.timeout", new Integer(20000));
 		method.getParams().setParameter("http.socket.timeout", new Integer(20000));
+
 		
 		// Configure the form parameters
 		params.add(new BasicNameValuePair("longestOnly", "false"));
@@ -176,6 +200,120 @@ public class D2S_BioportalClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+	}
+
+
+
+	public void splitAnnotateAndMerge(String longText, String format,
+			File outputSplitMerge, int wordCountPerSplit) {
+		
+			String [] splits = splitLongText(longText, wordCountPerSplit);
+		
+			//Accumulative length of previous splits to offset the prefix of current result
+			int splitOffset = 0;
+			
+			StringBuffer result = new StringBuffer();
+			for(String curSplit : splits){
+			
+				//Maybe I need to think of another way to do this instead of initializing every time
+				initialize();
+				
+				//Annotate this curSplit
+				String annotatedSplit = annotateText(curSplit, "xml");
+	
+				// Fix the prefix and suffix, update according to the length of accumulated previous split.
+				String correctedSplit = shiftAnnotatedSplitPrefixAndPostfix(annotatedSplit, splitOffset);
+				
+				//Merging corrected split, do I need to fix anything else besides the from/to
+				result.append(correctedSplit);
+				
+				// Don't forget to update current split
+				splitOffset += curSplit.length();
+		
+				D2S_Utils.sleep(1000);
+			
+			}
+			
+			// Write result to outputSplitMerge.
+			BufferedWriter writer = null;
+			try {
+				writer = new BufferedWriter(new FileWriter(outputSplitMerge));
+				writer.write(result.toString());
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if(writer != null)
+					try {
+						writer.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
+			
+	}
+
+
+	/**
+	 * This function should look for <from> <to> tag from existing string and replace it with the correct prefix.
+	 * We want also to strip the header containing text to Annotate
+	 * @param annotatedSplit
+	 * @param splitOffset
+	 */
+	private String shiftAnnotatedSplitPrefixAndPostfix(String annotatedSplit,
+			int splitOffset) {
+			String result = "";
+			try {
+				XMLReader reader = XMLReaderFactory.createXMLReader();
+				StreamResult stResult =  new StreamResult();
+				StringOutputStream srs = new StringOutputStream();
+				stResult.setOutputStream(srs);
+				
+				//This is the writer that will generate the final xml output.
+				SAXTransformerFactory transformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
+				TransformerHandler serializer = transformerFactory.newTransformerHandler();
+				serializer.setResult(stResult);
+				
+				XMLFilter shiftAndAnnotateFilter = new D2S_PrefixShiftXMLFilter(splitOffset);
+				shiftAndAnnotateFilter.setContentHandler(serializer);
+				shiftAndAnnotateFilter.setParent(reader);
+
+
+				shiftAndAnnotateFilter.parse (new InputSource(new StringReader(annotatedSplit)));
+				
+				result = srs.toString();
+				 
+			} catch (TransformerConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return result;
+	}
+
+
+
+	private String[] splitLongText(String longText, int wordCountPerSplit) {
+		
+		Vector<	String > result = new Vector<String>();
+
+		String [] words = longText.split(" ");
+	
+		for(int i=0;i<words.length;i++){
+			StringBuffer currentSplit = new StringBuffer();
+			for(int j=0;j<wordCountPerSplit && i < words.length;j++,i++){
+				currentSplit.append(' '); 
+				currentSplit.append(words[i]);
+			}
+			result.add(currentSplit.toString());
+		}
+		
+		return result.toArray(new String[result.size()]);
 	}
 
 }
