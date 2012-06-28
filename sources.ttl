@@ -1,82 +1,50 @@
 @prefix d2s: <http://aers.ata2semantics.org/resource/> .
 
 
-<http://cid.oxfordjournals.org/content/52/4/e56.full> d2s:cachedAs "Q00" .
+@prefix d2s: <http://aers.data2semantics.org/resource/> .
 
-<http://www.annals.org/content/119/4/270.full> d2s:cachedAs "Q02.47" .
 
-<http://jcm.asm.org/content/45/11/3546.full> d2s:cachedAs "Q02.49" .
-
-<http://cid.oxfordjournals.org/content/38/12/1724.full> d2s:cachedAs "Q02.50" .
-
-<http://www.annals.org/content/131/9/641.1.full> d2s:cachedAs "Q02.51" .
-
-<http://cid.oxfordjournals.org/content/23/1/40.short> d2s:cachedAs "Q02.52" .
-
-<http://www.springerlink.com/content/7uxg8uybjry9hu61/fulltext.html> d2s:cachedAs "Q02.55" .
-
-<http://onlinelibrary.wiley.com/doi/10.1111/j.1600-0609.2004.00387.x/full> d2s:cachedAs "Q02.56" .
-
-<http://www.springerlink.com/content/f5754730675j1643/fulltext.html> d2s:cachedAs "Q02.57" .
-
-<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> d2s:cachedAs "Q10.292" .
-
-<http://www.ncbi.nlm.nih.gov/pubmed/21095116> d2s:cachedAs "Q10.2922010" .
-
-<http://jco.ascopubs.org/content/24/19/3187.full> d2s:cachedAs "Q10.293" .
-
-<http://www.jnccn.org/content/7/1/64.short> d2s:cachedAs "Q10.294" .
-
-<http://jco.ascopubs.org/content/24/19/2991.full> d2s:cachedAs "Q10.295" .
-
-<http://jco.ascopubs.org/content/26/2/290.full> d2s:cachedAs "Q10.296" .
-
-<http://jco.ascopubs.org/content/24/19/2975> d2s:cachedAs "Q10.297" .
-
-<http://onlinelibrary.wiley.com/doi/10.1002/cncr.21847/full> d2s:cachedAs "Q10.298" .
-
-<http://www.croh-online.com/article/S1040-8428(09)00005-5/fulltext> d2s:cachedAs "Q10.299" .
-
-<http://www.annals.org/content/121/7/492.full> d2s:cachedAs "Q10.301" .
-
-<http://jnci.oxfordjournals.org/content/93/1/31.full> d2s:cachedAs "Q10.303" .
-
-<http://www.sciencedirect.com/science/article/pii/S1386653210000156> d2s:cachedAs "content1" .
-
-<http://www.sciencedirect.com/science/article/pii/S0959804910010294> d2s:cachedAs "content10" .
-
-<http://www.sciencedirect.com/science/article/pii/S1083879111010275> d2s:cachedAs "content11" .
-
-<http://www.sciencedirect.com/science/article/pii/S0924857907000714> d2s:cachedAs "content12" .
-
-<http://www.sciencedirect.com/science/article/pii/S0090825810010620> d2s:cachedAs "content13" .
-
-<http://www.sciencedirect.com/science/article/pii/S1201971207000422> d2s:cachedAs "content14" .
-
-<http://www.sciencedirect.com/science/article/pii/S1040842809001243> d2s:cachedAs "content15" .
-
-<http://www.sciencedirect.com/science/article/pii/S1083879110009390> d2s:cachedAs "content16" .
-
-<http://www.sciencedirect.com/science/article/pii/S1083879111011232> d2s:cachedAs "content17" .
-
-<http://www.sciencedirect.com/science/article/pii/S0145212611005091> d2s:cachedAs "content18" .
-
-<http://www.sciencedirect.com/science/article/pii/S0924857908000502> d2s:cachedAs "content19" .
-
-<http://www.sciencedirect.com/science/article/pii/S0037196309000572> d2s:cachedAs "content2" .
-
-<http://www.sciencedirect.com/science/article/pii/S0735675710003864> d2s:cachedAs "content20" .
-
-<http://www.sciencedirect.com/science/article/pii/S0145212609004275> d2s:cachedAs "content3" .
-
-<http://www.sciencedirect.com/science/article/pii/S0883944110001620> d2s:cachedAs "content4" .
-
-<http://www.sciencedirect.com/science/article/pii/S0924857910004061> d2s:cachedAs "content5" .
-
-<http://www.sciencedirect.com/science/article/pii/S092485790800294X> d2s:cachedAs "content6" .
-
-<http://www.sciencedirect.com/science/article/pii/S0959804911000669> d2s:cachedAs "content7" .
-
-<http://www.sciencedirect.com/science/article/pii/S1040842810000776> d2s:cachedAs "content8" .
-
-<http://www.sciencedirect.com/science/article/pii/S0924857907000167> d2s:cachedAs "content9" .
+d2s:fullList a d2s:ResourceList ;
+	d2s:cacheDirectory	"results/snapshots";
+	d2s:bioportalDirectory "results/bioportal";
+	d2s:annotationType	<http://www.w3.org/ns/openannotation/core/> ;
+	d2s:resource <http://cid.oxfordjournals.org/content/52/4/e56.full> ,
+		<http://www.annals.org/content/119/4/270.full> ,
+		<http://jcm.asm.org/content/45/11/3546.full> ,
+		<http://cid.oxfordjournals.org/content/38/12/1724.full> ,
+		<http://www.annals.org/content/131/9/641.1.full> ,
+		<http://cid.oxfordjournals.org/content/23/1/40.short> ,
+		<http://www.springerlink.com/content/7uxg8uybjry9hu61/fulltext.html> ,
+		<http://onlinelibrary.wiley.com/doi/10.1111/j.1600-0609.2004.00387.x/full> ,
+		<http://www.springerlink.com/content/f5754730675j1643/fulltext.html> ,
+		<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> ,
+		<http://www.ncbi.nlm.nih.gov/pubmed/21095116> ,
+		<http://jco.ascopubs.org/content/24/19/3187.full> ,
+		<http://www.jnccn.org/content/7/1/64.short> ,
+		<http://jco.ascopubs.org/content/24/19/2991.full> ,
+		<http://jco.ascopubs.org/content/26/2/290.full> ,
+		<http://jco.ascopubs.org/content/24/19/2975> ,
+		<http://onlinelibrary.wiley.com/doi/10.1002/cncr.21847/full> ,
+		<http://www.croh-online.com/article/S1040-8428(09)00005-5/fulltext> ,
+		<http://www.annals.org/content/121/7/492.full> ,
+		<http://jnci.oxfordjournals.org/content/93/1/31.full> ,
+		<http://www.sciencedirect.com/science/article/pii/S1386653210000156> ,
+		<http://www.sciencedirect.com/science/article/pii/S0959804910010294> ,
+		<http://www.sciencedirect.com/science/article/pii/S1083879111010275> ,
+		<http://www.sciencedirect.com/science/article/pii/S0924857907000714> ,
+		<http://www.sciencedirect.com/science/article/pii/S0090825810010620> ,
+		<http://www.sciencedirect.com/science/article/pii/S1201971207000422> ,
+		<http://www.sciencedirect.com/science/article/pii/S1040842809001243> ,
+		<http://www.sciencedirect.com/science/article/pii/S1083879110009390> ,
+		<http://www.sciencedirect.com/science/article/pii/S1083879111011232> ,
+		<http://www.sciencedirect.com/science/article/pii/S0145212611005091> ,
+		<http://www.sciencedirect.com/science/article/pii/S0924857908000502> ,
+		<http://www.sciencedirect.com/science/article/pii/S0037196309000572> ,
+		<http://www.sciencedirect.com/science/article/pii/S0735675710003864> ,
+		<http://www.sciencedirect.com/science/article/pii/S0145212609004275> ,
+		<http://www.sciencedirect.com/science/article/pii/S0883944110001620> ,
+		<http://www.sciencedirect.com/science/article/pii/S0924857910004061> ,
+		<http://www.sciencedirect.com/science/article/pii/S092485790800294X> ,
+		<http://www.sciencedirect.com/science/article/pii/S0959804911000669> ,
+		<http://www.sciencedirect.com/science/article/pii/S1040842810000776> ,
+		<http://www.sciencedirect.com/science/article/pii/S0924857907000167> .

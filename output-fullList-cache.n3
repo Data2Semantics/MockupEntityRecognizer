@@ -1,0 +1,200 @@
+@prefix oa: <http://www.w3.org/ns/openannotation/core/> .
+@prefix oax: <http://www.w3.org/ns/openannotation/extension/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix d2s: <http://aers.data2semantics.org/resource/> .
+
+d2s:fullList a d2s:ResourceList ;
+	d2s:cacheDirectory "results/snapshots" ;
+	d2s:bioportalDirectory "results/bioportal" ;
+	d2s:annotationType <http://www.w3.org/ns/openannotation/core/> ;
+	d2s:resource <http://cid.oxfordjournals.org/content/52/4/e56.full> , <http://www.annals.org/content/119/4/270.full> , <http://jcm.asm.org/content/45/11/3546.full> , <http://cid.oxfordjournals.org/content/38/12/1724.full> , <http://www.annals.org/content/131/9/641.1.full> , <http://cid.oxfordjournals.org/content/23/1/40.short> , <http://www.springerlink.com/content/7uxg8uybjry9hu61/fulltext.html> , <http://onlinelibrary.wiley.com/doi/10.1111/j.1600-0609.2004.00387.x/full> , <http://www.springerlink.com/content/f5754730675j1643/fulltext.html> , <http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> , <http://www.ncbi.nlm.nih.gov/pubmed/21095116> , <http://jco.ascopubs.org/content/24/19/3187.full> , <http://www.jnccn.org/content/7/1/64.short> , <http://jco.ascopubs.org/content/24/19/2991.full> , <http://jco.ascopubs.org/content/26/2/290.full> , <http://jco.ascopubs.org/content/24/19/2975> , <http://onlinelibrary.wiley.com/doi/10.1002/cncr.21847/full> , <http://www.croh-online.com/article/S1040-8428(09)00005-5/fulltext> , <http://www.annals.org/content/121/7/492.full> , <http://jnci.oxfordjournals.org/content/93/1/31.full> , <http://www.sciencedirect.com/science/article/pii/S1386653210000156> , <http://www.sciencedirect.com/science/article/pii/S0959804910010294> , <http://www.sciencedirect.com/science/article/pii/S1083879111010275> , <http://www.sciencedirect.com/science/article/pii/S0924857907000714> , <http://www.sciencedirect.com/science/article/pii/S0090825810010620> , <http://www.sciencedirect.com/science/article/pii/S1201971207000422> , <http://www.sciencedirect.com/science/article/pii/S1040842809001243> , <http://www.sciencedirect.com/science/article/pii/S1083879110009390> , <http://www.sciencedirect.com/science/article/pii/S1083879111011232> , <http://www.sciencedirect.com/science/article/pii/S0145212611005091> , <http://www.sciencedirect.com/science/article/pii/S0924857908000502> , <http://www.sciencedirect.com/science/article/pii/S0037196309000572> , <http://www.sciencedirect.com/science/article/pii/S0735675710003864> , <http://www.sciencedirect.com/science/article/pii/S0145212609004275> , <http://www.sciencedirect.com/science/article/pii/S0883944110001620> , <http://www.sciencedirect.com/science/article/pii/S0924857910004061> , <http://www.sciencedirect.com/science/article/pii/S092485790800294X> , <http://www.sciencedirect.com/science/article/pii/S0959804911000669> , <http://www.sciencedirect.com/science/article/pii/S1040842810000776> , <http://www.sciencedirect.com/science/article/pii/S0924857907000167> .
+
+<http://cid.oxfordjournals.org/content/52/4/e56.full> d2s:hasCache _:node170hv17l8x1 .
+
+_:node170hv17l8x1 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/cid.oxfordjournals.org%2Fcontent%2F52%2F4%2Fe56.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.annals.org/content/119/4/270.full> d2s:hasCache _:node170hv17l8x2 .
+
+_:node170hv17l8x2 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.annals.org%2Fcontent%2F119%2F4%2F270.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jcm.asm.org/content/45/11/3546.full> d2s:hasCache _:node170hv17l8x3 .
+
+_:node170hv17l8x3 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jcm.asm.org%2Fcontent%2F45%2F11%2F3546.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://cid.oxfordjournals.org/content/38/12/1724.full> d2s:hasCache _:node170hv17l8x4 .
+
+_:node170hv17l8x4 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/cid.oxfordjournals.org%2Fcontent%2F38%2F12%2F1724.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.annals.org/content/131/9/641.1.full> d2s:hasCache _:node170hv17l8x5 .
+
+_:node170hv17l8x5 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.annals.org%2Fcontent%2F131%2F9%2F641.1.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://cid.oxfordjournals.org/content/23/1/40.short> d2s:hasCache _:node170hv17l8x6 .
+
+_:node170hv17l8x6 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/cid.oxfordjournals.org%2Fcontent%2F23%2F1%2F40.short.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://onlinelibrary.wiley.com/doi/10.1111/j.1600-0609.2004.00387.x/full> d2s:hasCache _:node170hv17l8x7 .
+
+_:node170hv17l8x7 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/onlinelibrary.wiley.com%2Fdoi%2F10.1111%2Fj.1600-0609.2004.00387.x%2Ffull.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> d2s:hasCache _:node170hv17l8x8 .
+
+_:node170hv17l8x8 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.ejcancer.info%2Farticle%2FS0959-8049%2806%2900391-1%2Ffulltext.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.ncbi.nlm.nih.gov/pubmed/21095116> d2s:hasCache _:node170hv17l8x9 .
+
+_:node170hv17l8x9 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.ncbi.nlm.nih.gov%2Fpubmed%2F21095116.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jco.ascopubs.org/content/24/19/3187.full> d2s:hasCache _:node170hv17l8x10 .
+
+_:node170hv17l8x10 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jco.ascopubs.org%2Fcontent%2F24%2F19%2F3187.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.jnccn.org/content/7/1/64.short> d2s:hasCache _:node170hv17l8x11 .
+
+_:node170hv17l8x11 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.jnccn.org%2Fcontent%2F7%2F1%2F64.short.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jco.ascopubs.org/content/24/19/2991.full> d2s:hasCache _:node170hv17l8x12 .
+
+_:node170hv17l8x12 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jco.ascopubs.org%2Fcontent%2F24%2F19%2F2991.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jco.ascopubs.org/content/26/2/290.full> d2s:hasCache _:node170hv17l8x13 .
+
+_:node170hv17l8x13 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jco.ascopubs.org%2Fcontent%2F26%2F2%2F290.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jco.ascopubs.org/content/24/19/2975> d2s:hasCache _:node170hv17l8x14 .
+
+_:node170hv17l8x14 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jco.ascopubs.org%2Fcontent%2F24%2F19%2F2975.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://onlinelibrary.wiley.com/doi/10.1002/cncr.21847/full> d2s:hasCache _:node170hv17l8x15 .
+
+_:node170hv17l8x15 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/onlinelibrary.wiley.com%2Fdoi%2F10.1002%2Fcncr.21847%2Ffull.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.croh-online.com/article/S1040-8428(09)00005-5/fulltext> d2s:hasCache _:node170hv17l8x16 .
+
+_:node170hv17l8x16 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.croh-online.com%2Farticle%2FS1040-8428%2809%2900005-5%2Ffulltext.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.annals.org/content/121/7/492.full> d2s:hasCache _:node170hv17l8x17 .
+
+_:node170hv17l8x17 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.annals.org%2Fcontent%2F121%2F7%2F492.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://jnci.oxfordjournals.org/content/93/1/31.full> d2s:hasCache _:node170hv17l8x18 .
+
+_:node170hv17l8x18 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/jnci.oxfordjournals.org%2Fcontent%2F93%2F1%2F31.full.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1386653210000156> d2s:hasCache _:node170hv17l8x19 .
+
+_:node170hv17l8x19 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1386653210000156.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0959804910010294> d2s:hasCache _:node170hv17l8x20 .
+
+_:node170hv17l8x20 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0959804910010294.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1083879111010275> d2s:hasCache _:node170hv17l8x21 .
+
+_:node170hv17l8x21 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1083879111010275.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0924857907000714> d2s:hasCache _:node170hv17l8x22 .
+
+_:node170hv17l8x22 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0924857907000714.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0090825810010620> d2s:hasCache _:node170hv17l8x23 .
+
+_:node170hv17l8x23 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0090825810010620.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1201971207000422> d2s:hasCache _:node170hv17l8x24 .
+
+_:node170hv17l8x24 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1201971207000422.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1040842809001243> d2s:hasCache _:node170hv17l8x25 .
+
+_:node170hv17l8x25 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1040842809001243.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1083879110009390> d2s:hasCache _:node170hv17l8x26 .
+
+_:node170hv17l8x26 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1083879110009390.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1083879111011232> d2s:hasCache _:node170hv17l8x27 .
+
+_:node170hv17l8x27 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1083879111011232.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0145212611005091> d2s:hasCache _:node170hv17l8x28 .
+
+_:node170hv17l8x28 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0145212611005091.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0924857908000502> d2s:hasCache _:node170hv17l8x29 .
+
+_:node170hv17l8x29 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0924857908000502.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0037196309000572> d2s:hasCache _:node170hv17l8x30 .
+
+_:node170hv17l8x30 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0037196309000572.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0735675710003864> d2s:hasCache _:node170hv17l8x31 .
+
+_:node170hv17l8x31 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0735675710003864.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0145212609004275> d2s:hasCache _:node170hv17l8x32 .
+
+_:node170hv17l8x32 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0145212609004275.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0883944110001620> d2s:hasCache _:node170hv17l8x33 .
+
+_:node170hv17l8x33 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0883944110001620.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0924857910004061> d2s:hasCache _:node170hv17l8x34 .
+
+_:node170hv17l8x34 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0924857910004061.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S092485790800294X> d2s:hasCache _:node170hv17l8x35 .
+
+_:node170hv17l8x35 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS092485790800294X.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0959804911000669> d2s:hasCache _:node170hv17l8x36 .
+
+_:node170hv17l8x36 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0959804911000669.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S1040842810000776> d2s:hasCache _:node170hv17l8x37 .
+
+_:node170hv17l8x37 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS1040842810000776.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+<http://www.sciencedirect.com/science/article/pii/S0924857907000167> d2s:hasCache _:node170hv17l8x38 .
+
+_:node170hv17l8x38 d2s:cacheLocation "results/snapshots/2012-06-25T15:59:28/www.sciencedirect.com%2Fscience%2Farticle%2Fpii%2FS0924857907000167.html"^^<http://www.w3.org/2001/XMLSchema#string> ;
+	d2s:cacheTime "2012-06-25T15:59:28"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
