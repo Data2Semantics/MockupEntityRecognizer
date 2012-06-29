@@ -34,6 +34,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.data2semantics.filters.D2S_PrefixShiftXMLFilter;
 import org.data2semantics.util.D2S_Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -288,7 +289,6 @@ public class D2S_BioportalClient {
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
