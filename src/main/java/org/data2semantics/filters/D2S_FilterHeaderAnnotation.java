@@ -24,10 +24,9 @@ public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
 			Attributes atts) throws SAXException {
 
 		currentQName = qName;
-		if(currentQName.equalsIgnoreCase("resultid") || currentQName.equalsIgnoreCase("statistics")
-		 ||currentQName.equalsIgnoreCase("parameters"))
-			
+		if(currentQName.equalsIgnoreCase("parameters"))
 			relevantHeaders = true;
+	
 		if(relevantHeaders){
 			super.startElement(uri, localName, qName, atts);
 		}
@@ -39,28 +38,24 @@ public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
 		
 		if(relevantHeaders){
 			super.endElement(uri, localName, qName);
-			if(	qName.toLowerCase().contains("resultid") ||
-				qName.toLowerCase().contains("statistics") ||
-				qName.toLowerCase().contains("parameters") 
-						
-			   )
+			if(	qName.toLowerCase().contains("parameters") )
 				relevantHeaders=false;
+				currentQName = "";
 		}
 	}
 
 	/**
-	 * Here is where actually transformation/offset happened
 	 */
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 
-		// We are going to pass the integer value of this character, add it with
-		// split offset and return it back to the serializer
 
 		if (relevantHeaders){
-			if(currentQName.equalsIgnoreCase("texttoannotate"))
+			if(currentQName.equalsIgnoreCase("texttoannotate")){
 				super.characters(originalText.toCharArray(), 0, originalText.length());
+				
+			}
 			else
 			super.characters(ch, start, length);
 			

@@ -8,12 +8,21 @@ public class D2S_FilterAnnotationBeans extends XMLFilterImpl{
 
 	String currentQName;
 	boolean inAnnotationBeans=false;
+	
+	@Override
+	public void startDocument() throws SAXException {
+		// Not calling super start document, we are interested only in annotations.
+	};
+	@Override
+	public void endDocument() throws SAXException {
+		// Not calling super end document, we are interested only in annotations.
+	};
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 
 		currentQName = qName;
-		if(currentQName.equalsIgnoreCase("annotationbean"))
+		if(currentQName.equalsIgnoreCase("annotations"))
 			inAnnotationBeans = true;
 		if(inAnnotationBeans){
 			super.startElement(uri, localName, qName, atts);
@@ -26,14 +35,13 @@ public class D2S_FilterAnnotationBeans extends XMLFilterImpl{
 		
 		if(inAnnotationBeans){
 			super.endElement(uri, localName, qName);
-			if(qName.toLowerCase().contains("annotationbean"))
+			if(qName.toLowerCase().contains("annotations"))
 				inAnnotationBeans=false;
+			currentQName = "";
 		}
 	}
 
-	/**
-	 * Here is where actually transformation/offset happened
-	 */
+
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
