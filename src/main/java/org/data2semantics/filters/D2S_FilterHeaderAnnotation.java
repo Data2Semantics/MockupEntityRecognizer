@@ -38,9 +38,10 @@ public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
 		
 		if(relevantHeaders){
 			super.endElement(uri, localName, qName);
-			if(	qName.toLowerCase().contains("parameters") )
+			if(	qName.toLowerCase().contains("parameters") ){
 				relevantHeaders=false;
 				currentQName = "";
+			}
 		}
 	}
 

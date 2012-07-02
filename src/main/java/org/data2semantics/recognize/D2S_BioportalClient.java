@@ -5,6 +5,7 @@ import info.aduna.xml.XMLReaderFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -222,76 +223,83 @@ public class D2S_BioportalClient {
 
 	public void splitAnnotateAndMerge(String longText, String format,
 			File outputSplitMerge, int wordCountPerSplit) {
+
+		String[] splits = splitLongText(longText, wordCountPerSplit);
 		
-			String [] splits = splitLongText(longText, wordCountPerSplit);
-		
-			//Accumulative length of previous splits to offset the prefix of current result
-			int splitOffset = 0;
-			int countSplit = 0;
-			Vector<String> annotationResults = new Vector<String>();
-			
-			for(String curSplit : splits){
-			
-				//Maybe I need to think of another way to do this instead of initializing every time
+		log.info("Splitting the documents into " +splits.length+" splits. Each containing "+wordCountPerSplit+" words (not characters).");
+		// Accumulative length of previous splits to offset the prefix of
+		// current result
+		int splitOffset = 0;
+		int countSplit = 0;
+
+		File[] annotatedBeanFiles = new File[splits.length];
+
+		try {
+			File originalHeader = File.createTempFile("originalHeader", "xml");
+			for (int i = 0; i < splits.length; i++) {
+
+				// Maybe I need to think of another way to do this instead of
+				// initializing every time
 				initialize();
-				
-				log.info("Annotating split number " + countSplit+" with offset " + splitOffset);
-				
-				//Annotate current split
-				String annotatedSplit = annotateText(curSplit, "xml");
-	
-				// Fix the prefix and suffix, update according to the length of accumulated previous split.
+
+				log.info("Annotating split number " + countSplit
+						+ " with character offset " + splitOffset);
+
+				File bioportalOutput = File.createTempFile("annotation-" + i+"-", ".xml");
+
+				// Annotate current split
+				annotateToFile(splits[i], "xml", bioportalOutput);
+
+				// Fix the prefix and suffix, update according to the length of
+				// accumulated previous split.
 
 				log.info("Shifting prefix and suffix according to accumulated splitOffset");
-				String correctedSplit = shiftAnnotatedSplitPrefixAndPostfix(annotatedSplit, splitOffset);
-				
-				//Only for the first split, initialize the relevant header and modify the textToAnnotatePart with original text
-				if(annotationResults.size()==0){
+				File shiftedAnnotatedSplit = File.createTempFile("shiftedAnnotation-" + i+"-", ".xml");
+
+				shiftAnnotatedSplitPrefixAndPostfix(bioportalOutput,
+						splitOffset, shiftedAnnotatedSplit);
+
+				// Only for the first split, initialize the relevant header and
+				// modify the textToAnnotatePart with original text
+				if (countSplit == 0) {
 					log.info("Extracting relevant header");
-					annotationResults.add(extractRelevantHeader(correctedSplit, longText));
+					extractRelevantHeader(shiftedAnnotatedSplit, longText,	originalHeader);
 				}
-				
-				//Merging corrected split, do I need to fix anything else besides the from/to
+
+				// Merging corrected split, do I need to fix anything else
+				// besides the from/to
 				log.info("Extracting annotation beans");
-				annotationResults.add(extractAnnotationBeans(correctedSplit));
-				
-				
+				annotatedBeanFiles[i] = File.createTempFile("annotatedbeans" + i+"-", ".xml");
+				extractAnnotationBeans(shiftedAnnotatedSplit,	annotatedBeanFiles[i]);
+
 				// Don't forget to update current split
-				splitOffset += curSplit.length();
-		
+				splitOffset += splits[i].length();
+				countSplit++;
+
 				D2S_Utils.sleep(1000);
-			
+				bioportalOutput.delete();
+				shiftedAnnotatedSplit.delete();
+				
+
 			}
-			
-			String mergedAnnotations = mergeAnnotationResults(annotationResults);
-			
-			log.info("Writing results");
-			// Write result to outputSplitMerge.
-			BufferedWriter writer = null;
-			try {
-				writer = new BufferedWriter(new FileWriter(outputSplitMerge));
-				writer.write(mergedAnnotations);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if(writer != null)
-					try {
-						writer.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			}
-			
+		} catch (IOException e) {
+
+		}
+
+		log.info("Merging annotation results, directly writing to file");
+
+		mergeAnnotationResults(annotatedBeanFiles, outputSplitMerge);
+
 	}
 
 
-	private String mergeAnnotationResults(Vector<String> annotationResults) {
+	private void mergeAnnotationResults(File[] annotationResults, File outputSplitMerge) {
 
-		//StringWriter resultWriter = new StringWriter();
-		StringOutputStream sos = new StringOutputStream();	
+		FileOutputStream fos = null;
 		log.info("Merging annotation result");
 		try {
-			StreamResult finalHandler = new StreamResult(sos);
+			fos = new FileOutputStream(outputSplitMerge);	
+			StreamResult finalHandler = new StreamResult(fos);
 
 			SAXTransformerFactory transformerFactory = (SAXTransformerFactory) TransformerFactory
 					.newInstance();
@@ -308,36 +316,43 @@ public class D2S_BioportalClient {
 
 			serializer.startDocument();
 			serializer.startElement("", "annotatorResultBean", "annotatorResultBean",null);
-			for(String result: annotationResults){
+			for(int i=0;i<annotationResults.length;i++){
+				log.info("Merging file "+annotationResults[i].getAbsolutePath());
 				XMLReader reader = XMLReaderFactory.createXMLReader();
 				reader.setContentHandler(serializer);
-				reader.parse(new InputSource(new StringReader(result)));
+				FileInputStream inputStream =new FileInputStream(annotationResults[i]); 
+				reader.parse(new InputSource(inputStream));
+				inputStream.close();
 			}
 			serializer.endElement("", "annotatorResultBean", "annotatorResultBean");
 			serializer.endDocument();
 		
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if(fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+
+				}
 		}
 
-		return sos.toString();
+	
 	}
-	private String extractRelevantHeader(String correctedSplit, String originalText) {
+	private void  extractRelevantHeader(File correctedSplit, String originalText, File filteredOutput) {
 	    XMLFilter headerFilter = new D2S_FilterHeaderAnnotation(originalText);
-		return applyXMLFilter(correctedSplit, headerFilter);
+		 applyXMLFilter(correctedSplit, headerFilter, filteredOutput);
 	}
 	
-	private String extractAnnotationBeans(String correctedSplit) {
+	private void  extractAnnotationBeans(File correctedSplit, File filteredOutput) {
 		XMLFilter annotationBeanFilter = new D2S_FilterAnnotationBeans();
 		
-		return applyXMLFilter(correctedSplit, annotationBeanFilter);
+		applyXMLFilter(correctedSplit, annotationBeanFilter, filteredOutput);
 	}
 	/**
 	 * This function should look for <from> <to> tag from existing string and replace it with the correct prefix.
@@ -345,20 +360,24 @@ public class D2S_BioportalClient {
 	 * @param annotatedSplit
 	 * @param splitOffset
 	 */
-	private String shiftAnnotatedSplitPrefixAndPostfix(String annotatedSplit,
-			int splitOffset) {
+	private void  shiftAnnotatedSplitPrefixAndPostfix(File annotatedSplit,
+			int splitOffset, File shiftedOutput) {
 			XMLFilter shiftAndAnnotateFilter = new D2S_PrefixShiftXMLFilter(splitOffset);
-			return applyXMLFilter(annotatedSplit, shiftAndAnnotateFilter);
+			applyXMLFilter(annotatedSplit, shiftAndAnnotateFilter, shiftedOutput);
 	}
 	
-	private String applyXMLFilter(String xmlStringToFilter,
-			XMLFilter filterTobeApplied)
+	private void applyXMLFilter(File inputXMLFile,
+			XMLFilter filterTobeApplied, File filteredOutput)
 			throws TransformerFactoryConfigurationError {
 		
-		StringOutputStream sos = new StringOutputStream();
+		FileInputStream inputStream = null;
+		FileOutputStream outputStream = null;
 		try {
+			inputStream = new FileInputStream(inputXMLFile);
+			InputSource inputSource  = new InputSource(inputStream);
+			 outputStream = new FileOutputStream(filteredOutput);
 			
-			StreamResult finalResultHandler =  new StreamResult(sos);
+			StreamResult finalResultHandler =  new StreamResult(outputStream);
 			
 			//This is the writer that will generate the final xml output.
 			SAXTransformerFactory transformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
@@ -372,18 +391,25 @@ public class D2S_BioportalClient {
 			XMLReader reader = XMLReaderFactory.createXMLReader();
 			filterTobeApplied.setParent(reader);
 			filterTobeApplied.setContentHandler(serializer);	
-			filterTobeApplied.parse (new InputSource(new StringReader(xmlStringToFilter)));
 			
-			 
+			filterTobeApplied.parse (inputSource);
+	
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				inputStream.close();
+				outputStream.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
-		return sos.toString();
 	}
 
 
