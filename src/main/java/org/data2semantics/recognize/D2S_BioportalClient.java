@@ -226,17 +226,16 @@ public class D2S_BioportalClient {
 
 		String[] splits = splitLongText(longText, wordCountPerSplit);
 		
-		log.info("Splitting the documents into " +splits.length+" splits. Each containing "+wordCountPerSplit+" words (not characters).");
+		log.info("Splitting the documents into " +splits.length+" splits. Each containing "+wordCountPerSplit+" words (not characters). ");
 		// Accumulative length of previous splits to offset the prefix of
 		// current result
 		int splitOffset = 0;
-		int countSplit = 0;
-
-		File[] annotatedBeanFiles = new File[splits.length];
+		
+		// With additional original header
+		File[] headerAndAnnotatedBeans = new File[splits.length+1];
 
 		try {
-			File originalHeader = File.createTempFile("originalHeader", "xml");
-			for (int i = 0; i < splits.length; i++) {
+			for (int countSplit = 0; countSplit < splits.length; countSplit++) {
 
 				// Maybe I need to think of another way to do this instead of
 				// initializing every time
@@ -245,16 +244,16 @@ public class D2S_BioportalClient {
 				log.info("Annotating split number " + countSplit
 						+ " with character offset " + splitOffset);
 
-				File bioportalOutput = File.createTempFile("annotation-" + i+"-", ".xml");
+				File bioportalOutput = File.createTempFile("annotation-" + countSplit+"-", ".xml");
 
 				// Annotate current split
-				annotateToFile(splits[i], "xml", bioportalOutput);
+				annotateToFile(splits[countSplit], "xml", bioportalOutput);
 
 				// Fix the prefix and suffix, update according to the length of
 				// accumulated previous split.
 
 				log.info("Shifting prefix and suffix according to accumulated splitOffset");
-				File shiftedAnnotatedSplit = File.createTempFile("shiftedAnnotation-" + i+"-", ".xml");
+				File shiftedAnnotatedSplit = File.createTempFile("shiftedAnnotation-" + countSplit+"-", ".xml");
 
 				shiftAnnotatedSplitPrefixAndPostfix(bioportalOutput,
 						splitOffset, shiftedAnnotatedSplit);
@@ -263,24 +262,22 @@ public class D2S_BioportalClient {
 				// modify the textToAnnotatePart with original text
 				if (countSplit == 0) {
 					log.info("Extracting relevant header");
-					extractRelevantHeader(shiftedAnnotatedSplit, longText,	originalHeader);
+					headerAndAnnotatedBeans[0] = File.createTempFile("header" + countSplit+"-", ".xml");
+					extractRelevantHeader(shiftedAnnotatedSplit, longText,	headerAndAnnotatedBeans[0]);
 				}
 
 				// Merging corrected split, do I need to fix anything else
 				// besides the from/to
 				log.info("Extracting annotation beans");
-				annotatedBeanFiles[i] = File.createTempFile("annotatedbeans" + i+"-", ".xml");
-				extractAnnotationBeans(shiftedAnnotatedSplit,	annotatedBeanFiles[i]);
+				headerAndAnnotatedBeans[countSplit+1] = File.createTempFile("annotatedbeans" + countSplit+"-", ".xml");
+				extractAnnotationBeans(shiftedAnnotatedSplit,	headerAndAnnotatedBeans[countSplit+1]);
 
 				// Don't forget to update current split
-				splitOffset += splits[i].length();
-				countSplit++;
-
+				splitOffset += splits[countSplit].length();
+				
 				D2S_Utils.sleep(1000);
 				bioportalOutput.delete();
 				shiftedAnnotatedSplit.delete();
-				
-
 			}
 		} catch (IOException e) {
 
@@ -288,7 +285,7 @@ public class D2S_BioportalClient {
 
 		log.info("Merging annotation results, directly writing to file");
 
-		mergeAnnotationResults(annotatedBeanFiles, outputSplitMerge);
+		mergeAnnotationResults(headerAndAnnotatedBeans, outputSplitMerge);
 
 	}
 
