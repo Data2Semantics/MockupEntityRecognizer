@@ -75,12 +75,12 @@ public class D2S_Bioportal2AOTest {
 			is.setEncoding("UTF-8");
 			
 			String originalSource = originalFileSources.get(currentResultFile.getName());
-			bioPortalAnnotationSAXHandler = new D2S_BioPortalAnnotationHandler(currentResultFile.getName(), originalSource);
+			bioPortalAnnotationSAXHandler = new D2S_BioPortalAnnotationHandler(currentResultFile.getName(), originalSource, aoWriter);
 			parser.parse(is, bioPortalAnnotationSAXHandler);
 			
-			currentAnnotations = bioPortalAnnotationSAXHandler.getAnnotations();
-			for(D2S_Annotation currentAnnotation : currentAnnotations)
-				aoWriter.addAnnotation(currentAnnotation);
+//			currentAnnotations = bioPortalAnnotationSAXHandler.getAnnotations();
+//			for(D2S_Annotation currentAnnotation : currentAnnotations)
+//				aoWriter.addAnnotation(currentAnnotation);
 			
 		}
 		
