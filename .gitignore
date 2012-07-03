@@ -4,6 +4,6 @@ target
 .project
 bin/
 results/
-
+*.n3
 
 .DS_Store
