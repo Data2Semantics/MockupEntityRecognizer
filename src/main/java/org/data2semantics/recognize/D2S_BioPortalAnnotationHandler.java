@@ -1,10 +1,7 @@
 package org.data2semantics.recognize;
 
-import java.util.List;
-import java.util.Vector;
-
+import org.eclipse.jetty.util.log.Log;
 import org.xml.sax.Attributes;
-
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -16,8 +13,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 
 	String curQname;
-	List<D2S_Annotation> annotations = new Vector<D2S_Annotation>();
-
+	
+	
 	// Whenever we enter a new annotation beans we will set this to some new
 	// Annotation
 	D2S_Annotation currentAnnotation = null;
@@ -34,9 +31,12 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 	String originalSource;
 	String localFileName;
 	
-	public D2S_BioPortalAnnotationHandler(String localFileName, String originalSource) {
+	D2S_AnnotationWriter writer;
+	
+	public D2S_BioPortalAnnotationHandler(String localFileName, String originalSource, D2S_AnnotationWriter writer) {
 		this.originalSource = originalSource;
 		this.localFileName= localFileName ;
+		this.writer = writer;
 	}
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
@@ -66,7 +66,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			currentAnnotation.setSourceDocument(localFileName);
 			currentAnnotation.setFrom(from);
 			currentAnnotation.setTo(to);
-			annotations.add(currentAnnotation);
+			writer.addAnnotation(currentAnnotation);
 			currentAnnotation = null;
 		}
 		if (qName.equalsIgnoreCase("term")) {
@@ -127,13 +127,8 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 
 	@Override
 	public void endDocument() throws SAXException {
-		System.out.println(annotations.size());
-		System.out.println(textToAnnotate);
-		System.out.println();
 		super.endDocument();
 	}
 	
-	public List<D2S_Annotation>getAnnotations(){
-		return annotations;
-	}
+
 }
