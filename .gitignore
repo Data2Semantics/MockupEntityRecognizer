@@ -7,3 +7,5 @@ results/
 *.n3
 
 .DS_Store
+
+output-fullList-cache.n3
