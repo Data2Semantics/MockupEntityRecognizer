@@ -96,11 +96,8 @@ public class D2S_Utils {
 		}
 		
 		public static SimpleDateFormat getSimpleDateFormat(){
-			SimpleDateFormat sdfForWindows =  new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
-			SimpleDateFormat sdfForUnixMac =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			if(System.getProperty("os.name").toLowerCase().contains("win"))
-				return sdfForWindows ;
-			return sdfForUnixMac;
+			SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			return simpleDateFormat;
 		}
 
 		public static void sleep(int i) {
