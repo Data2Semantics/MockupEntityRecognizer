@@ -1,0 +1,16 @@
+@prefix oa: <http://www.w3.org/ns/openannotation/core/> .
+@prefix oax: <http://www.w3.org/ns/openannotation/extension/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix d2s: <http://aers.data2semantics.org/resource/> .
+
+d2s:firstList a d2s:ResourceList ;
+	d2s:cacheDirectory "results/snapshots" ;
+	d2s:bioportalDirectory "results/bioportal" ;
+	d2s:annotationType <http://www.w3.org/ns/openannotation/core/> ;
+	d2s:resource <http://cid.oxfordjournals.org/content/52/4/e56.full> , <http://www.annals.org/content/119/4/270.full> , <http://jcm.asm.org/content/45/11/3546.full> , <http://cid.oxfordjournals.org/content/38/12/1724.full> , <http://www.annals.org/content/131/9/641.1.full> , <http://cid.oxfordjournals.org/content/23/1/40.short> , <http://www.springerlink.com/content/7uxg8uybjry9hu61/fulltext.html> , <http://onlinelibrary.wiley.com/doi/10.1111/j.1600-0609.2004.00387.x/full> , <http://www.springerlink.com/content/f5754730675j1643/fulltext.html> , <http://www.ejcancer.info/article/S0959-8049(06)00391-1/fulltext> , <http://www.ncbi.nlm.nih.gov/pubmed/21095116> , <http://jco.ascopubs.org/content/24/19/3187.full> , <http://www.jnccn.org/content/7/1/64.short> , <http://jco.ascopubs.org/content/24/19/2991.full> , <http://jco.ascopubs.org/content/26/2/290.full> , <http://jco.ascopubs.org/content/24/19/2975> , <http://onlinelibrary.wiley.com/doi/10.1002/cncr.21847/full> , <http://www.croh-online.com/article/S1040-8428(09)00005-5/fulltext> , <http://www.annals.org/content/121/7/492.full> , <http://jnci.oxfordjournals.org/content/93/1/31.full> .
+	
+d2s:secondList a d2s:ResourceList ;
+		d2s:cacheDirectory "results/snapshots" ;
+		d2s:bioportalDirectory "results/bioportal" ;
+		d2s:annotationType <http://www.w3.org/ns/openannotation/core/> ;
+		d2s:resource <http://www.sciencedirect.com/science/article/pii/S1386653210000156> , <http://www.sciencedirect.com/science/article/pii/S0959804910010294> , <http://www.sciencedirect.com/science/article/pii/S1083879111010275> , <http://www.sciencedirect.com/science/article/pii/S0924857907000714> , <http://www.sciencedirect.com/science/article/pii/S0090825810010620> , <http://www.sciencedirect.com/science/article/pii/S1201971207000422> , <http://www.sciencedirect.com/science/article/pii/S1040842809001243> , <http://www.sciencedirect.com/science/article/pii/S1083879110009390> , <http://www.sciencedirect.com/science/article/pii/S1083879111011232> , <http://www.sciencedirect.com/science/article/pii/S0145212611005091> , <http://www.sciencedirect.com/science/article/pii/S0924857908000502> , <http://www.sciencedirect.com/science/article/pii/S0037196309000572> , <http://www.sciencedirect.com/science/article/pii/S0735675710003864> , <http://www.sciencedirect.com/science/article/pii/S0145212609004275> , <http://www.sciencedirect.com/science/article/pii/S0883944110001620> , <http://www.sciencedirect.com/science/article/pii/S0924857910004061> , <http://www.sciencedirect.com/science/article/pii/S092485790800294X> , <http://www.sciencedirect.com/science/article/pii/S0959804911000669> , <http://www.sciencedirect.com/science/article/pii/S1040842810000776> , <http://www.sciencedirect.com/science/article/pii/S0924857907000167> .
