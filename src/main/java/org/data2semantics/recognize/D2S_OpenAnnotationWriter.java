@@ -59,7 +59,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 				annotationIterator, vocab.d2s("annotationTime"));
 
 		// Check if the file has any annotations, if not, just return. 
-		// Remember to check before calling the annotatore!
+		// Remember to check before calling the annotator!
 		if (latestAnnotationResource == null ){
 			log.warn("Document has no annotations!");
 			return;
@@ -79,19 +79,22 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 			Statement annotationPropertyStatement = annotationPropertiesIterator
 					.next();
 
-			log.debug(annotationPropertyStatement.toString());
+//			log.info("Annotation property statement: " + annotationPropertyStatement.toString());
 			
-			if (annotationPropertyStatement.getPredicate() == vocab.d2s("annotationTime")) {
+			if (annotationPropertyStatement.getPredicate().equals(vocab.d2s("annotationTime"))) {
+				
 				annotationTime = annotationPropertyStatement.getObject().stringValue();
+//				log.info("annotationTime: "+annotationTime);
 				continue;
 			}
-			if (annotationPropertyStatement.getPredicate() == vocab.d2s("annotationLocation")) {
+			if (annotationPropertyStatement.getPredicate().equals(vocab.d2s("annotationLocation"))) {
+				
 				annotationFileName = annotationPropertyStatement.getObject().stringValue();
+//				log.info("annotationLocation: "+ annotationFileName);
+				
 				continue;
 			}	
 
-			// We only need one cache file
-			break;
 		}
 		
 		log.info("Latest annotations found at " + annotationFileName + " created at " + annotationTime);
@@ -107,7 +110,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 			Statement annotationSourceStatement = annotationSourceIterator
 					.next();
 
-			log.debug(annotationSourceStatement.toString());
+//			log.info("Annotation source statement: " + annotationSourceStatement.toString());
 			
 			Value annotationSource = annotationSourceStatement.getObject();
 			
@@ -119,17 +122,17 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	
 					log.debug(annotationSourcePropertyStatement.toString()); 
 					
-					if (annotationSourcePropertyStatement.getPredicate() == vocab.d2s("cacheTime")) {
+					if (annotationSourcePropertyStatement.getPredicate().equals(vocab.d2s("cacheTime"))) {
 						annotationSourceTime = annotationSourcePropertyStatement.getObject().stringValue();
 						continue;
 					}
-					if (annotationSourcePropertyStatement.getPredicate() == vocab.d2s("cacheLocation")) {
+					if (annotationSourcePropertyStatement.getPredicate().equals(vocab.d2s("cacheLocation"))) {
 						annotationSourceLocation = annotationSourcePropertyStatement.getObject().stringValue();
 						continue;
 					}	
 				}
 			} catch (ClassCastException e) {
-				log.debug(annotationSource + " is not a Resource");
+				log.error(annotationSource + " is not a Resource");
 			}
 			
 			// We need only one annotation source (there can be only one)
@@ -157,7 +160,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 
-		log.debug("Annotation: "+topic);
+		
 		// The target digest is unique for the target of every annotation
 		// (prefix, exact, suffix)
 		String targetDigest = DigestUtils.md5Hex(prefix + exact + suffix);
@@ -196,13 +199,17 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 				while (statements.hasNext()) {
 					Statement s = statements.next();
 					URI concept = (URI) s.getObject();
-
-					Statement exactMatch = vf.createStatement(concept,
-							vocab.skos("exactMatch"), vf.createURI(topic));
-					Statement skosConcept = vf.createStatement(vf.createURI(topic), RDF.TYPE, vocab.skos("Concept"));
+					URI topicURI = vf.createURI(topic);
 					
-					con.add(exactMatch);
-					con.add(skosConcept);
+					if (!concept.equals(topicURI)) {
+
+						Statement exactMatch = vf.createStatement(concept,
+								vocab.skos("exactMatch"), topicURI);
+						Statement skosConcept = vf.createStatement(topicURI, RDF.TYPE, vocab.skos("Concept"));
+						
+						con.add(exactMatch);
+						con.add(skosConcept);
+					}
 				}
 
 				return;
