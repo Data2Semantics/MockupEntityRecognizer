@@ -206,6 +206,7 @@ public class D2S_BioportalClient {
 				while((len=contentStream.read(buf))>0){
 					outputStream.write(buf,0,len);
 				}
+				log.info("Done writing annotation xml file ");
 				
 			}
 			
@@ -225,6 +226,9 @@ public class D2S_BioportalClient {
 			File outputSplitMerge, int wordCountPerSplit) {
 
 		String[] splits = splitLongText(longText, wordCountPerSplit);
+		StringBuffer merged = new StringBuffer();
+		for(String s : splits) merged.append(s);
+		longText = merged.toString();
 		
 		log.info("Splitting the documents into " +splits.length+" splits. Each containing "+wordCountPerSplit+" words (not characters). ");
 		// Accumulative length of previous splits to offset the prefix of
@@ -416,7 +420,6 @@ public class D2S_BioportalClient {
 		Vector<	String > result = new Vector<String>();
 
 		String [] words = longText.split(" ");
-	
 		for(int i=0;i<words.length;i++){
 			StringBuffer currentSplit = new StringBuffer();
 			for(int j=0;j<wordCountPerSplit && i < words.length;j++,i++){
@@ -425,7 +428,6 @@ public class D2S_BioportalClient {
 			}
 			result.add(currentSplit.toString());
 		}
-		
 		return result.toArray(new String[result.size()]);
 	}
 

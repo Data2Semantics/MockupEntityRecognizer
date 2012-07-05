@@ -1,6 +1,9 @@
 package org.data2semantics.recognize;
 
+import org.data2semantics.modules.D2S_AnnotationRenderer;
 import org.eclipse.jetty.util.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -14,6 +17,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 
 	String curQname;
 	
+	private Logger log = LoggerFactory.getLogger(D2S_BioPortalAnnotationHandler.class);
 	
 	// Whenever we enter a new annotation beans we will set this to some new
 	// Annotation
@@ -37,10 +41,11 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 		this.originalSource = originalSource;
 		this.localFileName= localFileName ;
 		this.writer = writer;
+		log.info("Start handling annotation");
 	}
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-
+		
 		if (qName.equalsIgnoreCase("AnnotationBean")) {
 			currentAnnotation = new D2S_Annotation();
 			fullID = "";
@@ -66,6 +71,7 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			currentAnnotation.setSourceDocument(localFileName);
 			currentAnnotation.setFrom(from);
 			currentAnnotation.setTo(to);
+			log.info("SAX Writing an annotation "+currentAnnotation);
 			writer.addAnnotation(currentAnnotation);
 			currentAnnotation = null;
 		}
