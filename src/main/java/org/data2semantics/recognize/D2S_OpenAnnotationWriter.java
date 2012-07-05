@@ -157,6 +157,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 
+		log.info("Annotation: "+topic);
 		// The target digest is unique for the target of every annotation
 		// (prefix, exact, suffix)
 		String targetDigest = DigestUtils.md5Hex(prefix + exact + suffix);
