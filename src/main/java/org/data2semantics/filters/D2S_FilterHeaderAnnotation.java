@@ -1,5 +1,8 @@
 package org.data2semantics.filters;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -11,6 +14,8 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  */
 public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
+
+	private Logger log = LoggerFactory.getLogger(D2S_FilterHeaderAnnotation.class);
 
 	String currentQName;
 	boolean relevantHeaders=false;
@@ -40,8 +45,8 @@ public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
 			super.endElement(uri, localName, qName);
 			if(	qName.toLowerCase().contains("parameters") ){
 				relevantHeaders=false;
-				currentQName = "";
 			}
+			currentQName = "";
 		}
 	}
 
@@ -55,10 +60,10 @@ public class D2S_FilterHeaderAnnotation extends XMLFilterImpl{
 		if (relevantHeaders){
 			if(currentQName.equalsIgnoreCase("texttoannotate")){
 				super.characters(originalText.toCharArray(), 0, originalText.length());
-				
+				currentQName="";
 			}
 			else
-			super.characters(ch, start, length);
+				super.characters(ch, start, length);
 			
 		}
 	}
