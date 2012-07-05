@@ -64,6 +64,7 @@ public class D2S_PrefixShiftXMLFilter extends XMLFilterImpl {
 			ch = curValue.toString().toCharArray();
 			start = 0;
 			length = ch.length;
+			currentQName = "";
 
 		}
 		super.characters(ch, start, length);
