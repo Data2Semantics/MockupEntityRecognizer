@@ -81,14 +81,14 @@ public class D2S_BioportalClient {
 		params.add(new BasicNameValuePair("filterNumber", "true"));
 		params.add(new BasicNameValuePair("stopWords", ""));
 		params.add(new BasicNameValuePair("withDefaultStopWords", "true"));
-		params.add(new BasicNameValuePair("isTopWordsCaseSensitive", "false"));
+		params.add(new BasicNameValuePair("isStopWordsCaseSensitive", "false"));
 		params.add(new BasicNameValuePair("mintermSize", "3"));
-		params.add(new BasicNameValuePair("scored", "true"));
+		params.add(new BasicNameValuePair("withContext", "true"));
 		params.add(new BasicNameValuePair("withSynonyms", "true"));
 		params.add(new BasicNameValuePair("ontologiesToExpand", ""));
 		// MedDRA, RxNorm, MeSH, WHO Adverse Reaction Terminology, SnomedCT
 		params.add(new BasicNameValuePair("ontologiesToKeepInResult", "42280,46395,46836,46896,40404"));
-		params.add(new BasicNameValuePair("isVirtualOntologyId", "true"));
+		params.add(new BasicNameValuePair("isVirtualOntologyId", "false"));
 		params.add(new BasicNameValuePair("semanticTypes", ""));
 		params.add(new BasicNameValuePair("levelMax", "0"));
 		params.add(new BasicNameValuePair("mappingTypes", "null")); // null, Automatic
@@ -173,11 +173,11 @@ public class D2S_BioportalClient {
 		String splitted[] = text.split(" ");
 		
 		// Assuming document with 10000 words still can be handled by Bioportal
-		if(splitted.length > 10000){
-			log.info("Document containing "+splitted.length+" words, proceed with split, annotate and merge ");
-			splitAnnotateAndMerge(text, format, outputFile, 5000);
-			return;
-		}
+//		if(splitted.length > 10000){
+//			log.info("Document containing "+splitted.length+" words, proceed with split, annotate and merge ");
+//			splitAnnotateAndMerge(text, format, outputFile, 5000);
+//			return;
+//		}
 		
 		params.add(new BasicNameValuePair("textToAnnotate",text));
 		
