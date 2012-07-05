@@ -235,7 +235,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		addTriple(annotationURI, vocab.oa("hasTarget"), targetURI);
 		
 		// Add a skos:Concept type for the topic
-		addTriple(annotationURI, RDF.TYPE, vocab.skos("Concept"));
+		addTriple(vf.createURI(topic), RDF.TYPE, vocab.skos("Concept"));
 
 		// Some provenance stuff
 		addTriple(
