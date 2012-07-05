@@ -18,4 +18,6 @@ public interface D2S_AnnotationWriter {
 	public String getAnnotationSourceLocation();
 	
 	public URI getDocumentURI();
+	
+	public Boolean hasAnnotations();
 }

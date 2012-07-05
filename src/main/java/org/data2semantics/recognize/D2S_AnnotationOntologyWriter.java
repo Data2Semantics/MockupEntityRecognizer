@@ -410,6 +410,11 @@ public class D2S_AnnotationOntologyWriter implements D2S_AnnotationWriter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Boolean hasAnnotations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

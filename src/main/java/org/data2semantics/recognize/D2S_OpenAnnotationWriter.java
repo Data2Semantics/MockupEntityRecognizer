@@ -38,8 +38,11 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 	private RepositoryConnection con;
 	private String annotationTime, annotationSourceTime, annotationFileName, annotationSourceLocation;
 	private URI documentURI;
+	private Boolean hasAnnotations = false;
 
 	
+
+
 	public D2S_OpenAnnotationWriter(RepositoryConnection con, URI documentURI) throws RepositoryException {
 		this.con = con;		
 		this.vf = con.getValueFactory();
@@ -51,9 +54,19 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 				.getStatements(documentURI, vocab.d2s("hasAnnotation"),
 						null, true);
 
+		
 		Resource latestAnnotationResource = D2S_Utils.getLatest(con,
 				annotationIterator, vocab.d2s("annotationTime"));
 
+		// Check if the file has any annotations, if not, just return. 
+		// Remember to check before calling the annotatore!
+		if (latestAnnotationResource == null ){
+			log.warn("Document has no annotations!");
+			return;
+		} else {
+			log.info("Document has annotations... continuing");
+			this.hasAnnotations = true;
+		}
 		
 		RepositoryResult<Statement> annotationPropertiesIterator = con
 				.getStatements(latestAnnotationResource,
@@ -286,5 +299,8 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		return this.documentURI;
 	}
 	
+	public Boolean hasAnnotations() {
+		return hasAnnotations;
+	}
 
 }
