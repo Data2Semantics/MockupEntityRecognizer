@@ -71,7 +71,6 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 			currentAnnotation.setSourceDocument(localFileName);
 			currentAnnotation.setFrom(from);
 			currentAnnotation.setTo(to);
-			log.info("SAX Writing an annotation "+currentAnnotation);
 			writer.addAnnotation(currentAnnotation);
 			currentAnnotation = null;
 		}
