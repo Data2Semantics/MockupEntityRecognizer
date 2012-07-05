@@ -256,7 +256,7 @@ public class D2S_BioportalClient {
 				// Fix the prefix and suffix, update according to the length of
 				// accumulated previous split.
 
-				log.info("Shifting prefix and suffix according to accumulated splitOffset");
+				log.info("Shifting prefix and suffix according to accumulated splitOffset ("+ splitOffset +")");
 				File shiftedAnnotatedSplit = File.createTempFile("shiftedAnnotation-" + countSplit+"-", ".xml");
 
 				shiftAnnotatedSplitPrefixAndPostfix(bioportalOutput,
