@@ -157,7 +157,7 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		cachedSource = curAnnotation.getSourceDocument();
 		topic = curAnnotation.getTermFound();
 
-		log.info("Annotation: "+topic);
+		log.debug("Annotation: "+topic);
 		// The target digest is unique for the target of every annotation
 		// (prefix, exact, suffix)
 		String targetDigest = DigestUtils.md5Hex(prefix + exact + suffix);
@@ -199,8 +199,10 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 
 					Statement exactMatch = vf.createStatement(concept,
 							vocab.skos("exactMatch"), vf.createURI(topic));
-
+					Statement skosConcept = vf.createStatement(vf.createURI(topic), RDF.TYPE, vocab.skos("Concept"));
+					
 					con.add(exactMatch);
+					con.add(skosConcept);
 				}
 
 				return;
@@ -224,6 +226,9 @@ public class D2S_OpenAnnotationWriter implements D2S_AnnotationWriter {
 		addTriple(annotationURI, vocab.oax("hasSemanticTag"),
 				vf.createURI(topic));
 		addTriple(annotationURI, vocab.oa("hasTarget"), targetURI);
+		
+		// Add a skos:Concept type for the topic
+		addTriple(annotationURI, RDF.TYPE, vocab.skos("Concept"));
 
 		// Some provenance stuff
 		addTriple(
