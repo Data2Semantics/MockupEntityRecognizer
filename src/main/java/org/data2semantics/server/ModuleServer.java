@@ -87,6 +87,7 @@ public class ModuleServer extends HttpServlet {
 
 		} catch (D2S_ModuleException e) {
 			log.error("There is a problem in instantiating module : " +e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
