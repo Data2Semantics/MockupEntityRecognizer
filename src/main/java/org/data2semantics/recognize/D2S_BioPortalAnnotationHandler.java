@@ -41,11 +41,11 @@ public class D2S_BioPortalAnnotationHandler extends DefaultHandler {
 		this.originalSource = originalSource;
 		this.localFileName= localFileName ;
 		this.writer = writer;
-		log.info("Start handling annotation");
+		log.info("Starting Annotation Handler...");
 	}
+	
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-		
 		if (qName.equalsIgnoreCase("AnnotationBean")) {
 			currentAnnotation = new D2S_Annotation();
 			fullID = "";
