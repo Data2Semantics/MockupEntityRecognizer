@@ -86,7 +86,8 @@ public class D2S_BioportalClient {
 		params.add(new BasicNameValuePair("scored", "true"));
 		params.add(new BasicNameValuePair("withSynonyms", "true"));
 		params.add(new BasicNameValuePair("ontologiesToExpand", ""));
-		params.add(new BasicNameValuePair("ontologiesToKeepInResult", ""));
+		// MedDRA, RxNorm, MeSH, WHO Adverse Reaction Terminology, SnomedCT
+		params.add(new BasicNameValuePair("ontologiesToKeepInResult", "42280,46395,46836,46896,40404"));
 		params.add(new BasicNameValuePair("isVirtualOntologyId", "true"));
 		params.add(new BasicNameValuePair("semanticTypes", ""));
 		params.add(new BasicNameValuePair("levelMax", "0"));
